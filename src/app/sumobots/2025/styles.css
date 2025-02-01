@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Antonio:wght@100..700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,13 +21,13 @@ main {
 
 @layer utilities {
   .font-display {
-    font-family: "Antonio", sans-serif;
+    font-family: "Audiowide", serif;
     font-optical-sizing: auto;
     font-weight: 700;
     font-style: normal;
   }
   .font-main {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Anta", serif;
     font-optical-sizing: auto;
     font-style: normal;
   }
