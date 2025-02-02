@@ -14,11 +14,14 @@ export function Navbar() {
           ></Image>
         </div>
         <div className="ml-auto flex gap-8">
-          <Link className="" href="/sumobots/2025">
+          <Link className="hover:underline underline-offset-4 px-3 py-2" href="/sumobots/2025">
             Home
           </Link>
-          <Link className="" href="/sumobots/2025/resources">
+          <Link className="hover:underline underline-offset-4 px-3 py-2" href="/sumobots/2025/resources">
             Resources
+          </Link>
+          <Link className="hover:underline underline-offset-4 text-black bg-white px-3 py-2" href="/sumobots/2025/eoi">
+            EOI
           </Link>
         </div>
       </div>
