@@ -10,10 +10,13 @@
     "pages:build": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
+    "googleapis": "^144.0.0",
     "motion": "^12.0.5",
     "next": "15.1.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.4.0",
+    "swr": "^2.3.0"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.7",
