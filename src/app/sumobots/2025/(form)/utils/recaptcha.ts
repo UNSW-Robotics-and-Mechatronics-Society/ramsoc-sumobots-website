@@ -43,7 +43,7 @@ export const getCaptchaToken = async () => {
         grecaptcha.enterprise.ready(async () => {
             const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
             if (!SITE_KEY) return;
-            const token = await grecaptcha.enterprise.execute(SITE_KEY, { action: "LOGIN" });
+            const token = await grecaptcha.enterprise.execute(SITE_KEY, { action: "submit_form" });
             resolve(token);
         })
     })
@@ -57,7 +57,7 @@ export const verifyCaptchaToken = async (token: string) => {
     const res = await axios.post(url.toString(), {
         event: {
             token: token,
-            expectedAction: "LOGIN",
+            expectedAction: "submit_form",
             siteKey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
         }
     });
