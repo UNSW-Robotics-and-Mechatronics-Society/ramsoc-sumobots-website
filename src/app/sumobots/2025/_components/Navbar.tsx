@@ -17,9 +17,6 @@ export function Navbar() {
           <Link className="hover:underline underline-offset-4 px-3 py-2" href="/sumobots/2025">
             Home
           </Link>
-          <Link className="hover:underline underline-offset-4 px-3 py-2" href="/sumobots/2025/resources">
-            Resources
-          </Link>
           <Link className="hover:underline underline-offset-4 text-black bg-white px-3 py-2" href="/sumobots/2025/eoi">
             EOI
           </Link>

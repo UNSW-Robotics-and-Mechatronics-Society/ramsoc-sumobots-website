@@ -89,23 +89,6 @@ export default function Page() {
             </tbody>
           </table>
         </section>
-
-        <section className="container">
-          <h2 className="col-span-full">Resources</h2>
-          <div className="col-span-full">
-            <p>
-              Dive deeper into the world of SumoBots with our curated collection
-              of resources. Find tutorials on designing and building your own
-              robot warrior, learn essential programming skills, and explore the
-              rules and regulations of sumo competitions. Whether you&apos;re a
-              beginner or a seasoned veteran, these resources will equip you
-              with the knowledge and inspiration to conquer the ring.
-            </p>
-            <Link className="button mt-8" href={"/sumobots/2025/resources"}>
-              Learn More
-            </Link>
-          </div>
-        </section>
         <section className="container pb-24">
           <h2 className="col-span-full">Proudly Sponsored By</h2>
           <div className="col-span-full grid h-full grid-cols-8 justify-items-center gap-8">
