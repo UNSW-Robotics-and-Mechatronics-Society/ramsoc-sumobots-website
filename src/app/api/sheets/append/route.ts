@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
+import { verifyCaptchaToken } from "@/app/sumobots/2025/(form)/utils/recaptcha";
 
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
   try {
-    const { range, values } = await req.json();
+    const { range, values, recaptchaToken } = await req.json();
 
-    if (!range || !values || !Array.isArray(values)) {
+    if (!range || !values || !Array.isArray(values) || !recaptchaToken) {
       return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
+
+    // Verify the ReCaptcha token
+    const captchaData = await verifyCaptchaToken(recaptchaToken);
+    if (!captchaData) {
+      return NextResponse.json({ error: "Failed to verify ReCaptcha token" }, { status: 400 });
+    }
+    if (!captchaData.success || captchaData.score < 0.5) {
+      return NextResponse.json({ error: `ReCaptcha verification failed: ${!captchaData.success ? captchaData["error-codes"] : undefined}` }, { status: 400 });
     }
 
     // Append new data to the sheet
