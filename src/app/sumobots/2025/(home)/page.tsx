@@ -1,10 +1,13 @@
+"use client"
+
 import Link from "next/link";
 import { Fragment } from "react";
-import { TimelineData } from "./_data/TimelineData";
-import { SponsorData } from "./_data/SponsorsData";
+import { TimelineData } from "../_data/TimelineData";
+import { SponsorData } from "../_data/SponsorsData";
 import Image from "next/image";
 
 export default function Page() {
+
   return (
     <Fragment>
       <div className="container flex h-[100vh] mt-[-6rem] flex-col items-center justify-center gap-8">

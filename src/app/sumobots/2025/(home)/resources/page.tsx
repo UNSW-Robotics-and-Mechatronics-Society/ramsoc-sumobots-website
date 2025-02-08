@@ -3,7 +3,7 @@ import {
   InternalResourceData,
   ExternalResourceData,
   InternalVideoResourceData,
-} from "../_data/ResourceData";
+} from "../../_data/ResourceData";
 import Link from "next/link";
 import { Fragment } from "react";
 
