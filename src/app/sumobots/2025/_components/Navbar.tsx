@@ -7,8 +7,8 @@ export function Navbar() {
       <div className="mx-auto flex h-full w-full max-w-[1600px] items-center px-16">
         <div className="h-full">
           <Image
-            src="/sumobots/2025/logo.svg"
-            alt="Mechatronics Logo"
+            src="2025/logo.svg"
+            alt="RAMSoc Logo"
             width={96}
             height={96}
           ></Image>
