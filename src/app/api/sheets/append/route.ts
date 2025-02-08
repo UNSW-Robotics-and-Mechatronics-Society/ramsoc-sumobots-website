@@ -17,8 +17,8 @@ export async function POST(req: Request) {
     if (!captchaData) {
       return NextResponse.json({ error: "Failed to verify ReCaptcha token" }, { status: 400 });
     }
-    if (!captchaData.success || captchaData.score < 0.5) {
-      return NextResponse.json({ error: `ReCaptcha verification failed: ${!captchaData.success ? captchaData["error-codes"] : undefined}` }, { status: 400 });
+    if (!captchaData.tokenProperties.valid || captchaData.riskAnalysis.score < 0.5) {
+      return NextResponse.json({ error: `ReCaptcha verification failed: ${!captchaData.riskAnalysis.reasons}` }, { status: 400 });
     }
 
     // Append new data to the sheet
