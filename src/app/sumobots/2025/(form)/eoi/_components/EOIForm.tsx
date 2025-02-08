@@ -2,9 +2,11 @@ import { useState } from "react";
 import { FieldType } from "../../types/FieldType";
 import { SubmitStatus } from "../../types/SubmitStatus";
 import { validateField } from "../../utils/validateField";
-import { appendToSheet } from "../../../_utils/googlesheet";
 import TextField from "../../_components/TextField";
 import { FormData } from "../../types/FormData";
+import { getCaptchaToken } from "../../utils/recaptcha";
+// import { formServerAction } from "../action";
+import { appendToSheet } from "../../../_utils/googlesheet";
 
 const EOIForm = ({ status, setStatus }: { status: SubmitStatus, setStatus: React.Dispatch<React.SetStateAction<SubmitStatus>> }) => {
   const initialFormData: FormData = {
@@ -49,12 +51,21 @@ const EOIForm = ({ status, setStatus }: { status: SubmitStatus, setStatus: React
     if (!validateForm()) return;
     setStatus("loading");
 
-    // Submit form data
-    const result = await appendToSheet("eoi!A:C", [Object.values(formData)]);
-    if (!result.success) {
-      alert(`Error: ${result.error}`);
+    const token = await getCaptchaToken();
+    if (!token) {
       setStatus("initial");
+      alert("Failed to get ReCaptcha token");
       return;
+    }
+    // Submit form data
+    const result = await appendToSheet("eoi!A:C", [Object.values(formData)], token);
+    if (!result.success) {
+      setStatus("initial");
+      alert(result.error || "Failed to submit form data");
+      return {
+        success: false,
+        message: result.error || "Failed to submit form data",
+      }
     }
     setStatus("success");
   }
