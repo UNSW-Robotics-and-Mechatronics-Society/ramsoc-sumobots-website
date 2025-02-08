@@ -1,3 +1,3 @@
-export default function Home() {
+export default function RootLayout() {
   return <main></main>;
 }
