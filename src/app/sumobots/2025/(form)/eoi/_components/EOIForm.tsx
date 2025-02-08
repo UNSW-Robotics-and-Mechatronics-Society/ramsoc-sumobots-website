@@ -4,19 +4,20 @@ import { SubmitStatus } from "../../types/SubmitStatus";
 import { validateField } from "../../utils/validateField";
 import { appendToSheet } from "../../../_utils/googlesheet";
 import TextField from "../../_components/TextField";
+import { FormData } from "../../types/FormData";
 
 const EOIForm = ({ status, setStatus }: { status: SubmitStatus, setStatus: React.Dispatch<React.SetStateAction<SubmitStatus>> }) => {
-  const initialFormData: { [key in FieldType]: string } = {
+  const initialFormData: FormData = {
     fullName: "",
     school: "",
     email: "",
   };
 
   const [formData, setFormData] =
-    useState<{ [key in FieldType]: string }>(initialFormData);
+    useState<FormData>(initialFormData);
 
   const [errors, setErrors] =
-    useState<{ [key in FieldType]: string }>(initialFormData);
+    useState<FormData>(initialFormData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
