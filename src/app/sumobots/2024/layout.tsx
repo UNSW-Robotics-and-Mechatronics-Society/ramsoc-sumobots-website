@@ -30,10 +30,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="font-main w-full bg-black text-2xl text-white">
-      <Navbar></Navbar>
-      {children}
-      <Footer></Footer>
-    </main>
+    <html lang="en" className="antialiased">
+      <body>
+        <main className="font-main w-full bg-black text-2xl text-white">
+          <Navbar></Navbar>
+          {children}
+          <Footer></Footer>
+        </main>
+      </body>
+    </html>
   );
 }
