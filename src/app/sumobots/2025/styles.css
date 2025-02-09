@@ -49,10 +49,10 @@ section + section {
 }
 
 h2 {
-  @apply font-display mb-12 text-5xl lg:mb-6 lg:mt-8;
+  @apply font-display mb-5 text-4xl lg:mb-6 lg:mt-8;
 }
 h3 {
-  @apply font-display mb-4 text-3xl;
+  @apply font-display mb-4 text-xl;
 }
 td,
 p {
