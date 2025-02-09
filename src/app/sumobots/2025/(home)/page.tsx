@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { Fragment } from "react";
-import { TimelineData } from "../_data/TimelineData";
 import { SponsorData } from "../_data/SponsorsData";
 import Image from "next/image";
+import { Timetable } from "./_components/Timetable";
 
 export default function Page() {
 
   return (
     <Fragment>
-      <div className="container flex h-[100vh] mt-[-6rem] flex-col items-center justify-center gap-8">
+      <div id="banner" className="container flex h-[100vh] flex-col items-center justify-center gap-8">
         <h1 className="font-display col-span-full flex w-full flex-col items-center leading-none">
           <span className="text-[8vw] md:text-[6.5vw] xl:text-[4.5vw]">
             RAMSOC UNSW PRESENTS
@@ -21,7 +21,7 @@ export default function Page() {
         </h1>
       </div>
       <div className="min-h-screen w-full bg-black pt-12">
-        <section className="container">
+        <section id="about" className="container">
           <h2 className="font-display col-span-full">What is Sumobots</h2>
           <div className="col-span-full lg:col-span-7">
             <p>
@@ -49,21 +49,17 @@ export default function Page() {
             ></Image>
           </div>
         </section>
-        <section className="container">
+        <section id="timeline" className="container">
           <h2 className="col-span-full">Timeline</h2>
-          <p className="col-span-full">
-            From Week 1 - Week 4 we will be hosting workshops on CAD, Arduino,
-            soldering, laser cutting, etc (check our{" "}
+            <p className="col-span-full">
+            Join our workshops from Week 1 - Week 4 on CAD, Arduino, soldering, and more. Check our{" "}
             <Link className="text-link" href={"https://shorturl.at/yJMCJ"}>
               info pack
             </Link>{" "}
-            for more details). We host the same workshops twice a week on
-            Tuesday and Thursday 6-8pm, so attend the day that suits you best
-            (you will only need to attend one day a week). We also provide
-            pre-recorded workshops if you are unable to attend. Pizza and drinks
-            will be provided.
-          </p>
-          <table className="col-span-full border-separate border-spacing-y-8">
+            for details. Workshops are held twice weekly on Tuesday and Thursday from 6-8pm. Attend one session per week. Pre-recorded sessions are available. Food and drinks provided.
+            </p>
+          <Timetable/>
+          {/* <table className="col-span-full border-separate border-spacing-y-8">
             <thead className="text-blue-400">
               <tr>
                 <th className="font-semibold">Week</th>
@@ -87,9 +83,9 @@ export default function Page() {
                 );
               })}
             </tbody>
-          </table>
+          </table> */}
         </section>
-        <section className="container pb-24">
+        <section id="sponsor" className="container pb-24">
           <h2 className="col-span-full">Proudly Sponsored By</h2>
           <div className="col-span-full grid h-full grid-cols-8 justify-items-center gap-8">
             {SponsorData.map((data) => (

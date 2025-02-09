@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { Footer } from "../_components/Footer";
-import { Navbar } from "../_components/Navbar";
+import { Footer } from "./_components/Footer";
+import Navbar from "./_components/Navbar";
 import "../styles.css"
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="antialiased">
+    <html lang="en" className="antialiased no-scrollbar overflow-y-scroll">
       <body className="font-main w-full bg-black text-2xl text-white">
         <main>
           <Navbar/>
