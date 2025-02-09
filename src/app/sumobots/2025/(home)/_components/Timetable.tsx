@@ -11,7 +11,7 @@ export const Timetable = () => {
             <div className="h-full w-16 flex flex-col font-semibold text-center justify-center text-white text-opacity-70 text-lg border-r-[1px] border-white border-opacity-10">
               WK<br />{data.week}
             </div>
-            <div className="flex flex-col justify-center p-2">
+            <div className="flex flex-col justify-center p-2 sm:w-fit">
               <div>{data.topics}</div>
               <div className="flex flex-col sm:flex-row gap-2 text-sm text-white text-opacity-70">
                 {data.date}
