@@ -3,13 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
-main {
+html {
+  scroll-behavior: smooth;
+}
+
+body {
   background-image: url("/sumobots/2025/background_gears.svg");
 }
 
 @layer base {
   .container {
-    @apply mx-auto grid w-full grid-cols-12 gap-x-8 px-4;
+    @apply mx-auto grid w-full grid-cols-12 gap-x-8 px-4 scroll-mt-24;
   }
   .shadow-centered {
     --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
@@ -30,6 +34,13 @@ main {
     font-family: "Anta", serif;
     font-optical-sizing: auto;
     font-style: normal;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
 
