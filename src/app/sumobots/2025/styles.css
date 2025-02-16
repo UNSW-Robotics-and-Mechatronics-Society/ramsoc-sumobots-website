@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +13,7 @@ body {
 
 @layer base {
   .container {
-    @apply mx-auto grid w-full grid-cols-12 gap-x-8 px-4 scroll-mt-24;
+    @apply mx-auto grid w-full scroll-mt-24 grid-cols-12 gap-x-8 px-4;
   }
   .shadow-centered {
     --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
