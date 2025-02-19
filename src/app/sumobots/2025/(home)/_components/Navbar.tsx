@@ -91,7 +91,7 @@ export default function Navbar({
         <SheetTrigger className="ml-auto flex h-full items-center gap-2 text-xl text-white sm:hidden">
           <LuMenu size={32} />
         </SheetTrigger>
-        <SheetContent className="bg-primary-950">
+        <SheetContent className="bg-black">
           <SheetHeader>
             <SheetTitle hidden>Navbar for RAMSOC Sumobots</SheetTitle>
             <SheetDescription hidden>
