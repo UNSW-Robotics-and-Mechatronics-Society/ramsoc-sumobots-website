@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Fragment } from "react";
 import { Banner } from "./_components/Banner";
@@ -7,11 +7,10 @@ import { Timeline } from "./_components/Timeline";
 import { Sponsors } from "./_components/Sponsors";
 
 export default function Page() {
-
   return (
     <Fragment>
       <Banner />
-      <div className="min-h-screen w-full pt-12 bg-black/30 flex flex-col items-center">
+      <div className="flex min-h-screen w-full flex-col items-center bg-black/30 pt-12">
         <div className="max-w-5xl">
           <About />
           <Timeline />
