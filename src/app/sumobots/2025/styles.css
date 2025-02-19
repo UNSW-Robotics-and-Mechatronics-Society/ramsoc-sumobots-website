@@ -13,7 +13,7 @@ body {
 
 @layer base {
   .container {
-    @apply mx-auto grid w-full scroll-mt-24 grid-cols-12 gap-x-8 px-4;
+    @apply w-full scroll-mt-24 gap-x-8 px-4;
   }
   .shadow-centered {
     --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
@@ -47,7 +47,9 @@ body {
 section + section {
   @apply mt-12 lg:mt-8;
 }
-
+h1 {
+  @apply font-display;
+}
 h2 {
   @apply font-display mb-5 text-4xl lg:mb-6 lg:mt-8;
 }
@@ -56,10 +58,13 @@ h3 {
 }
 td,
 p {
-  @apply text-[#B3B3B3] md:text-lg;
+  @apply font-main leading-snug text-[#B3B3B3];
 }
 td {
   @apply md:text-base;
+}
+p {
+  @apply font-main text-sm lg:text-base;
 }
 
 img {
@@ -71,5 +76,13 @@ img {
 }
 
 .button {
-  @apply block w-fit bg-rose-600 px-8 py-4 font-normal duration-200 hover:bg-rose-400;
+  @apply block w-fit bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
+  @apply text-base md:text-lg lg:text-xl;
+  @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
+}
+
+.button-white {
+  @apply block w-fit bg-white px-8 py-4 font-normal text-black duration-200 hover:font-bold;
+  @apply text-base md:text-lg lg:text-xl;
+  @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
 }
