@@ -1,13 +1,30 @@
+"use client";
+import { useInView } from "motion/react";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 
-export const Banner = () => {
+export const Banner = ({
+  setPageTitleVisible,
+}: {
+  setPageTitleVisible: (visible: boolean) => void;
+}) => {
+  const titleRef = useRef(null);
+  const isTitleInView = useInView(titleRef, {
+    amount: "all",
+    margin: "80px 0px 0px 0px",
+  });
+
+  useEffect(() => {
+    setPageTitleVisible(isTitleInView);
+  }, [isTitleInView, setPageTitleVisible]);
+
   return (
     <div
       id="banner"
       className="container relative flex h-[100vh] min-h-[30rem] flex-col items-center justify-center"
     >
       <div className="absolute left-[50vw] top-1/2 -translate-x-1/2 -translate-y-1/4">
-        <h1 className="leading-none">
+        <h1 ref={titleRef} className="leading-none">
           <span className="self-start text-[0.8rem] md:text-[1rem] xl:text-[1.5rem]">
             RAMSOC UNSW PRESENTS
           </span>
