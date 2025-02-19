@@ -47,6 +47,7 @@ body {
 section + section {
   @apply mt-12 lg:mt-8;
 }
+
 h1 {
   @apply font-display;
 }
@@ -63,6 +64,7 @@ p {
 td {
   @apply md:text-base;
 }
+
 p {
   @apply font-main text-sm lg:text-base;
 }
