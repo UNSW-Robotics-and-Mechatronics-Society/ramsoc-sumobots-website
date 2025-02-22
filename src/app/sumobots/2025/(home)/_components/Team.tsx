@@ -1,18 +1,23 @@
 import Image from "next/image";
-import { fetchTeamData } from "../../_utils/contentful";
 import { useEffect, useState } from "react";
 import { TeamMember } from "../types/teamData";
 import { FaLinkedin } from "react-icons/fa6";
 import Link from "next/link";
 
+const fetchTeamData = async (year: number) => {
+  const response = await fetch(`/api/team/get?year=${year}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch team data");
+  }
+  return response.json();
+};
+
 export const Team = () => {
   const [teamData, setTeamData] = useState<TeamMember[] | null>();
   useEffect(() => {
-    async function fetchData() {
-      const data = await fetchTeamData(2025);
-      setTeamData([...data.executives, ...data.directors]);
-    }
-    fetchData();
+    fetchTeamData(2025).then((data) =>
+      setTeamData([...data.executives, ...data.directors]),
+    );
   }, []);
   return (
     <div className="container" id="team">
