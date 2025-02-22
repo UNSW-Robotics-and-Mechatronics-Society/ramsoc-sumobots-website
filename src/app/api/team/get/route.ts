@@ -1,16 +1,19 @@
+import { NextRequest, NextResponse } from "next/server";
 import { Asset, createClient } from "contentful";
 import {
   SubcomProfileData,
   TeamMember,
   TeamStructure,
-} from "../(home)/types/teamData";
+} from "@/app/sumobots/2025/(home)/types/teamData";
 
-export const client = createClient({
-  space: `${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}`,
-  accessToken: `${process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN}`,
+export const runtime = "edge";
+
+const client = createClient({
+  space: process.env.CONTENTFUL_SPACE_ID || "",
+  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
 });
 
-export const fetchTeamData = async (year: number): Promise<TeamStructure> => {
+const fetchTeamData = async (year: number): Promise<TeamStructure> => {
   const response = await client.getEntries({
     content_type: "team",
     order: ["fields.year", "fields.role", "fields.name"],
@@ -21,7 +24,7 @@ export const fetchTeamData = async (year: number): Promise<TeamStructure> => {
     .map((item) => {
       const selfieUrl = (item.fields.selfie as Asset)?.fields.file?.url; // without https
       const formattedSelfieUrl = selfieUrl
-        ? `https:${selfieUrl}?fm=jpg&fit=fill&w=500&h=500&fl=progressive` // format: .webp, fitting: fill, dimention: 500px * 500px
+        ? `https:${selfieUrl}?fm=jpg&fit=fill&w=500&h=500&fl=progressive` // format: .webp, fitting: fill, dimension: 500px * 500px
         : "";
 
       const nameParts = (item.fields.name as string).split(" ");
@@ -47,13 +50,6 @@ export const fetchTeamData = async (year: number): Promise<TeamStructure> => {
 const categorizeTeamMembersByRole = (
   teamMembers: TeamMember[],
 ): TeamStructure => {
-  /*
-    Categorizing conditions:
-    - execs: teamMember.role doesn't include director nor subcommittee
-    - directors: teamMember.role includes director
-    - subcoms: teamMember.role includes subcommittee
-  */
-
   const execs: TeamMember[] = [];
   const directors: TeamMember[] = [];
   const subcoms: SubcomProfileData[] = [];
@@ -104,4 +100,24 @@ const categorizeTeamMembersByRole = (
     directors: directors,
     subcommittees: subcoms,
   };
+};
+
+export const GET = async (req: NextRequest) => {
+  const { searchParams } = new URL(req.url);
+  const year = searchParams.get("year");
+
+  if (!year) {
+    return NextResponse.json({ error: "Year is required" }, { status: 400 });
+  }
+
+  try {
+    const teamData = await fetchTeamData(Number(year));
+    return NextResponse.json(teamData, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to fetch team data" },
+      { status: 500 },
+    );
+  }
 };
