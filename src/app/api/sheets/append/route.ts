@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { verifyCaptchaToken } from "@/app/sumobots/2025/(form)/utils/recaptcha";
 
-export const runtime = 'edge';
+// export const runtime = "edge";
 
 export async function POST(req: Request) {
   try {
@@ -15,10 +15,21 @@ export async function POST(req: Request) {
     // Verify the ReCaptcha token
     const captchaData = await verifyCaptchaToken(recaptchaToken);
     if (!captchaData) {
-      return NextResponse.json({ error: "Failed to verify ReCaptcha token" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Failed to verify ReCaptcha token" },
+        { status: 400 },
+      );
     }
-    if (!captchaData.tokenProperties.valid || captchaData.riskAnalysis.score < 0.5) {
-      return NextResponse.json({ error: `ReCaptcha verification failed: ${!captchaData.riskAnalysis.reasons}` }, { status: 400 });
+    if (
+      !captchaData.tokenProperties.valid ||
+      captchaData.riskAnalysis.score < 0.5
+    ) {
+      return NextResponse.json(
+        {
+          error: `ReCaptcha verification failed: ${!captchaData.riskAnalysis.reasons}`,
+        },
+        { status: 400 },
+      );
     }
 
     // Append new data to the sheet
@@ -27,27 +38,36 @@ export async function POST(req: Request) {
       {
         spreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
         range: "eoi",
-        values: values
+        values: values,
       },
       {
         headers: {
           Authorization: `Bearer ${process.env.GOOGLE_SHEETS_API_TOKEN}`,
-          "Content-Type": "application/json"
-        }
-      }
+          "Content-Type": "application/json",
+        },
+      },
     );
 
-    return NextResponse.json({ message: "Data added", response: response.data });
+    return NextResponse.json({
+      message: "Data added",
+      response: response.data,
+    });
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
-        return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+        return NextResponse.json(
+          { error: "Unauthorized access" },
+          { status: 401 },
+        );
       }
       return NextResponse.json({ error: error.message }, { status: 500 });
     } else if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     } else {
-      return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
+      return NextResponse.json(
+        { error: "An unknown error occurred" },
+        { status: 500 },
+      );
     }
   }
 }
