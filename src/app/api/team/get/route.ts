@@ -6,6 +6,8 @@ import {
   TeamStructure,
 } from "@/app/sumobots/2025/(home)/types/teamData";
 
+export const runtime = "edge";
+
 const fetchTeamData = async (year: number): Promise<TeamStructure> => {
   const spaceId = process.env.CONTENTFUL_SPACE_ID || "";
   const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN || "";
