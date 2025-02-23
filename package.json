@@ -27,7 +27,7 @@
     "@cloudflare/next-on-pages": "^1.13.8",
     "@eslint/eslintrc": "^3",
     "@types/grecaptcha": "^3.0.9",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
