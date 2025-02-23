@@ -11,6 +11,5 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "chore"
-      suffix: "dependency updates"
     versioning-strategy: "increase"
 
