@@ -9,20 +9,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    # Optional: Define custom commit message for updates
-    commit-message:
-      prefix: "fix"
-      suffix: "dependency updates"
-    versioning-strategy: "increase"
-
-  # This section can be used to update devDependencies separately
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    dependency-type: "dev"
     commit-message:
       prefix: "chore"
-      suffix: "dev dependencies"
+      suffix: "dependency updates"
     versioning-strategy: "increase"
 
