@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -16,7 +16,7 @@ updates:
     versioning-strategy: "increase"
 
   # This section can be used to update devDependencies separately
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
