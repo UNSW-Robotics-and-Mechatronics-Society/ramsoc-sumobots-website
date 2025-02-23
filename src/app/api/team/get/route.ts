@@ -1,28 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Asset, createClient } from "contentful";
+import { Asset, EntryCollection, EntrySkeletonType } from "contentful";
 import {
   SubcomProfileData,
   TeamMember,
   TeamStructure,
 } from "@/app/sumobots/2025/(home)/types/teamData";
 
-export const runtime = "edge";
-
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID || "",
-  accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || "",
-});
-
 const fetchTeamData = async (year: number): Promise<TeamStructure> => {
-  const response = await client.getEntries({
-    content_type: "team",
-    order: ["fields.year", "fields.role", "fields.name"],
-  });
+  const spaceId = process.env.CONTENTFUL_SPACE_ID || "";
+  const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN || "";
+  const contentType = "team";
+  const url = `https://cdn.contentful.com/spaces/${spaceId}/environments/master/entries?access_token=${accessToken}&content_type=${contentType}&order=fields.year,fields.role,fields.name&include=1`;
+  const response = await fetch(url);
+  const data: EntryCollection<EntrySkeletonType, undefined, string> =
+    await response.json();
 
-  const yearTeamData: TeamMember[] = response.items
+  const yearTeamData: TeamMember[] = data.items
     .filter((item) => item.fields.year?.toString() === year.toString())
     .map((item) => {
-      const selfieUrl = (item.fields.selfie as Asset)?.fields.file?.url; // without https
+      const selfieUrl = data.includes?.Asset?.find(
+        (a) => a.sys.id === (item.fields.selfie as Asset).sys.id,
+      )?.fields.file?.url; // without https
       const formattedSelfieUrl = selfieUrl
         ? `https:${selfieUrl}?fm=jpg&fit=fill&w=500&h=500&fl=progressive` // format: .webp, fitting: fill, dimension: 500px * 500px
         : "";
