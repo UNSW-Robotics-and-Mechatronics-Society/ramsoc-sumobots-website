@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { LuMenu } from "react-icons/lu";
 import { cn } from "../../_utils/cn";
 import {
   Sheet,
@@ -13,6 +12,7 @@ import {
   SheetTrigger,
 } from "./Sheet";
 import { motion } from "framer-motion";
+import { Menu } from "lucide-react";
 
 export default function Navbar({
   isTitleVisible,
@@ -89,7 +89,7 @@ export default function Navbar({
       </div>
       <Sheet>
         <SheetTrigger className="ml-auto flex h-full items-center gap-2 text-xl text-white sm:hidden">
-          <LuMenu size={32} />
+          <Menu />
         </SheetTrigger>
         <SheetContent className="bg-black">
           <SheetHeader>

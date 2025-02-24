@@ -1,5 +1,6 @@
-import { FaLocationDot } from "react-icons/fa6";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { TimelineData } from "../../_data/TimelineData";
+import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 export const Timetable = () => {
   return (
@@ -20,7 +21,7 @@ export const Timetable = () => {
               <div className="flex flex-col gap-2 text-sm text-white text-opacity-70 sm:flex-row">
                 {data.date}
                 <span className="flex w-fit items-center justify-center gap-1 rounded-xl bg-zinc-800 px-2 font-semibold">
-                  <FaLocationDot className="h-3" />
+                  <FontAwesomeIcon icon={faLocationDot} size="sm" />
                   {data.location}
                 </span>
               </div>
