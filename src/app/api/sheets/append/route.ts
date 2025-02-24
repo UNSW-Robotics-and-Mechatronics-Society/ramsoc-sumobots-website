@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { verifyCaptchaToken } from "@/app/sumobots/2025/(form)/utils/recaptcha";
 
-export const runtime = "edge";
-
 export async function POST(req: Request) {
   try {
     const { range, values, recaptchaToken } = await req.json();
