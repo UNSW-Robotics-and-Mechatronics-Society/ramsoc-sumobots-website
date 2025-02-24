@@ -1,10 +1,5 @@
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faInstagram,
-  faFacebook,
-  faDiscord,
-} from "@fortawesome/free-brands-svg-icons";
+import { FaInstagram, FaFacebook, FaDiscord } from "react-icons/fa6";
 
 export default function EOIFormEnd() {
   return (
@@ -26,7 +21,7 @@ export default function EOIFormEnd() {
             target="_blank"
             aria-label="Instagram"
           >
-            <FontAwesomeIcon icon={faInstagram} size="sm" />
+            <FaInstagram size={32} />
           </Link>
           <Link
             className="h-full transform transition-transform hover:scale-110"
@@ -34,7 +29,7 @@ export default function EOIFormEnd() {
             target="_blank"
             aria-label="Facebook"
           >
-            <FontAwesomeIcon icon={faFacebook} size="sm" />
+            <FaFacebook size={32} />
           </Link>
           <Link
             className="h-full transform transition-transform hover:scale-110"
@@ -42,7 +37,7 @@ export default function EOIFormEnd() {
             target="_blank"
             aria-label="Discord"
           >
-            <FontAwesomeIcon icon={faDiscord} size="sm" />
+            <FaDiscord size={32} />
           </Link>
         </div>
         <Link

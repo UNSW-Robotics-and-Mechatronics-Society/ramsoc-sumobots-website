@@ -1,9 +1,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { TeamMember } from "../types/teamData";
-import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const fetchTeamData = async (year: number) => {
   const response = await fetch(`/api/team/get?year=${year}`);
@@ -50,7 +49,7 @@ export const Team = () => {
                       rel="noopener noreferrer"
                       className="absolute bottom-0 right-0 rounded-[4px] border-2 border-black bg-black"
                     >
-                      <FontAwesomeIcon icon={faLinkedin} size="sm" />
+                      <FaLinkedin size={32} />
                     </Link>
                   )}
                 </div>
