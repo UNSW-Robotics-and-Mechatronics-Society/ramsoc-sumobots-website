@@ -46,3 +46,6 @@ next-env.d.ts
 
 # wrangler
 .wrangler
+
+.sst
+.dev.vars
