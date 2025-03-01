@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import { verifyCaptchaToken } from "@/app/sumobots/2025/(form)/utils/recaptcha";
+import { verifyCaptchaToken } from "@/app/_utils/recaptcha";
+import { Resource } from "sst";
+
+const googleSheetsApiUrl = Resource.GOOGLE_SHEETS_API_URL.value;
+const googleSheetsApiToken = Resource.GOOGLE_SHEETS_API_TOKEN.value;
+const googleSheetsSpreadsheetId = Resource.GOOGLE_SHEETS_SPREADSHEET_ID.value;
 
 export async function POST(req: Request) {
   try {
@@ -30,21 +35,18 @@ export async function POST(req: Request) {
     }
 
     // Append new data to the sheet using fetch
-    const response = await fetch(
-      `https://${process.env.GOOGLE_SHEETS_API_URL}/api/append`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.GOOGLE_SHEETS_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          spreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
-          range: "eoi",
-          values: values,
-        }),
+    const response = await fetch(`https://${googleSheetsApiUrl}/api/append`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${googleSheetsApiToken}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        spreadsheetId: googleSheetsSpreadsheetId,
+        range: "eoi",
+        values: values,
+      }),
+    });
 
     if (!response.ok) {
       if (response.status === 401) {

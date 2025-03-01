@@ -10,11 +10,10 @@ const nextConfig: NextConfig = {
     ],
   },
   async redirects() {
-    const currentYear = new Date().getFullYear();
     return [
       {
-        source: "/sumobots",
-        destination: `/sumobots/${currentYear}`,
+        source: "/",
+        destination: `/2025`, // !! should match current year
         permanent: false, // Use false for temporary redirects (307) or true for permanent redirects (308)
       },
     ];

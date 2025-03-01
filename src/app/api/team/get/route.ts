@@ -4,11 +4,15 @@ import {
   SubcomProfileData,
   TeamMember,
   TeamStructure,
-} from "@/app/sumobots/2025/(home)/types/teamData";
+} from "@/app/_types/teamData";
+import { Resource } from "sst";
+
+const contentfulAccessToken = Resource.CONTENTFUL_ACCESS_TOKEN.value;
+const contentfulSpaceId = Resource.CONTENTFUL_SPACE_ID.value;
 
 const fetchTeamData = async (year: number): Promise<TeamStructure> => {
-  const spaceId = process.env.CONTENTFUL_SPACE_ID || "";
-  const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN || "";
+  const spaceId = contentfulSpaceId || "";
+  const accessToken = contentfulAccessToken || "";
   const contentType = "team";
   const url = `https://cdn.contentful.com/spaces/${spaceId}/environments/master/entries?access_token=${accessToken}&content_type=${contentType}&order=fields.year,fields.role,fields.name&include=1`;
   const response = await fetch(url);
