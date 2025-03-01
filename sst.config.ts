@@ -8,6 +8,9 @@ export default $config({
       protect: ["production"].includes(input?.stage),
       home: "aws",
       providers: { cloudflare: "5.49.1" },
+      server: {
+        runtime: "nodejs20.x",
+      },
     };
   },
   async run() {
