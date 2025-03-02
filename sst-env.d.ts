@@ -33,10 +33,6 @@ declare module "sst" {
       "type": "sst.sst.Secret"
       "value": string
     }
-    "ramsocSumobotsWeb": {
-      "type": "sst.aws.Nextjs"
-      "url": string
-    }
   }
 }
 /// <reference path="sst-env.d.ts" />
