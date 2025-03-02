@@ -51,6 +51,10 @@ export default $config({
           return {
             stage: event.branch === "main" ? "production" : "development",
           };
+        } else if (event.type === "pull_request" && event.action === "pushed") {
+          return {
+            stage: "development",
+          };
         }
       },
     },
