@@ -44,4 +44,23 @@ export default $config({
       },
     });
   },
+  console: {
+    autodeploy: {
+      target(event) {
+        if (
+          event.type === "branch" &&
+          event.branch === "main" &&
+          event.action === "pushed"
+        ) {
+          return { stage: "production" };
+        } else if (
+          event.type === "branch" &&
+          event.branch === "dev" &&
+          event.action === "pushed"
+        ) {
+          return { stage: "development" };
+        }
+      },
+    },
+  },
 });
