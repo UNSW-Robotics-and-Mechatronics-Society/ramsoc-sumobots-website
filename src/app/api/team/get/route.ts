@@ -5,10 +5,11 @@ import {
   TeamMember,
   TeamStructure,
 } from "@/app/_types/teamData";
-import { Resource } from "sst";
 
-const contentfulAccessToken = Resource.CONTENTFUL_ACCESS_TOKEN.value;
-const contentfulSpaceId = Resource.CONTENTFUL_SPACE_ID.value;
+export const runtime = "edge";
+
+const contentfulAccessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
+const contentfulSpaceId = process.env.CONTENTFUL_SPACE_ID;
 
 const fetchTeamData = async (year: number): Promise<TeamStructure> => {
   const spaceId = contentfulSpaceId || "";

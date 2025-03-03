@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { verifyCaptchaToken } from "@/app/_utils/recaptcha";
-import { Resource } from "sst";
 
-const googleSheetsApiUrl = Resource.GOOGLE_SHEETS_API_URL.value;
-const googleSheetsApiToken = Resource.GOOGLE_SHEETS_API_TOKEN.value;
-const googleSheetsSpreadsheetId = Resource.GOOGLE_SHEETS_SPREADSHEET_ID.value;
+export const runtime = "edge";
+
+const googleSheetsApiUrl = process.env.GOOGLE_SHEETS_API_URL;
+const googleSheetsApiToken = process.env.GOOGLE_SHEETS_API_TOKEN;
+const googleSheetsSpreadsheetId = process.env.GOOGLE_SHEETS_SPREADSHEET_ID;
 
 export async function POST(req: Request) {
   try {
