@@ -3,19 +3,11 @@ import { useEffect, useState } from "react";
 import { TeamMember } from "@/app/_types/teamData";
 import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
-
-const fetchTeamData = async (year: number) => {
-  const response = await fetch(`/api/team/get?year=${year}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch team data");
-  }
-  return response.json();
-};
-
+import {  getTeamProfiles } from "@/app/_utils/teamProfiles";
 export const Team = () => {
   const [teamData, setTeamData] = useState<TeamMember[] | null>();
   useEffect(() => {
-    fetchTeamData(2025).then((data) =>
+    getTeamProfiles(2025).then((data) =>
       setTeamData([...data.executives, ...data.directors]),
     );
   }, []);
