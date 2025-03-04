@@ -21,10 +21,10 @@ export async function appendToSheet(
       throw new Error("Invalid input: range and values must be provided.");
     }
 
-    const response = await fetch("http://localhost:8787/api/sheets/append", {
+    const response = await fetch(`http://${process.env.SUMOBOTS_WORKER_SITE_URL}/api/sheets/append`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.SUMOBOTS_API_KEY}`,
+        Authorization: `Bearer ${process.env.SUMOBOTS_WORKER_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

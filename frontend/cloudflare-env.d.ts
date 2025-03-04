@@ -10,6 +10,6 @@ interface CloudflareEnv {
 	GOOGLE_SHEETS_SPREADSHEET_ID: string;
 	CONTENTFUL_SPACE_ID: string;
 	CONTENTFUL_ACCESS_TOKEN: string;
-	SUMOBOTS_API_KEY: string;
+	SUMOBOTS_WORKER_KEY: string;
 	ASSETS: Fetcher;
 }

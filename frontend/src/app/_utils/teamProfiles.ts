@@ -3,10 +3,10 @@
 import { SubcomProfileData, TeamMember, TeamStructure } from "@/app/_types/teamData";
 
 export async function getTeamProfiles(year: number): Promise<TeamStructure> {
-    const url = new URL(`http://localhost:8787/api/team/get?year=${year}`);
+    const url = new URL(`https://${process.env.SUMOBOTS_WORKER_SITE_URL}/api/team/get?year=${year}`);
     const response = await fetch(url.toString(), {
         headers: {
-          Authorization: `Bearer ${process.env.SUMOBOTS_API_KEY}`,
+          Authorization: `Bearer ${process.env.SUMOBOTS_WORKER_KEY}`,
         },
     });
     const data = await response.json();

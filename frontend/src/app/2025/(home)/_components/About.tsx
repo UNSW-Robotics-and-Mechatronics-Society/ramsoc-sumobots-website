@@ -26,7 +26,7 @@ export const About = () => {
           <Image
             width={445}
             height={250}
-            src={"/static/2025/VR_005.gif"}
+            src={"static/2025/VR_005.gif"}
             alt="silly gif of robot"
             unoptimized={true}
           ></Image>

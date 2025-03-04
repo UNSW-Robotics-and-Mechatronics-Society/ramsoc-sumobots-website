@@ -51,7 +51,7 @@ export default function Navbar({
       <div className="hidden size-full items-center text-lg sm:flex">
         <div className="ml-auto flex">
           <Link
-            href="/2025/#banner"
+            href="/2025/#"
             className="flex items-center px-4 hover:underline"
             aria-label="Go to home page"
           >
@@ -99,7 +99,7 @@ export default function Navbar({
             </SheetDescription>
             <div className="ml-auto flex w-full flex-col text-2xl text-white">
               <Link
-                href="/2025/#banner"
+                href="/2025/#"
                 className="flex h-full items-center p-4 hover:underline"
                 aria-label="Go to home page"
               >
