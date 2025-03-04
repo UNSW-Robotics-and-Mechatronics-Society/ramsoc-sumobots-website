@@ -1,19 +1,27 @@
 "use server";
 
-import { SubcomProfileData, TeamMember, TeamStructure } from "@/app/_types/teamData";
+import {
+  SubcomProfileData,
+  TeamMember,
+  TeamStructure,
+} from "@/app/_types/teamData";
+import { SUMOBOTS_WORKER_SITE_URL } from "../constants";
 
 export async function getTeamProfiles(year: number): Promise<TeamStructure> {
-    const url = new URL(`https://${process.env.SUMOBOTS_WORKER_SITE_URL}/api/team/get?year=${year}`);
-    const response = await fetch(url.toString(), {
-        headers: {
-          Authorization: `Bearer ${process.env.SUMOBOTS_WORKER_KEY}`,
-        },
-    });
-    const data = await response.json();
-    if (!response.ok) {
-        throw new Error(data.error);
-    }
-    return categorizeTeamMembersByRole(data);
+  const response = await fetch(
+    `${SUMOBOTS_WORKER_SITE_URL}/api/team/get?year=${year}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${process.env.SUMOBOTS_WORKER_KEY}`,
+      },
+    },
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error);
+  }
+  return categorizeTeamMembersByRole(data);
 }
 
 const categorizeTeamMembersByRole = (

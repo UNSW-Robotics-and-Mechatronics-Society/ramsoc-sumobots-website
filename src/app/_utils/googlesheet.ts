@@ -1,5 +1,7 @@
 "use server";
 
+import { SUMOBOTS_WORKER_SITE_URL } from "../constants";
+
 /**
  * Utility function to append data to a Google Sheet using the existing API.
  * @param {string} range - The target sheet and range (e.g., "Sheet1!A:C").
@@ -21,18 +23,21 @@ export async function appendToSheet(
       throw new Error("Invalid input: range and values must be provided.");
     }
 
-    const response = await fetch(`http://${process.env.SUMOBOTS_WORKER_SITE_URL}/api/sheets/append`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.SUMOBOTS_WORKER_KEY}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${SUMOBOTS_WORKER_SITE_URL}/api/sheets/append`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.SUMOBOTS_WORKER_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          range: "eoi",
+          values: values,
+          recaptchaToken,
+        }),
       },
-      body: JSON.stringify({
-        range: "eoi",
-        values: values,
-        recaptchaToken,
-      }),
-    });
+    );
     const data = await response.json();
 
     if (!response.ok) {
