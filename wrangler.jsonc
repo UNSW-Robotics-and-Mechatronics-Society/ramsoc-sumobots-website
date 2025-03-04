@@ -23,8 +23,5 @@
             "pattern": "www.sumobots.ramsocunsw.org",
             "custom_domain": true
         }
-    ],
-    "services": [
-        
     ]
   }
