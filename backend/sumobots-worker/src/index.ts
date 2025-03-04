@@ -5,7 +5,7 @@ export default {
   async fetch(req: Request, env: any): Promise<Response> {
     const url = new URL(req.url);
     const authHeader = req.headers.get("Authorization");
-    console.log(authHeader)
+    console.log(authHeader, env.SUMOBOTS_API_KEY)
     if (!authHeader || authHeader !== `Bearer ${env.SUMOBOTS_API_KEY}`) {
       return new Response("Unauthorized", { status : 401 });
     }
