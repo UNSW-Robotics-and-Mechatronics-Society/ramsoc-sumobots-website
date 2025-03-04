@@ -62,7 +62,7 @@ const EOIForm = ({
     }
     // Submit form data
     const result = await appendToSheet(
-      "eoi!A:C",
+      "eoi",
       [Object.values(formData)],
       token,
     );
