@@ -1,0 +1,30 @@
+{
+    "$schema": "node_modules/wrangler/config-schema.json",
+    "main": ".open-next/worker.js",
+    "name": "ramsoc-sumobots-website",
+    "compatibility_date": "2025-02-14",
+    "compatibility_flags": ["nodejs_compat"],
+    "assets": {
+      "directory": ".open-next/assets",
+      "binding": "ASSETS"
+    },
+    "kv_namespaces": [
+        {
+            "binding": "SB_NEXT_CACHE_WORKERS_KV",
+            "id": "0671b7d2af184676a360e90412973140"
+        }
+    ],
+    "routes": [
+        {
+            "pattern": "sumobots.ramsocunsw.org",
+            "custom_domain": true
+        },
+        {
+            "pattern": "www.sumobots.ramsocunsw.org",
+            "custom_domain": true
+        }
+    ],
+    "services": [
+        
+    ]
+  }
