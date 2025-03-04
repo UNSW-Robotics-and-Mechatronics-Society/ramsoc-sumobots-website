@@ -1,7 +1,0 @@
-{
-	"editor.formatOnSave": true,
-	"editor.formatOnSaveMode": "file",
-	"files.associations": {
-		"wrangler.json": "jsonc"
-	}
-}
