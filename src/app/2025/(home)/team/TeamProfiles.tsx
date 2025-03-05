@@ -1,10 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { TeamMember } from "@/app/_types/teamData";
 import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
-import {  getTeamProfiles } from "@/app/_utils/teamProfiles";
-export const Team = () => {
+import { getTeamProfiles } from "@/app/_utils/teamProfiles";
+const TeamProfiles = () => {
   const [teamData, setTeamData] = useState<TeamMember[] | null>();
   useEffect(() => {
     getTeamProfiles(2025).then((data) =>
@@ -13,11 +15,6 @@ export const Team = () => {
   }, []);
   return (
     <div className="container" id="team">
-      <h2>Meet The Team.</h2>
-      <p>
-        The RAMSOC team is a group of passionate students who are dedicated to
-        providing a great experience for all participants.
-      </p>
       <div className="flex justify-center">
         <div className="mt-5 grid grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
           {teamData &&
@@ -54,3 +51,5 @@ export const Team = () => {
     </div>
   );
 };
+
+export default TeamProfiles;

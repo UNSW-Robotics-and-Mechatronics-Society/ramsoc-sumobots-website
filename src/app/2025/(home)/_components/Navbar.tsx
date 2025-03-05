@@ -86,6 +86,13 @@ export default function Navbar({
             Workshop
           </Link>
           <Link
+            href="/2025/team"
+            className="flex items-center px-4 hover:underline"
+            aria-label="Go to team page"
+          >
+            Team
+          </Link>
+          <Link
             href="/2025/eoi"
             className="bg-white px-3 py-2 text-black hover:underline"
             aria-label="Go to EOI page"
@@ -139,6 +146,13 @@ export default function Navbar({
                 aria-label="Go to workshop page"
               >
                 Workshop
+              </Link>
+              <Link
+                href="/2025/team"
+                className="flex items-center p-4 hover:underline"
+                aria-label="Go to team page"
+              >
+                Team
               </Link>
               <Link
                 href="/2025/eoi"
