@@ -13,6 +13,7 @@ import {
 } from "./Sheet";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
+import { MAIN_SITE_URL } from "@/app/constants";
 
 export default function Navbar({
   isTitleVisible = false,
@@ -27,13 +28,14 @@ export default function Navbar({
       )}
     >
       <div className="flex items-center justify-start">
-        <Image
-          src="/2025/logo.svg"
-          className="h-16 w-16"
-          alt="RAMSoc Logo"
-          width={96}
-          height={96}
-        />
+        <Link href={MAIN_SITE_URL} className="h-16 w-16">
+          <Image
+            src="/2025/logo.svg"
+            alt="RAMSoc Logo"
+            width={96}
+            height={96}
+          />
+        </Link>
         <motion.div
           id="page-title"
           className="flex flex-col text-nowrap"
