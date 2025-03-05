@@ -6,6 +6,7 @@ import { EventSchedule } from "./_components/EventSchedule";
 import { Sponsors } from "./_components/Sponsors";
 import Navbar from "./_components/Navbar";
 import { Banner } from "./_components/Banner";
+import Faq from "./_components/Faq";
 
 export default function Page() {
   const [isTitleVisible, setTitleVisible] = useState(true);
@@ -17,6 +18,7 @@ export default function Page() {
         <div className="max-w-5xl">
           <About />
           <EventSchedule />
+          <Faq />
           <Sponsors />
         </div>
       </div>
