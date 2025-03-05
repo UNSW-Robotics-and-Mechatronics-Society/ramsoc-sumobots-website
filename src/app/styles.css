@@ -49,7 +49,7 @@ section + section {
 }
 
 h1 {
-  @apply font-display;
+  @apply font-display text-5xl lg:text-6xl;
 }
 h2 {
   @apply font-display mb-5 text-4xl lg:mb-6 lg:mt-8;

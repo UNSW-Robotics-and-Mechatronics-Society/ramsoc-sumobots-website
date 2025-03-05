@@ -15,9 +15,9 @@ import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 
 export default function Navbar({
-  isTitleVisible,
+  isTitleVisible = false,
 }: {
-  isTitleVisible: boolean;
+  isTitleVisible?: boolean;
 }) {
   return (
     <motion.nav
@@ -65,11 +65,11 @@ export default function Navbar({
             About
           </Link>
           <Link
-            href="/2025/#timeline"
+            href="/2025/#schedule"
             className="flex items-center px-4 hover:underline"
-            aria-label="Go to timeline section"
+            aria-label="Go to schedule section"
           >
-            Timeline
+            Schedule
           </Link>
           <Link
             href="/2025/#sponsor"
@@ -77,6 +77,13 @@ export default function Navbar({
             aria-label="Go to sponsors section"
           >
             Sponsors
+          </Link>
+          <Link
+            href="/2025/workshop"
+            className="flex items-center px-4 hover:underline"
+            aria-label="Go to workshop page"
+          >
+            Workshop
           </Link>
           <Link
             href="/2025/eoi"
@@ -113,11 +120,11 @@ export default function Navbar({
                 About
               </Link>
               <Link
-                href="/2025/#timeline"
+                href="/2025/#schedule"
                 className="flex h-full items-center p-4 hover:underline"
-                aria-label="Go to timeline section"
+                aria-label="Go to event schedule section"
               >
-                Timeline
+                Schedule
               </Link>
               <Link
                 href="/2025/#sponsor"
@@ -125,6 +132,13 @@ export default function Navbar({
                 aria-label="Go to sponsors section"
               >
                 Sponsors
+              </Link>
+              <Link
+                href="/2025/workshop"
+                className="flex items-center p-4 hover:underline"
+                aria-label="Go to workshop page"
+              >
+                Workshop
               </Link>
               <Link
                 href="/2025/eoi"
