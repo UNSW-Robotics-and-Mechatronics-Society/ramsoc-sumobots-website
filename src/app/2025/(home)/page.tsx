@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { About } from "./_components/About";
+import { About } from "./_components/About/About";
 import { Timeline } from "./_components/Timeline";
 import { Sponsors } from "./_components/Sponsors";
 import Navbar from "./_components/Navbar";
