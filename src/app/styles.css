@@ -8,7 +8,7 @@ html {
 }
 
 body {
-  background-image: url("/static/2025/background_gears.svg");
+  background-image: url("/2025/background_gears.svg");
 }
 
 @layer base {
@@ -18,9 +18,8 @@ body {
   .shadow-centered {
     --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
     --tw-shadow-colored: 0 0px 72px -12px var(--tw-shadow-color);
-    box-shadow:
-      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-      var(--tw-shadow);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   }
 }
 
@@ -58,16 +57,24 @@ h2 {
 h3 {
   @apply font-display mb-4 text-xl;
 }
+th {
+  @apply font-display text-sm lg:text-lg;
+}
+
 td,
 p {
-  @apply font-main leading-snug text-[#B3B3B3];
+  @apply font-main text-sm leading-snug text-[#B3B3B3] lg:text-base;
 }
 td {
   @apply md:text-base;
 }
 
 p {
-  @apply font-main text-sm lg:text-base;
+  @apply font-main text-sm text-[#B3B3B3] lg:text-base;
+}
+
+p b {
+  @apply font-bold text-white;
 }
 
 img {
@@ -79,7 +86,7 @@ img {
 }
 
 .button {
-  @apply block w-fit bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
+  @apply flex w-fit flex-row items-center gap-2 bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
   @apply text-base md:text-lg lg:text-xl;
   @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
 }
