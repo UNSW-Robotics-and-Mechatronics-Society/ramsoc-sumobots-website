@@ -72,6 +72,13 @@ export default function Navbar({
             Schedule
           </Link>
           <Link
+            href="/2025/#faq"
+            className="flex items-center px-4 hover:underline"
+            aria-label="Go to faq section"
+          >
+            Faq
+          </Link>
+          <Link
             href="/2025/#sponsor"
             className="flex items-center px-4 hover:underline"
             aria-label="Go to sponsors section"
@@ -132,6 +139,13 @@ export default function Navbar({
                 aria-label="Go to event schedule section"
               >
                 Schedule
+              </Link>
+              <Link
+                href="/2025/#faq"
+                className="flex h-full items-center p-4 hover:underline"
+                aria-label="Go to event faq section"
+              >
+                Faq
               </Link>
               <Link
                 href="/2025/#sponsor"

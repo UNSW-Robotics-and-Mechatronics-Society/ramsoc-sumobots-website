@@ -66,7 +66,7 @@ const FaqList = ({
 
 const Faq = () => {
   return (
-    <div className="container">
+    <div className="container" id="faq">
       <div className="flex flex-col justify-center gap-8 md:flex-row">
         <div className="w-full md:w-[25%]">
           <h2>FAQ.</h2>
