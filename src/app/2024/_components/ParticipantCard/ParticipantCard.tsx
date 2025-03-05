@@ -8,8 +8,8 @@ export default function ParticipantCard({ data }: { data: { title: string } }) {
           width={256}
           height={256}
           className="h-full w-full overflow-hidden object-cover"
-          src={`/static/2024/images/participants/fullsize/${data.title}.png`}
-          blurDataURL={`/static/2024/images/participants/blur/${data.title}.png`}
+          src={`/2024/images/participants/fullsize/${data.title}.png`}
+          blurDataURL={`/2024/images/participants/blur/${data.title}.png`}
           placeholder="blur"
           alt={data.title}
         ></Image>

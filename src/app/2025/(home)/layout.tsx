@@ -6,13 +6,13 @@ export const metadata: Metadata = {
   title: "RAMSoc Sumobots 2025",
   description:
     "Sumobots 2025 is here! Design, build, and compete in the most exciting robotics competition of the year. Sign up now!",
-  icons: { icon: "/static/2025/logo.svg" },
+  icons: { icon: "/2025/logo.svg" },
   twitter: {
     card: "summary_large_image",
     title: "RAMSoc Sumobots 2025",
     site: "@site",
     creator: "@creator",
-    images: "/static/2025/og.jpg",
+    images: "/2025/og.jpg",
   },
   openGraph: {
     type: "website",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description:
       "Sumobots 2025 is here! Design, build, and compete in the most exciting robotics competition of the year. Sign up now!",
     siteName: "RAMSoc Sumobots 2025",
-    images: "/static/2025/og.jpg",
+    images: "/2025/og.jpg",
   },
 };
 
