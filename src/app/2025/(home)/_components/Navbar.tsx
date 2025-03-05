@@ -28,7 +28,7 @@ export default function Navbar({
     >
       <div className="flex items-center justify-start">
         <Image
-          src="/static/2025/logo.svg"
+          src="/2025/logo.svg"
           className="h-16 w-16"
           alt="RAMSoc Logo"
           width={96}
