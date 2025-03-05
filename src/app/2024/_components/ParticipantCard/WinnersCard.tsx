@@ -15,8 +15,8 @@ export default function WinnersCard({
           width={470}
           height={320}
           className="object-cover"
-          src={`/static/2024/images/participants/fullsize/winner_${title}.png`}
-          blurDataURL={`/static/2024/images/participants/blur/winner_${title}.png`}
+          src={`/2024/images/participants/fullsize/winner_${title}.png`}
+          blurDataURL={`/2024/images/participants/blur/winner_${title}.png`}
           placeholder="blur"
           alt={title}
         ></Image>

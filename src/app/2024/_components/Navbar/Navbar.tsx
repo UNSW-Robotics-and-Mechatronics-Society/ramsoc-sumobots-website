@@ -7,7 +7,7 @@ export function Navbar() {
       <div className="mx-auto flex h-full w-full max-w-[1600px] items-center px-16">
         <div className="h-full">
           <Image
-            src="/static/2024/logo.svg"
+            src="/2024/logo.svg"
             alt="Mechatronics Logo"
             width={96}
             height={96}

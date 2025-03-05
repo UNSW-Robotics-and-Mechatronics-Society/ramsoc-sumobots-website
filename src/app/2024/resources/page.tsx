@@ -25,7 +25,7 @@ function ResourceCard({ title, url, image, description }: ResourceCardProps) {
         <Image
           width={400}
           height={225}
-          src={`/static/2024${image}`}
+          src={`/2024${image}`}
           alt={title}
           className="transition group-hover:scale-105"
         ></Image>
