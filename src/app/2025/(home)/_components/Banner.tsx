@@ -2,6 +2,7 @@
 import { useInView } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import TypingAnimation from "./TypeWriter";
 
 export const Banner = ({
   setPageTitleVisible,
@@ -26,7 +27,7 @@ export const Banner = ({
       <div className="absolute left-[50vw] top-1/2 -translate-x-1/2 -translate-y-1/4">
         <h1 ref={titleRef} className="leading-none">
           <span className="self-start text-[0.8rem] md:text-[1rem] xl:text-[1.5rem]">
-            RAMSOC UNSW PRESENTS
+            <span className="text-rose-600">2025</span> RAMSOC UNSW PRESENTS
           </span>
           <span className="block text-[12vw] sm:text-[5.5rem] md:text-[7rem] xl:text-[8rem]">
             SUMOBOTS
@@ -34,11 +35,12 @@ export const Banner = ({
         </h1>
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-row justify-between pt-4">
-            <p className="pr-4 text-[1rem] md:text-[1.5rem] xl:text-[1.7rem]">
-              2nd JUNE, <span className="text-rose-600">2025</span>
-            </p>
-            <p className="text-right text-[1rem] md:text-[1.5rem] xl:text-[1.7rem]">
-              9 WEEKS EVENT
+            <TypingAnimation
+              words={["Learn.", "Build.", "Battle."]}
+              className="pr-4 text-right align-top text-[1rem] text-gray-300 md:text-[1.5rem] xl:text-[1.7rem]"
+            />
+            <p className="text-[1rem] md:text-[1.5rem] xl:text-[1.7rem]">
+              INTER-UNI COMPETITION
             </p>
           </div>
           <div className="mt-7 flex w-full flex-col gap-3 bg-gray-800/50 p-4">
@@ -46,7 +48,7 @@ export const Banner = ({
               Join the robot battle.
             </h3>
             <p>
-              Applications open on May 25th. Fill out our EOI form to stay
+              Applications open on 8th March. Fill out our EOI form to stay
               updated.
             </p>
             <Link
