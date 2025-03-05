@@ -5,13 +5,13 @@ export const metadata: Metadata = {
   title: "RAMSoc Sumobots 2025 - EOI Form",
   description:
     "Join the battle! Register your interest now and get exclusive updates on the upcoming event. Don't miss out!",
-  icons: { icon: "/static/2025/logo.svg" },
+  icons: { icon: "/2025/logo.svg" },
   twitter: {
     card: "summary_large_image",
     title: "RAMSoc Sumobots 2025",
     site: "@site",
     creator: "@creator",
-    images: "/static/2025/og.jpg",
+    images: "/2025/og.jpg",
   },
   openGraph: {
     type: "website",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     description:
       "Join the battle! Register your interest now and get exclusive updates on the upcoming event. Don't miss out!",
     siteName: "RAMSoc Sumobots 2025 - EOI Form",
-    images: "/static/2025/og.jpg",
+    images: "/2025/og.jpg",
   },
 };
 
