@@ -25,13 +25,13 @@ export function Footer({
     setFooterVisible(isFooterInView);
   }, [isFooterInView, setFooterVisible]);
   return (
-    <footer
-      ref={footerRef}
-      className="mt-16 border-t-2 border-gray-300 bg-black px-10 py-8"
-    >
-      <div className="flex flex-col items-center space-y-6 sm:flex-row sm:justify-between">
+    <footer className="mt-16 flex-col items-center justify-center border-t-2 border-gray-300 bg-black px-10">
+      <div className="flex flex-col items-center space-y-6 py-8 sm:flex-row sm:justify-between">
         {/* Navigation Links */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm sm:justify-start">
+        <div
+          ref={footerRef}
+          className="flex flex-wrap justify-center gap-4 text-sm sm:justify-start"
+        >
           <Link href="/2025/#" className="hover:text-gray-400">
             Home
           </Link>
@@ -104,6 +104,10 @@ export function Footer({
             ramsocunsw.org
           </Link>
         </div>
+      </div>
+      <hr className="self-center border-gray-300/50" />
+      <div className="py-4 text-center text-sm">
+        <p>&copy; 2025 RAMSoc UNSW. All rights reserved.</p>
       </div>
     </footer>
   );
