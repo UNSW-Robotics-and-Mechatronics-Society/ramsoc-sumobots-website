@@ -7,6 +7,7 @@ import { Sponsors } from "./_components/Sponsors";
 import Navbar from "./_components/Navbar";
 import { Banner } from "./_components/Banner";
 import Faq from "./_components/Faq";
+import FurtherSupport from "./_components/FurtherSupport";
 
 export default function Page() {
   const [isTitleVisible, setTitleVisible] = useState(true);
@@ -20,6 +21,7 @@ export default function Page() {
           <EventSchedule />
           <Faq />
           <Sponsors />
+          <FurtherSupport />
         </div>
       </div>
     </Fragment>
