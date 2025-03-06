@@ -11,7 +11,7 @@ import { MAIN_SITE_URL } from "@/app/constants";
 import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
 
-export function Footer({
+function Footer({
   setFooterVisible = () => {},
 }: {
   setFooterVisible?: (visible: boolean) => void;
@@ -112,3 +112,5 @@ export function Footer({
     </footer>
   );
 }
+
+export default Footer;

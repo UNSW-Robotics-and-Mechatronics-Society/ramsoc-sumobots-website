@@ -8,7 +8,7 @@ import Navbar from "./_components/Navbar";
 import { Banner } from "./_components/Banner";
 import Faq from "./_components/Faq";
 import FurtherSupport from "./_components/FurtherSupport";
-import { Footer } from "./_components/Footer";
+import Footer from "./_components/Footer";
 
 export default function Page() {
   const [isTitleVisible, setTitleVisible] = useState(true);

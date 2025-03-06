@@ -1,11 +1,14 @@
-import { Fragment } from "react";
+"use client";
+import { Fragment, useState } from "react";
 import Navbar from "../_components/Navbar";
 import TeamProfiles from "./TeamProfiles";
+import Footer from "../_components/Footer";
 
 export default function Team() {
+  const [isFooterVisible, setFooterVisible] = useState(false);
   return (
     <Fragment>
-      <Navbar />
+      <Navbar isFooterVisible={isFooterVisible} />
       <section className="min-h-screen py-24">
         <div className="flex w-full flex-col items-center pt-12">
           <div className="container flex flex-col items-center text-center">
@@ -23,6 +26,7 @@ export default function Team() {
           </div>
         </div>
       </section>
+      <Footer setFooterVisible={setFooterVisible} />
     </Fragment>
   );
 }
