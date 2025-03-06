@@ -12,9 +12,9 @@ import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
 
 export function Footer({
-  setFooterVisible,
+  setFooterVisible = () => {},
 }: {
-  setFooterVisible: (visible: boolean) => void;
+  setFooterVisible?: (visible: boolean) => void;
 }) {
   const footerRef = useRef(null);
   const isFooterInView = useInView(footerRef, {
