@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Footer } from "./_components/Footer";
 import "@/app/styles.css";
 
 export const metadata: Metadata = {
@@ -33,10 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="no-scrollbar overflow-y-scroll antialiased">
       <body className="font-main w-full bg-black text-2xl text-white">
-        <main>
-          {children}
-          <Footer />
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );

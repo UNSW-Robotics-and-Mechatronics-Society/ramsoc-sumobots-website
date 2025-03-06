@@ -17,15 +17,23 @@ import { MAIN_SITE_URL } from "@/app/constants";
 
 export default function Navbar({
   isTitleVisible = false,
+  isFooterVisible = false,
 }: {
   isTitleVisible?: boolean;
+  isFooterVisible?: boolean;
 }) {
+  console.log(isFooterVisible);
   return (
     <motion.nav
       className={cn(
         "fixed left-0 top-0 z-50 flex h-20 w-full items-center justify-between px-4 transition-colors ease-out",
         !isTitleVisible ? "bg-black/50" : "bg-primary-transparent",
       )}
+      initial={{ y: 0 }}
+      animate={{
+        y: !isFooterVisible ? 0 : -80,
+      }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
       <div className="flex items-center justify-start">
         <Link href={MAIN_SITE_URL} className="h-16 w-16">
