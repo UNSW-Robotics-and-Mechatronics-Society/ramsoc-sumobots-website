@@ -8,12 +8,17 @@ import Navbar from "./_components/Navbar";
 import { Banner } from "./_components/Banner";
 import Faq from "./_components/Faq";
 import FurtherSupport from "./_components/FurtherSupport";
+import { Footer } from "./_components/Footer";
 
 export default function Page() {
   const [isTitleVisible, setTitleVisible] = useState(true);
+  const [isFooterVisible, setFooterVisible] = useState(false);
   return (
     <Fragment>
-      <Navbar isTitleVisible={isTitleVisible} />
+      <Navbar
+        isTitleVisible={isTitleVisible}
+        isFooterVisible={isFooterVisible}
+      />
       <Banner setPageTitleVisible={setTitleVisible} />
       <div className="flex min-h-screen w-full flex-col items-center bg-black/30 pt-12">
         <div className="max-w-5xl">
@@ -24,6 +29,7 @@ export default function Page() {
           <FurtherSupport />
         </div>
       </div>
+      <Footer setFooterVisible={setFooterVisible} />
     </Fragment>
   );
 }
