@@ -22,7 +22,6 @@ export default function Navbar({
   isTitleVisible?: boolean;
   isFooterVisible?: boolean;
 }) {
-  console.log(isFooterVisible);
   return (
     <motion.nav
       className={cn(
