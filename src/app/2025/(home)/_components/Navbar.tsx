@@ -58,7 +58,7 @@ export default function Navbar({
           <h1 className="text-[0.7rem] leading-none">SUMOBOTS</h1>
         </motion.div>
       </div>
-      <div className="hidden size-full items-center text-lg sm:flex">
+      <div className="hidden size-full items-center text-lg lg:flex">
         <div className="ml-auto flex">
           <Link
             href="/2025/#"
@@ -119,7 +119,7 @@ export default function Navbar({
         </div>
       </div>
       <Sheet>
-        <SheetTrigger className="ml-auto flex h-full items-center gap-2 text-xl text-white sm:hidden">
+        <SheetTrigger className="ml-auto flex h-full items-center gap-2 text-xl text-white lg:hidden">
           <Menu />
         </SheetTrigger>
         <SheetContent className="bg-black">
