@@ -61,19 +61,19 @@ th {
   @apply font-display text-sm lg:text-lg;
 }
 
-td,
-p {
-  @apply font-main text-sm leading-snug text-[#B3B3B3] lg:text-base;
-}
 td {
-  @apply md:text-base;
+  @apply font-main text-sm leading-snug text-[#B3B3B3] lg:text-base;
 }
 
 p {
   @apply font-main text-sm text-[#B3B3B3] lg:text-base;
 }
+li {
+  @apply font-main text-sm text-gray-300 lg:text-base;
+}
 
-p b {
+p b,
+li b {
   @apply font-bold text-white;
 }
 
