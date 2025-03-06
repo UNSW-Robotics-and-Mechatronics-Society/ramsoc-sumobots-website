@@ -1,6 +1,6 @@
 export const Sponsors = () => {
   return (
-    <section id="sponsor" className="container pb-12">
+    <section id="sponsor" className="container">
       <h2>Let&apos;s host a great event, together.</h2>
       <p>
         Our sponsors allow us to host hundreds of students every year and
