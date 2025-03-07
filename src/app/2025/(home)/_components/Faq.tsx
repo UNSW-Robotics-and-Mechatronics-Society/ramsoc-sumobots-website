@@ -67,8 +67,8 @@ const FaqList = ({
 const Faq = () => {
   return (
     <div className="container" id="faq">
-      <div className="flex flex-col justify-center gap-8 md:flex-row">
-        <div className="w-full md:w-[25%]">
+      <div className="flex flex-col justify-center gap-8 lg:flex-row">
+        <div className="w-full lg:w-[25%]">
           <h2>FAQ.</h2>
           <p>
             Everything you need to know about participating in the 2025
@@ -98,7 +98,7 @@ const Faq = () => {
             </Link>
           </div>
         </div>
-        <div className="mt-5 md:mt-10">
+        <div className="mt-5 lg:mt-10">
           <FaqList faqs={faqData} />
         </div>
       </div>
