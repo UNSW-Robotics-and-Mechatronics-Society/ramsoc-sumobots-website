@@ -35,10 +35,10 @@ const TeamProfileGrid = () => {
   return (
     <div className="container" id="team">
       <div className="flex flex-col justify-center">
-        <div className="relative rounded-lg border border-dashed border-gray-300 p-4">
-          <h2 className="absolute -top-[52px] left-3 bg-gray-950 px-2">
+        <div className="relative mb-5 rounded-lg border border-dashed border-gray-300 px-4 py-8">
+          <h3 className="absolute -top-4 left-3 bg-gray-950 px-2">
             Main Organisers
-          </h2>
+          </h3>
           <TeamProfile
             member={technicalExecutive}
             size="l"
