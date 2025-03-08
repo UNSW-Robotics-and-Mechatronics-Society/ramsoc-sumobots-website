@@ -30,7 +30,7 @@ export default function Navbar({
       )}
       initial={{ y: 0 }}
       animate={{
-        y: !isFooterVisible ? 0 : -80,
+        y: !isFooterVisible ? 0 : -100,
       }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
@@ -116,9 +116,33 @@ export default function Navbar({
             EOI
           </Link>
         </div>
+        <Link
+          href="https://arc.unsw.edu.au/"
+          className="ml-10 hidden w-20 self-start lg:block"
+          target="_blank"
+        >
+          <Image
+            src="/2025/UNSW_ARC_logo.svg"
+            alt="RAMSoc Logo"
+            width={96}
+            height={96}
+          />
+        </Link>
       </div>
       <Sheet>
         <SheetTrigger className="ml-auto flex h-full items-center gap-2 text-xl text-white lg:hidden">
+          <Link
+            href="https://arc.unsw.edu.au/"
+            className="mr-5 block w-20 self-start lg:hidden"
+            target="_blank"
+          >
+            <Image
+              src="/2025/UNSW_ARC_logo.svg"
+              alt="RAMSoc Logo"
+              width={96}
+              height={96}
+            />
+          </Link>
           <Menu />
         </SheetTrigger>
         <SheetContent className="bg-black">

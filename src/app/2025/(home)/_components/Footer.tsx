@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   FaInstagram,
@@ -61,52 +62,72 @@ function Footer({
           </Link>
         </div>
 
-        {/* Social Links */}
-        <div className="flex flex-col items-center">
-          <div className="flex space-x-4">
+        <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row-reverse sm:space-x-4 sm:space-y-0">
+          {/* Social Links */}
+          <div className="flex flex-col items-center">
+            <div className="flex space-x-4">
+              <Link
+                href="https://www.instagram.com/ramsocunsw"
+                target="_blank"
+                className="hover:text-gray-400"
+                aria-label="Instagram"
+              >
+                <FaInstagram size={24} />
+              </Link>
+              <Link
+                href="https://www.facebook.com/RAMSOCUNSW"
+                target="_blank"
+                className="hover:text-gray-400"
+                aria-label="Facebook"
+              >
+                <FaFacebook size={24} />
+              </Link>
+              <Link
+                href="https://discord.com/invite/4dWMWAjWm9"
+                target="_blank"
+                className="hover:text-gray-400"
+                aria-label="Discord"
+              >
+                <FaDiscord size={24} />
+              </Link>
+              <Link
+                href="mailto:contact@ramsocunsw.org"
+                className="hover:text-gray-400"
+                aria-label="Email us"
+              >
+                <FaEnvelope size={24} />
+              </Link>
+            </div>
             <Link
-              href="https://www.instagram.com/ramsocunsw"
+              href={MAIN_SITE_URL}
+              className="text-primary-500 mt-2 inline-block text-center text-xs opacity-75"
               target="_blank"
-              className="hover:text-gray-400"
-              aria-label="Instagram"
             >
-              <FaInstagram size={24} />
-            </Link>
-            <Link
-              href="https://www.facebook.com/RAMSOCUNSW"
-              target="_blank"
-              className="hover:text-gray-400"
-              aria-label="Facebook"
-            >
-              <FaFacebook size={24} />
-            </Link>
-            <Link
-              href="https://discord.com/invite/4dWMWAjWm9"
-              target="_blank"
-              className="hover:text-gray-400"
-              aria-label="Discord"
-            >
-              <FaDiscord size={24} />
-            </Link>
-            <Link
-              href="mailto:contact@ramsocunsw.org"
-              className="hover:text-gray-400"
-              aria-label="Email us"
-            >
-              <FaEnvelope size={24} />
+              ramsocunsw.org
             </Link>
           </div>
-          <Link
-            href={MAIN_SITE_URL}
-            className="text-primary-500 mt-2 inline-block text-center text-xs opacity-75"
-            target="_blank"
-          >
-            ramsocunsw.org
-          </Link>
         </div>
       </div>
       <hr className="self-center border-gray-300/50" />
-      <div className="py-4 text-center text-sm">
+      <div className="flex flex-col items-center justify-center py-4 text-center text-sm">
+        {/* UNSW Arc */}
+        <div className="m-4 flex flex-col items-center gap-1 rounded-md border border-gray-300 px-8 py-4">
+          <p>Proudly supported by</p>
+          <Link
+            href="https://arc.unsw.edu.au"
+            target="_blank"
+            className="hover:text-gray-400"
+          >
+            <Image
+              src="/2025/UNSW_ARC_logo.svg"
+              alt="UNSW Arc Logo"
+              className="w-16"
+              width={96}
+              height={96}
+            />
+          </Link>
+          <p className="text-sm">UNSW Student Life</p>
+        </div>
         <p>&copy; 2025 RAMSoc UNSW. All rights reserved.</p>
       </div>
     </footer>
