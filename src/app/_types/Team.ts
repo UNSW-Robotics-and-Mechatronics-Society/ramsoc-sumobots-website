@@ -1,6 +1,7 @@
 export type TeamMember = {
   id: string;
   name: string;
+  roleName: TeamRole;
   role: TeamRole;
   position: TeamPosition;
   year: number;
@@ -29,7 +30,16 @@ export type TeamRole =
   | "socials director"
   | "projects director"
   | "workshops director"
-  | "outreach director";
+  | "outreach director"
+  | "industry & sponsorships subcommittee"
+  | "it subcommittee"
+  | "marketing subcommittee"
+  | "wim subcommittee"
+  | "creatives subcommittee"
+  | "socials subcommittee"
+  | "projects subcommittee"
+  | "workshops subcommittee"
+  | "outreach subcommittee";
 
 export class Team {
   constructor(fullTeam: TeamMember[]) {
@@ -45,15 +55,23 @@ export class Team {
   }
 
   get organisers() {
-    return this.fullTeam
-      .filter((member) =>
-        Team.organisersOrder.find((role) => role === member.role),
-      )
+    const organisers = this.fullTeam
+      .filter((member) => Team.organisersOrder.includes(member.role))
       .sort(
         (a, b) =>
           Team.organisersOrder.indexOf(a.role) -
           Team.organisersOrder.indexOf(b.role),
       );
+    const technicalExecutive = organisers.find(
+      (member) => member.role === "technical executive",
+    );
+    if (!technicalExecutive) {
+      throw new Error("Technical Executive is required");
+    }
+    const otherOrganisers = organisers.filter(
+      (member) => member.role !== "technical executive",
+    );
+    return { technicalExecutive, otherOrganisers };
   }
 
   get nonOrganisers() {
@@ -111,6 +129,7 @@ export class Team {
     return {
       id: member.id,
       name: member.name,
+      roleName: member.role,
       role: member.role.toLowerCase() as TeamRole,
       position: member.position.toLowerCase() as TeamPosition,
       year: member.year,
@@ -152,12 +171,30 @@ export class Team {
     "workshops director",
   ];
 
-  static fullTeamOrder: TeamRole[] = this.execOrder.concat(this.directorOrder);
+  static subcommitteeOrder: TeamRole[] = [
+    "creatives subcommittee",
+    "industry & sponsorships subcommittee",
+    "it subcommittee",
+    "marketing subcommittee",
+    "outreach subcommittee",
+    "projects subcommittee",
+    "socials subcommittee",
+    "wim subcommittee",
+    "workshops subcommittee",
+  ];
+
+  static fullTeamOrder: TeamRole[] = [
+    ...this.execOrder,
+    ...this.directorOrder,
+    ...this.subcommitteeOrder,
+  ];
 
   static organisersOrder: TeamRole[] = [
     "technical executive",
     "workshops director",
     "projects director",
+    "workshops subcommittee",
+    "projects subcommittee",
   ];
 
   #fullTeam: TeamMember[] = [];
