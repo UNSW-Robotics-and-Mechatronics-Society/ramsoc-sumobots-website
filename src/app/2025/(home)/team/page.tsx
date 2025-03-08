@@ -1,7 +1,7 @@
 "use client";
 import { Fragment, useState } from "react";
 import Navbar from "../_components/Navbar";
-import TeamProfiles from "./TeamProfiles";
+import TeamProfileGrid from "./TeamProfileGrid";
 import Footer from "../_components/Footer";
 
 export default function Team() {
@@ -22,7 +22,7 @@ export default function Team() {
                 free to reach out!
               </p>
             </div>
-            <TeamProfiles />
+            <TeamProfileGrid />
           </div>
         </div>
       </section>
