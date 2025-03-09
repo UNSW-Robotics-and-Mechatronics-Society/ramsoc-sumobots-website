@@ -193,8 +193,10 @@ export class Team {
     "technical executive",
     "workshops director",
     "projects director",
+    "it director",
     "workshops subcommittee",
     "projects subcommittee",
+    "it subcommittee",
   ];
 
   #fullTeam: TeamMember[] = [];
