@@ -109,11 +109,10 @@ export default function Navbar({
             Team
           </Link>
           <Link
-            href="/2025/eoi"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSciKhBKAnkF2AwTzlVI-XyPJiT-bZjtOWi02eg3b2VT_WhKUg/viewform?usp=sharing"
             className="bg-white px-3 py-2 text-black hover:underline"
-            aria-label="Go to EOI page"
           >
-            EOI
+            Apply
           </Link>
         </div>
         <Link
@@ -202,11 +201,11 @@ export default function Navbar({
                 Team
               </Link>
               <Link
-                href="/2025/eoi"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSciKhBKAnkF2AwTzlVI-XyPJiT-bZjtOWi02eg3b2VT_WhKUg/viewform?usp=sharing"
                 className="flex h-full items-center bg-white p-4 text-black hover:underline"
-                aria-label="Go to EOI page"
+                aria-label="Go to Open Stream apply form"
               >
-                EOI
+                Apply
               </Link>
             </div>
           </SheetHeader>
