@@ -48,14 +48,14 @@ export const Banner = ({
               Join the robot battle.
             </h3>
             <p>
-              Applications open on 8th March. Fill out our EOI form to stay
-              updated.
+              <strong>OPEN STREAM</strong> registration are now open! STANDARD
+              STREAM registration will open soon on 24th March.
             </p>
             <Link
               className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-              href="/2025/eoi"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSciKhBKAnkF2AwTzlVI-XyPJiT-bZjtOWi02eg3b2VT_WhKUg/viewform?usp=sharing"
             >
-              EXPRESS INTEREST.
+              SIGN ME UP.
             </Link>
           </div>
         </div>
