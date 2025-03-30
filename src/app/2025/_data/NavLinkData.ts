@@ -1,6 +1,7 @@
 import Path from "@/app/path";
-import { OPEN_STREAM_FORM_URL } from "@/app/constants";
+// import { OPEN_STREAM_FORM_URL } from "@/app/constants";
 import NavLinkDataType from "@/app/_types/NavLinkData";
+import { OPEN_STREAM_FORM_URL } from "@/app/constants";
 
 const NavLinkData: NavLinkDataType[] = [
   {
@@ -29,14 +30,26 @@ const NavLinkData: NavLinkDataType[] = [
     href: Path[2025].Sponsor,
   },
   {
-    name: "Workshop",
-    label: "Go to workshop page",
-    href: Path[2025].Workshop,
-  },
-  {
     name: "Team",
     label: "Go to team page",
     href: Path[2025].Team,
+  },
+  {
+    name: "Workshop",
+    label: "Go to workshop page",
+    href: Path[2025].Workshop.Root,
+    dropdown: [
+      {
+        name: "Timetable",
+        label: "Go to workshop timetable",
+        href: Path[2025].Workshop.Timetable,
+      },
+      {
+        name: "Resources",
+        label: "Go to workshop resources",
+        href: Path[2025].Workshop.Resources,
+      },
+    ],
   },
   // {
   //   name: "EOI",
