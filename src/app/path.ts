@@ -10,7 +10,11 @@ const Path = {
     Schedule: "/2025/#schedule",
     Faq: "/2025/#faq",
     Sponsor: "/2025/#sponsor",
-    Workshop: "/2025/workshop",
+    Workshop: {
+      Root: "/2025/workshop",
+      Timetable: "/2025/workshop/#timetable",
+      Resources: "/2025/workshop/#resources",
+    },
     Team: "/2025/team",
     EOI: "/2025/eoi",
   },
