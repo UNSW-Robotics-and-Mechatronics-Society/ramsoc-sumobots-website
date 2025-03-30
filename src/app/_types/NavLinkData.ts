@@ -3,8 +3,8 @@ type NavLinkData = {
   label: string;
   href?: string | "";
   color?: "default" | "white";
-  size?: "default" | "lg" | "sm";
   dropdown?: NavLinkData[];
+  isDisabled?: boolean;
 };
 
 export default NavLinkData;
