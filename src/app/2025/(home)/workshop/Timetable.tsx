@@ -7,7 +7,7 @@ interface TimetableProps {
 
 export const Timetable = ({ className }: TimetableProps) => {
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={`flex scroll-mt-10 flex-col ${className}`} id="timetable">
       <h2>Timetable.</h2>
       <p>
         Join us for hands-on workshops to build and program your Sumobot! From
