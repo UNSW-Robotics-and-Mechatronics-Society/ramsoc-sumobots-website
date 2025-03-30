@@ -23,7 +23,7 @@ const NavLink = ({
   className,
 }: NavLinkProps) => {
   const isDropdown = !!dropdown && dropdown.length > 0;
-  const isDisabled = isDisabledProp || (!isDropdown && !!!href);
+  const isDisabled = isDisabledProp || (!isDropdown && !href);
   const onClick = isDisabled ? undefined : onClickProp;
   const [openDropdown, setOpenDropdown] = useState(false);
   const isMobile = useIsMobile();
