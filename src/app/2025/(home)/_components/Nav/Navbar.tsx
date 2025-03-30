@@ -3,7 +3,6 @@ import { cn } from "@/app/_utils/cn";
 import { motion } from "framer-motion";
 import NavLinks from "./NavLinks";
 import Logo from "../Logo";
-import NavSheet from "./NavSheet";
 
 const NavHeader = ({
   isTitleVisible = false,
@@ -12,7 +11,7 @@ const NavHeader = ({
 }) => {
   return (
     <div className="flex items-center">
-      <Logo logoName="ramsoc" size={14} />
+      <Logo logoName="ramsoc" size={70} />
       <motion.div
         id="page-title"
         className="flex flex-col text-nowrap"
@@ -32,9 +31,9 @@ const NavHeader = ({
 
 const NavContent = () => {
   return (
-    <div className="hidden h-full items-center gap-10 text-lg lg:flex">
-      <NavLinks size="lg" />
-      <Logo logoName="arc" size={20} className="self-start" />
+    <div className="flex h-full flex-row-reverse items-center gap-5 text-lg xl:flex-row">
+      <NavLinks />
+      <Logo logoName="arc" className="self-start" size={80} />
     </div>
   );
 };
@@ -60,7 +59,6 @@ export default function Navbar({
     >
       <NavHeader isTitleVisible={isTitleVisible} />
       <NavContent />
-      <NavSheet />
     </motion.nav>
   );
 }
