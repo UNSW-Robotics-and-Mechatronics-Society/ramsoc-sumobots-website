@@ -15,7 +15,7 @@ const NavSheet = () => {
     <>
       <Sheet>
         <SheetTrigger className="flex h-full items-center lg:hidden">
-          <Logo logoName="arc" size={20} className="self-start" />
+          <Logo logoName="arc" size={80} className="self-start" />
           <div className="p-[26px]">
             <Menu className="h-7 w-7" />
           </div>
