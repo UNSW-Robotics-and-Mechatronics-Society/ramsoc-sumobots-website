@@ -4,16 +4,17 @@ import { LogoData, LogoKeys } from "@/app/2025/_data/LogoData";
 
 type LogoProps = {
   logoName: LogoKeys;
-  size?: number;
+  size: number;
   className?: string;
 };
 
-const Logo = ({ logoName, size = 20, className }: LogoProps) => {
+const Logo = ({ logoName, size, className }: LogoProps) => {
   const logoData = LogoData[logoName];
   return (
     <Link
       href={logoData.href}
-      className={`w-${size} ${className}`}
+      className={className}
+      style={{ width: size ? `${size}px` : undefined }}
       target="_blank"
     >
       <Image
