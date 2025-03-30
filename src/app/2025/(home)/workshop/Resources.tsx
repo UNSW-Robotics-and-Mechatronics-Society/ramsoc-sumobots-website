@@ -48,7 +48,7 @@ function ResourceCard({ title, url, image, description }: ResourceCardProps) {
 
 export default function Resources({ className }: { className?: string }) {
   return (
-    <div className={`${className} px-6 py-10`}>
+    <div className={`${className} px-6 py-10`} id="resources">
       <h2 className="mb-6">Resources.</h2>
       <p>
         <b>Note:</b> These resources are from 2024 and serve as a reference for

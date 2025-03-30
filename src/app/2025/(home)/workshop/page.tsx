@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useState } from "react";
-import Navbar from "../_components/Navbar";
+import Navbar from "../_components/Nav/Navbar";
 import { Timetable } from "./Timetable";
 import Resources from "./Resources";
 import Footer from "../_components/Footer";

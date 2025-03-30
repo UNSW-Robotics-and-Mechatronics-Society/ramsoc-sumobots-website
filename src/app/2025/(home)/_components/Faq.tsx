@@ -1,9 +1,8 @@
-import Link from "next/link";
-import { FaDiscord, FaAngleDown } from "react-icons/fa6";
-import { IoMdMail } from "react-icons/io";
+import { FaAngleDown } from "react-icons/fa6";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import faqData from "@/app/2025/_data/FaqData";
+import Social from "./Social";
 
 const FaqRow = ({
   question,
@@ -68,7 +67,7 @@ const Faq = () => {
   return (
     <div className="container" id="faq">
       <div className="flex flex-col justify-center gap-8 lg:flex-row">
-        <div className="w-full lg:w-[25%]">
+        <div className="w-full flex-shrink-0 lg:w-[25%]">
           <h2>FAQ.</h2>
           <p>
             Everything you need to know about participating in the 2025
@@ -80,22 +79,18 @@ const Faq = () => {
           <p>Think we missed something?</p>
           <p>Reach out at...</p>
           <div className="mt-4 flex flex-col gap-2">
-            <Link
-              href="mailto:contact@ramsocunsw.org"
-              className="flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-center text-gray-950"
-            >
-              <IoMdMail size={20} className="flex-shrink-0" />
-              <p className="text-sm text-gray-950">contact@ramsocunsw.org</p>
-            </Link>
-            <Link
-              href="https://discord.com/invite/4dWMWAjWm9"
-              className="flex w-fit items-center gap-2 rounded-full bg-white px-4 py-2 text-center text-gray-950"
-            >
-              <FaDiscord size={20} className="flex-shrink-0" />
-              <p className="text-sm text-gray-950">
-                RAMSOC UNSW Discord Server
-              </p>
-            </Link>
+            <Social
+              socialName="discord"
+              size={24}
+              variant="pill"
+              className="w-fit lg:w-full"
+            />
+            <Social
+              socialName="email"
+              size={24}
+              variant="pill"
+              className="w-fit lg:w-full"
+            />
           </div>
         </div>
         <div className="mt-5 lg:mt-10">

@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import { About } from "./_components/About/About";
 import { EventSchedule } from "./_components/EventSchedule";
 import { Sponsors } from "./_components/Sponsors";
-import Navbar from "./_components/Navbar";
+import Navbar from "./_components/Nav/Navbar";
 import { Banner } from "./_components/Banner";
 import Faq from "./_components/Faq";
 import FurtherSupport from "./_components/FurtherSupport";

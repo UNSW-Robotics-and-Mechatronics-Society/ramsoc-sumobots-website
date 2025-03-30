@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useState } from "react";
-import Navbar from "../_components/Navbar";
+import Navbar from "../_components/Nav/Navbar";
 import TeamProfileGrid from "./TeamProfileGrid";
 import Footer from "../_components/Footer";
 

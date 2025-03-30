@@ -3,6 +3,7 @@ import { useInView } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import TypingAnimation from "./TypeWriter";
+import MenuToggler from "./Nav/MenuToggler";
 
 export const Banner = ({
   setPageTitleVisible,

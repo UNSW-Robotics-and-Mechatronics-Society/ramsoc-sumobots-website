@@ -1,16 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import {
-  FaInstagram,
-  FaFacebook,
-  FaDiscord,
-  FaEnvelope,
-} from "react-icons/fa6";
-import { MAIN_SITE_URL } from "@/app/constants";
+import { MAIN_DOMAIN, MAIN_SITE_URL } from "@/app/constants";
 import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
+import Social from "./Social";
+import Logo from "./Logo";
+import NavLinkData from "../../_data/NavLinkData";
 
 function Footer({
   setFooterVisible = () => {},
@@ -19,116 +15,96 @@ function Footer({
 }) {
   const footerRef = useRef(null);
   const isFooterInView = useInView(footerRef, {
-    amount: "all",
+    amount: "some",
   });
+
+  const links = NavLinkData.filter(
+    (link) => !!link.href && !link.dropdown && link.name !== "Home",
+  );
+  const dropdownLinks = NavLinkData.filter((link) => !!link.dropdown);
 
   useEffect(() => {
     setFooterVisible(isFooterInView);
   }, [isFooterInView, setFooterVisible]);
+
   return (
-    <footer className="mt-16 flex-col items-center justify-center border-t-2 border-gray-300 bg-black px-10">
-      <div className="flex flex-col items-center space-y-6 py-8 sm:flex-row sm:justify-between">
-        {/* Navigation Links */}
-        <div
-          ref={footerRef}
-          className="flex flex-wrap justify-center gap-4 text-sm sm:justify-start"
-        >
-          <Link href="/2025/#" className="hover:text-gray-400">
-            Home
-          </Link>
-          <Link href="/2025/#about" className="hover:text-gray-400">
-            About
-          </Link>
-          <Link href="/2025/#schedule" className="hover:text-gray-400">
-            Schedule
-          </Link>
-          <Link href="/2025/#faq" className="hover:text-gray-400">
-            FAQ
-          </Link>
-          <Link href="/2025/#sponsor" className="hover:text-gray-400">
-            Sponsors
-          </Link>
-          <Link href="/2025/workshop" className="hover:text-gray-400">
-            Workshop
-          </Link>
-          <Link href="/2025/team" className="hover:text-gray-400">
-            Team
-          </Link>
+    <footer
+      className="mt-20 border-t-2 border-gray-700 bg-black px-6 text-gray-300 sm:px-10"
+      ref={footerRef}
+    >
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 py-12 sm:grid-cols-3 lg:grid-cols-4">
+        {/* Brand and Socials */}
+        <div className="col-span-1 space-y-4 sm:col-span-1">
+          <h3 className="text-lg font-semibold text-white">Follow Us</h3>
+          <div className="flex space-x-4">
+            <Social socialName="instagram" />
+            <Social socialName="facebook" />
+            <Social socialName="discord" />
+            <Social socialName="email" />
+          </div>
           <Link
-            href="/2025/eoi"
-            className="bg-white px-4 text-black hover:bg-gray-200"
+            href={MAIN_SITE_URL}
+            className="text-primary-500 mt-2 block text-xs opacity-75"
+            target="_blank"
           >
-            EOI
+            {MAIN_DOMAIN}
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row-reverse sm:space-x-4 sm:space-y-0">
-          {/* Social Links */}
-          <div className="flex flex-col items-center">
-            <div className="flex space-x-4">
-              <Link
-                href="https://www.instagram.com/ramsocunsw"
-                target="_blank"
-                className="hover:text-gray-400"
-                aria-label="Instagram"
-              >
-                <FaInstagram size={24} />
-              </Link>
-              <Link
-                href="https://www.facebook.com/RAMSOCUNSW"
-                target="_blank"
-                className="hover:text-gray-400"
-                aria-label="Facebook"
-              >
-                <FaFacebook size={24} />
-              </Link>
-              <Link
-                href="https://discord.com/invite/4dWMWAjWm9"
-                target="_blank"
-                className="hover:text-gray-400"
-                aria-label="Discord"
-              >
-                <FaDiscord size={24} />
-              </Link>
-              <Link
-                href="mailto:contact@ramsocunsw.org"
-                className="hover:text-gray-400"
-                aria-label="Email us"
-              >
-                <FaEnvelope size={24} />
-              </Link>
+        {/* Primary Nav */}
+        <div className="col-span-1 space-y-4">
+          <h3 className="text-lg font-semibold text-white">Home</h3>
+          <ul className="space-y-1 text-sm">
+            {links.map(
+              (link) =>
+                link.href && (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      aria-label={link.label}
+                      className="hover:underline"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ),
+            )}
+          </ul>
+        </div>
+
+        {/* Dropdown Links */}
+        <div className="col-span-1 space-y-4">
+          {dropdownLinks.map((link) => (
+            <div key={link.name}>
+              <h3 className="text-lg font-semibold text-white">{link.name}</h3>
+              <ul className="mt-1 space-y-1 text-sm">
+                {link.dropdown?.map((navLink) => (
+                  <li key={navLink.name}>
+                    {navLink.href ? (
+                      <Link href={navLink.href} className="hover:underline">
+                        {navLink.name}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-500">{navLink.name}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <Link
-              href={MAIN_SITE_URL}
-              className="text-primary-500 mt-2 inline-block text-center text-xs opacity-75"
-              target="_blank"
-            >
-              ramsocunsw.org
-            </Link>
-          </div>
+          ))}
+        </div>
+
+        {/* Arc Support Badge */}
+        <div className="col-span-1 flex flex-col items-start space-y-4 sm:items-center">
+          <p className="text-sm">Proudly supported by</p>
+          <Logo logoName="arc" size={80} />
+          <p className="text-xs">UNSW Student Life</p>
         </div>
       </div>
-      <hr className="self-center border-gray-300/50" />
-      <div className="flex flex-col items-center justify-center py-4 text-center text-sm">
-        {/* UNSW Arc */}
-        <div className="m-4 flex flex-col items-center gap-1 rounded-md border border-gray-300 px-8 py-4">
-          <p>Proudly supported by</p>
-          <Link
-            href="https://arc.unsw.edu.au"
-            target="_blank"
-            className="hover:text-gray-400"
-          >
-            <Image
-              src="/2025/UNSW_ARC_logo.svg"
-              alt="UNSW Arc Logo"
-              className="w-16"
-              width={96}
-              height={96}
-            />
-          </Link>
-          <p className="text-sm">UNSW Student Life</p>
-        </div>
-        <p>&copy; 2025 RAMSoc UNSW. All rights reserved.</p>
+
+      {/* Legal */}
+      <div className="border-t border-gray-700 p-5 pt-6 text-center text-xs text-gray-500">
+        &copy; 2025 RAMSoc UNSW. All rights reserved.
       </div>
     </footer>
   );

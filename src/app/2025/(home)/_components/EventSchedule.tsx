@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaDiscord, FaFacebook, FaInstagram } from "react-icons/fa6";
+import Social from "./Social";
 
 export const EventSchedule = () => {
   return (
@@ -32,30 +32,9 @@ export const EventSchedule = () => {
           <p>Follow us on our socials for our latest updates!</p>
           <div className="mt-6 flex flex-col justify-center gap-4">
             <div className="flex h-12 justify-center gap-8">
-              <Link
-                className="h-full transform transition-transform hover:scale-110"
-                href="https://www.instagram.com/ramsocunsw"
-                target="_blank"
-                aria-label="Instagram"
-              >
-                <FaInstagram size={32} />
-              </Link>
-              <Link
-                className="h-full transform transition-transform hover:scale-110"
-                href="https://www.facebook.com/RAMSOCUNSW"
-                target="_blank"
-                aria-label="Facebook"
-              >
-                <FaFacebook size={32} />
-              </Link>
-              <Link
-                className="h-full transform transition-transform hover:scale-110"
-                href="https://discord.com/invite/4dWMWAjWm9"
-                target="_blank"
-                aria-label="Discord"
-              >
-                <FaDiscord size={32} />
-              </Link>
+              <Social socialName="instagram" size={32} />
+              <Social socialName="facebook" size={32} />
+              <Social socialName="discord" size={32} />
             </div>
           </div>
         </div>
