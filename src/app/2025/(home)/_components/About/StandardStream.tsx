@@ -1,3 +1,4 @@
+import { RULEBOOK_URL } from "@/app/constants";
 import {
   GraduationCap,
   Scale,
@@ -110,7 +111,7 @@ const StandardStream = () => {
                 </div>
               </td>
               <td className="table-cell border border-gray-500 px-4 py-2">
-                $0 (supplied kit and preapproved extras list only)
+                $200 (supplied kit and preapproved extras list only)
               </td>
             </tr>
             <tr>
@@ -137,7 +138,7 @@ const StandardStream = () => {
           official rulebook.
         </p>
         <a
-          href="https://docs.google.com/document/d/16KqDf9lArQZWStWT5tjy72ISZoLHtO71SLx5pW6Jmgw/edit?tab=t.0"
+          href={RULEBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="button self-center"

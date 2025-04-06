@@ -1,3 +1,4 @@
+import { RULEBOOK_URL } from "@/app/constants";
 import {
   Settings,
   Globe,
@@ -140,7 +141,7 @@ const OpenStream = () => {
           official rulebook.
         </p>
         <a
-          href="https://docs.google.com/document/d/16KqDf9lArQZWStWT5tjy72ISZoLHtO71SLx5pW6Jmgw/edit?tab=t.0"
+          href={RULEBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="button"
