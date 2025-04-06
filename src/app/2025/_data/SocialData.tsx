@@ -22,8 +22,8 @@ export const SocialData = {
     icon: (size: number) => <FaDiscord size={size} />,
   },
   email: {
-    href: "mailto:contact@ramsocunsw.org",
-    label: "contact@ramsocunsw.org",
+    href: "mailto:info@ramsocunsw.org",
+    label: "info@ramsocunsw.org",
     icon: (size: number) => <FaEnvelope size={size} />,
   },
 };
