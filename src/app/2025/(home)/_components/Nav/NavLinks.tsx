@@ -212,7 +212,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              className="fixed right-0 top-16 z-40 flex max-h-[90vh] w-64 flex-col gap-4 overflow-y-auto rounded-lg border border-gray-300/50 bg-black/90 p-6"
+              className="fixed right-0 top-16 z-40 flex max-h-[90vh] w-72 flex-col gap-4 overflow-y-auto rounded-lg border border-gray-300/50 bg-black/90 p-6"
               variants={sidebarVariants}
               onClick={(e) => e.stopPropagation()}
               initial="closed"
