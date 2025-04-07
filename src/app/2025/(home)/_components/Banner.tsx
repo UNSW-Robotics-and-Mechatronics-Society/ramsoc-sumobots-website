@@ -3,6 +3,10 @@ import { useInView } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import TypingAnimation from "./TypeWriter";
+import {
+  INTER_UNI_SIGNUP_FORM_URL,
+  UNSW_ONLY_SIGNUP_FORM_URL,
+} from "@/app/constants";
 
 export const Banner = ({
   setPageTitleVisible,
@@ -48,15 +52,25 @@ export const Banner = ({
               Join the robot battle.
             </h3>
             <p>
-              <strong>OPEN STREAM</strong> registration are now open! STANDARD
-              STREAM registration will open soon on 24th March.
+              <strong>OPEN</strong> and <strong>STANDARD</strong> streams are
+              live! Sign up now to secure your spot in the largest robotics
+              competition in UNSW. Sign-up closes on{" "}
+              <strong>31st MAY 2025</strong>.
             </p>
-            <Link
-              className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSciKhBKAnkF2AwTzlVI-XyPJiT-bZjtOWi02eg3b2VT_WhKUg/viewform?usp=sharing"
-            >
-              SIGN ME UP.
-            </Link>
+            <div className="flex w-fit flex-row items-center justify-start gap-4 rounded-md border bg-gray-800/50 p-3">
+              <Link
+                className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                href={INTER_UNI_SIGNUP_FORM_URL}
+              >
+                INTER UNI SIGN UP
+              </Link>
+              <Link
+                className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                href={UNSW_ONLY_SIGNUP_FORM_URL}
+              >
+                UNSW ONLY SIGN UP
+              </Link>
+            </div>
           </div>
         </div>
       </div>
