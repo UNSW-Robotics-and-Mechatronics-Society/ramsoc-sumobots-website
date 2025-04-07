@@ -18,8 +18,9 @@ body {
   .shadow-centered {
     --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
     --tw-shadow-colored: 0 0px 72px -12px var(--tw-shadow-color);
-    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
-      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    box-shadow:
+      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
   }
 }
 
@@ -70,6 +71,9 @@ p {
 }
 li {
   @apply font-main text-sm text-gray-300 lg:text-base;
+}
+legend {
+  @apply font-main ml-4 text-sm leading-none text-gray-300;
 }
 
 p b,

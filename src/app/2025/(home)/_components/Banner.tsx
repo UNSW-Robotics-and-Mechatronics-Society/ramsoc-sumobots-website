@@ -53,24 +53,27 @@ export const Banner = ({
             </h3>
             <p>
               <strong>OPEN</strong> and <strong>STANDARD</strong> streams are
-              live! Sign up now to secure your spot in the largest robotics
-              competition in UNSW. Sign-up closes on{" "}
-              <strong>31st MAY 2025</strong>.
+              now live! Sign up today to secure your place in UNSW’s largest
+              robotics competition. Registrations close on{" "}
+              <strong>31st May 2025</strong>.
             </p>
-            <div className="flex w-fit flex-row items-center justify-start gap-4 rounded-md border bg-gray-800/50 p-3">
-              <Link
-                className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-                href={INTER_UNI_SIGNUP_FORM_URL}
-              >
-                INTER UNI SIGN UP
-              </Link>
-              <Link
-                className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-                href={UNSW_ONLY_SIGNUP_FORM_URL}
-              >
-                UNSW ONLY SIGN UP
-              </Link>
-            </div>
+            <fieldset className="w-fit rounded-md border border-gray-500/50">
+              <legend>WHO ARE YOU SIGNING UP AS?</legend>
+              <div className="flex flex-row items-center justify-start gap-4 p-4">
+                <Link
+                  className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                  href={UNSW_ONLY_SIGNUP_FORM_URL}
+                >
+                  I&apos;M A UNSW STUDENT
+                </Link>
+                <Link
+                  className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                  href={INTER_UNI_SIGNUP_FORM_URL}
+                >
+                  I&apos;M FROM ANOTHER UNI
+                </Link>
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>
