@@ -6,7 +6,7 @@ import { Footer } from "./_components/Footer/Footer";
 export const metadata: Metadata = {
   title: "MTRNSoc Sumobots 2024",
   description: "Official UNSW MTRNSoc Sumobots 2024 website.",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/2024/logo.svg" },
   twitter: {
     card: "summary_large_image",
     title: "MTRNSoc Sumobots 2024",
