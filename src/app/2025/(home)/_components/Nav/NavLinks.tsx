@@ -65,7 +65,9 @@ const NavLink = ({
         onMouseLeave={() => !isMobile && setOpenDropdown(false)}
       >
         <motion.button
-          className={`${variantClass} flex items-center justify-between gap-1 px-4 py-2 text-start ${openDropdown && !!href && "hover:underline"} ${className || ""} rounded-sm border border-gray-300/50`}
+          className={`${variantClass} flex items-center justify-between gap-1 px-4 py-2 text-start ${
+            openDropdown && !!href && "hover:underline"
+          } ${className || ""} rounded-sm border border-gray-300/50`}
           variants={{ open: { opacity: 1 }, closed: { opacity: 0 } }}
         >
           {openDropdown && !!href ? (
@@ -86,15 +88,16 @@ const NavLink = ({
             <LuChevronsUpDown />
           </div>
         </motion.button>
+
         <AnimatePresence>
           {openDropdown && (
             <div
               className={`${
-                isMobile ? "relative" : "absolute"
-              } right-0 top-full pt-2`}
+                isMobile ? "relative" : "absolute right-0 top-full"
+              } z-50 pt-2`}
             >
               <motion.div
-                className={`flex flex-col gap-1 rounded-lg border border-gray-300/50 bg-black/90 p-2`}
+                className="flex min-w-max flex-col gap-1 whitespace-nowrap rounded-lg border border-gray-300/50 bg-black/90 p-2"
                 variants={{
                   open: { opacity: 1, height: "auto" },
                   closed: { opacity: 0, height: 0 },
@@ -212,7 +215,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              className="fixed right-0 top-16 z-40 flex max-h-[90vh] w-64 flex-col gap-4 overflow-y-auto rounded-lg border border-gray-300/50 bg-black/90 p-6"
+              className="fixed right-0 top-16 z-40 flex max-h-[90vh] w-72 flex-col gap-4 overflow-y-auto rounded-lg border border-gray-300/50 bg-black/90 p-6"
               variants={sidebarVariants}
               onClick={(e) => e.stopPropagation()}
               initial="closed"

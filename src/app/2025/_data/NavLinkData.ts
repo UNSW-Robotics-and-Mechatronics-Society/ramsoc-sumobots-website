@@ -1,7 +1,10 @@
 import Path from "@/app/path";
 // import { OPEN_STREAM_FORM_URL } from "@/app/constants";
 import NavLinkDataType from "@/app/_types/NavLinkData";
-import { OPEN_STREAM_FORM_URL } from "@/app/constants";
+import {
+  INTER_UNI_SIGNUP_FORM_URL,
+  UNSW_ONLY_SIGNUP_FORM_URL,
+} from "@/app/constants";
 
 const NavLinkData: NavLinkDataType[] = [
   {
@@ -62,14 +65,14 @@ const NavLinkData: NavLinkDataType[] = [
     color: "white",
     dropdown: [
       {
-        name: "Standard Stream",
-        label: "Go to standard stream application form",
-        href: "",
+        name: "UNSW ONLY Sign-up",
+        label: "Go to UNSW students sign-up form",
+        href: UNSW_ONLY_SIGNUP_FORM_URL,
       },
       {
-        name: "Open Stream",
-        label: "Go to open stream application form",
-        href: OPEN_STREAM_FORM_URL,
+        name: "INTER-UNI Sign-up",
+        label: "Go to inter-uni sign-up form",
+        href: INTER_UNI_SIGNUP_FORM_URL,
       },
     ],
   },

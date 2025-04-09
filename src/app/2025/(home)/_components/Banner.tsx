@@ -3,6 +3,10 @@ import { useInView } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import TypingAnimation from "./TypeWriter";
+import {
+  INTER_UNI_SIGNUP_FORM_URL,
+  UNSW_ONLY_SIGNUP_FORM_URL,
+} from "@/app/constants";
 
 export const Banner = ({
   setPageTitleVisible,
@@ -48,15 +52,28 @@ export const Banner = ({
               Join the robot battle.
             </h3>
             <p>
-              <strong>OPEN STREAM</strong> registration are now open! STANDARD
-              STREAM registration will open soon on 24th March.
+              <strong>OPEN</strong> and <strong>STANDARD</strong> streams are
+              now live! Sign up today to secure your place in UNSW’s largest
+              robotics competition. Registrations close on{" "}
+              <strong>31st May 2025</strong>.
             </p>
-            <Link
-              className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSciKhBKAnkF2AwTzlVI-XyPJiT-bZjtOWi02eg3b2VT_WhKUg/viewform?usp=sharing"
-            >
-              SIGN ME UP.
-            </Link>
+            <fieldset className="w-fit rounded-md border border-gray-500/50">
+              <legend>WHO ARE YOU SIGNING UP AS?</legend>
+              <div className="flex flex-row items-center justify-start gap-4 p-4">
+                <Link
+                  className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                  href={UNSW_ONLY_SIGNUP_FORM_URL}
+                >
+                  I&apos;M A UNSW STUDENT
+                </Link>
+                <Link
+                  className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                  href={INTER_UNI_SIGNUP_FORM_URL}
+                >
+                  I&apos;M FROM ANOTHER UNI
+                </Link>
+              </div>
+            </fieldset>
           </div>
         </div>
       </div>
