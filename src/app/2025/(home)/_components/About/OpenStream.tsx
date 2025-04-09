@@ -1,3 +1,4 @@
+import { RULEBOOK_URL } from "@/app/constants";
 import {
   Settings,
   Globe,
@@ -7,7 +8,6 @@ import {
   Weight,
   DollarSign,
   Wrench,
-  AlertCircle,
   FileText,
 } from "lucide-react";
 
@@ -73,7 +73,7 @@ const OpenStream = () => {
                 Attribute
               </th>
               <th className="border border-gray-500 px-4 py-2">
-                Specification (2024)
+                Specification
               </th>
             </tr>
           </thead>
@@ -114,7 +114,7 @@ const OpenStream = () => {
                 </div>
               </td>
               <td className="table-cell border border-gray-500 px-4 py-2">
-                $100 (kit not included)
+                $200 (without base kit), $100 (with base kit)
               </td>
             </tr>
             <tr>
@@ -141,24 +141,14 @@ const OpenStream = () => {
           official rulebook.
         </p>
         <a
-          href="/2024/2024_Sumobots_Formal_Rules.pdf"
+          href={RULEBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="button"
         >
           <FileText className="h-5 w-5" />
-          <span>Official Rulebook. (2024)</span>
+          <span>Official Rulebook</span>
         </a>
-      </div>
-
-      {/* Update Notice */}
-      <div className="mt-4 flex items-center justify-center">
-        <AlertCircle className="mr-2 w-6 flex-shrink-0 text-yellow-600" />
-        <p className="text-left text-sm font-medium">
-          <strong>Note:</strong> The rulebook and specifications are from last
-          year. The updated 2025 rulebook and specifications will be released on{" "}
-          <strong>March 30.</strong>
-        </p>
       </div>
     </div>
   );
