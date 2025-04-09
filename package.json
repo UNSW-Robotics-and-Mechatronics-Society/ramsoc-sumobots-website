@@ -30,7 +30,7 @@
     "@eslint/eslintrc": "^3",
     "@opennextjs/cloudflare": "^0.5.8",
     "@types/grecaptcha": "^3.0.9",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
