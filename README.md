@@ -1,6 +1,6 @@
 # SUMOBOTS Website
 
-This is the official website for the UNSW MTRNSoc SUMOBOTS competition. Built with **Next.js**, styled with **TailwindCSS**, and deployed on **Cloudflare Workers** via [OpenNext.js](https://github.com/sst/next-on-pages).
+This is the official website for the UNSW RAMSoc SUMOBOTS competition. Built with **Next.js**, styled with **TailwindCSS**, and deployed on **Cloudflare Workers** via [OpenNext.js](https://github.com/sst/next-on-pages).
 
 ⚠️ **Important Note**: Do **not** use `yarn` as this project is deployed to Cloudflare Workers. Having both `yarn.lock` and `package-lock.json` in the project may **overload the build** during deployment.
 
@@ -14,40 +14,45 @@ To set up the development environment:
    cd ramsoc-sumobots-website
    ```
 2. Create a `.env` file and a `.dev.vars` file at project root. Ask the IT directors for the env keys.
-2. Install dependencies (use npm, not yarn!)
-    ```bash
-    npm install
-    ```
+3. Install dependencies (use npm, not yarn!)
 
-3.	Run the local development server
-    ```bash
-    npm run dev
-    ```
+   ```bash
+   npm install
+   ```
+
+4. Run the local development server
+   ```bash
+   npm run dev
+   ```
 
 ## 🚦 Pre-Deployment Checklist
 
 Before deploying, make sure to:
+
 1. Lint the project:
-    ```bash
-    npm run lint
-    ```
+
+   ```bash
+   npm run lint
+   ```
 
 2. Preview the site locally to confirm all features work:
-    ```bash
-    npm run preview
-    ```
+   ```bash
+   npm run preview
+   ```
 
 ## 🌐 Deploying to Cloudflare Workers
 
 This website is automatically built and deployed when changes are merged into the dev branch.
 
 Deployment Workflow
-1.	Create a pull request with your changes.
-2.	Once approved and merged into the dev branch, deployment will begin automatically via Cloudflare Workers.
+
+1. Create a pull request with your changes.
+2. Once approved and merged into the dev branch, deployment will begin automatically via Cloudflare Workers.
 
 > Note: Cloudflare Workers does not support preview URLs for PRs at this time. Use `npm run preview` locally to verify your implementation before submitting a PR.
 
 ## 📦 Scripts Overview
+
 - `npm run dev` – Launches local development server with Turbopack
 - `npm run preview` – Starts local preview using Cloudflare Workers
 - `npm run lint` – Lints codebase
@@ -55,6 +60,7 @@ Deployment Workflow
 - `npm run cf-typegen` – Generates Cloudflare environment typings
 
 ## 📎 Tech Stack
+
 - Framework: Next.js 15
 - Styling: TailwindCSS, Radix UI, Framer Motion
 - Icons: Lucide & React Icons
