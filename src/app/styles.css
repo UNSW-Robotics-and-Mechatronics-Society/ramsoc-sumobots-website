@@ -1,15 +1,63 @@
-@config "../../tailwind.config.ts";
 @import url("https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+/* layer(base); */
 
-html {
-  scroll-behavior: smooth;
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--color-white);
+  --color-secondary: #b3b3b3;
 }
 
-body {
-  background-image: url("/2025/background_gears.svg");
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility font-display {
+  font-family: "Audiowide", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--color-primary);
+}
+
+@utility font-main {
+  font-family: "Anta", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: var(--color-secondary);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-image: url("/2025/background_gears.svg");
+  }
 }
 
 @layer base {
@@ -25,53 +73,32 @@ body {
   }
 }
 
-@layer utilities {
-  .font-display {
-    font-family: "Audiowide", serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-  }
-  .font-main {
-    font-family: "Anta", serif;
-    font-optical-sizing: auto;
-    font-style: normal;
-  }
-  .no-scrollbar {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-}
-
 section + section {
-  @apply mt-12 lg:mt-8;
+  @apply mt-20 w-full scroll-mt-24 gap-x-8 px-4;
 }
 
 h1 {
-  @apply font-display text-5xl lg:text-6xl;
+  @apply font-display text-5xl;
 }
 h2 {
-  @apply font-display mb-5 text-4xl lg:mb-6 lg:mt-8;
+  @apply font-display mb-5 text-4xl;
 }
 h3 {
-  @apply font-display mb-4 text-xl;
+  @apply font-display text-xl;
 }
 th {
   @apply font-display text-sm lg:text-lg;
 }
 
 td {
-  @apply font-main text-sm leading-snug text-[#B3B3B3] lg:text-base;
+  @apply font-main text-sm leading-snug lg:text-base;
 }
 
 p {
-  @apply font-main text-sm text-[#B3B3B3] lg:text-base;
+  @apply font-main text-sm lg:text-base;
 }
 li {
-  @apply font-main text-sm text-gray-300 lg:text-base;
+  @apply font-main text-sm lg:text-base;
 }
 legend {
   @apply font-main ml-4 text-sm leading-none text-gray-300;
@@ -79,7 +106,7 @@ legend {
 
 p b,
 li b {
-  @apply font-bold text-white;
+  @apply text-primary font-bold;
 }
 
 img {
@@ -92,12 +119,12 @@ img {
 
 .button {
   @apply flex w-fit flex-row items-center gap-2 bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
-  @apply text-base md:text-lg lg:text-xl;
+  @apply text-base;
   @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
 }
 
 .button-white {
   @apply block w-fit bg-white px-8 py-4 font-normal text-black duration-200 hover:font-bold;
-  @apply text-base md:text-lg lg:text-xl;
+  @apply text-base;
   @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
 }

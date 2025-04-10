@@ -35,7 +35,7 @@ export default function Page() {
       </div>
       <div className="min-h-screen w-full bg-black pt-12">
         <section className="container">
-          <h2 className="font-display col-span-full">What is Sumobots</h2>
+          <h2 className="col-span-full">What is Sumobots</h2>
           <div className="col-span-full lg:col-span-7">
             <p>
               Sumobots is a sport in which two robots attempt to push each other
@@ -102,7 +102,7 @@ export default function Page() {
                 return (
                   <tr
                     key={index}
-                    className="text-center text-xl text-white text-opacity-70"
+                    className="text-opacity-70 text-center text-xl text-white"
                   >
                     <td>{data.week}</td>
                     <td>{data.topics}</td>

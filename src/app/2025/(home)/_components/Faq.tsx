@@ -67,7 +67,7 @@ const Faq = () => {
   return (
     <div className="container" id="faq">
       <div className="flex flex-col justify-center gap-8 lg:flex-row">
-        <div className="w-full flex-shrink-0 lg:w-[25%]">
+        <div className="w-full shrink-0 lg:w-[25%]">
           <h2>FAQ.</h2>
           <p>
             Everything you need to know about participating in the 2025

@@ -28,7 +28,7 @@ export const EventSchedule = () => {
               to sharpen their skills before the competition.
             </p>
           </div>
-          <h3 className="mb-0 leading-relaxed">Meanwhile,</h3>
+          <h3 className="leading-relaxed">Meanwhile,</h3>
           <p>Follow us on our socials for our latest updates!</p>
           <div className="mt-6 flex flex-col justify-center gap-4">
             <div className="flex h-12 justify-center gap-8">

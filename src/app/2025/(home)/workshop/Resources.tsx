@@ -33,9 +33,9 @@ function ResourceCard({ title, url, image, description }: ResourceCardProps) {
 
       {/* Text Content */}
       <div className="p-4 text-white">
-        <h2 className="text-lg font-semibold text-blue-400 group-hover:underline md:text-xl">
+        <span className="text-lg font-semibold text-blue-400 group-hover:underline md:text-xl">
           {title}
-        </h2>
+        </span>
         {description && (
           <p className="mt-2 text-sm text-gray-300 md:text-base">
             {description}
@@ -60,9 +60,7 @@ export default function Resources({ className }: { className?: string }) {
       <div className="space-y-10">
         {/* Slides */}
         <div>
-          <h3 className="mb-4 mt-6 text-2xl font-semibold text-blue-300">
-            Slides
-          </h3>
+          <h3 className="mt-6 mb-4 font-semibold text-blue-300">Slides</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {InternalResourceData.map((data, i) => (
               <ResourceCard key={i} {...data} />
@@ -72,7 +70,7 @@ export default function Resources({ className }: { className?: string }) {
 
         {/* Videos */}
         <div>
-          <h3 className="mb-4 text-2xl font-semibold text-blue-300">Videos</h3>
+          <h3 className="mb-4 font-semibold text-blue-300">Videos</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {InternalVideoResourceData.map((data, i) => (
               <ResourceCard key={i} {...data} />
@@ -82,7 +80,7 @@ export default function Resources({ className }: { className?: string }) {
 
         {/* Other Resources */}
         <div>
-          <h3 className="mb-4 text-2xl font-semibold text-blue-300">Others</h3>
+          <h3 className="mb-4 font-semibold text-blue-300">Others</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {ExternalResourceData.map((data, i) => (
               <ResourceCard key={i} {...data} />

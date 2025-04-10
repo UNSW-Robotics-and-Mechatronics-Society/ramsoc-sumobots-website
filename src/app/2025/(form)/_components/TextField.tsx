@@ -20,7 +20,7 @@ const TextField: React.FC<TextFieldProps> = ({ name, label, placeholder, value, 
                 name={name}
                 value={value}
                 placeholder={placeholder}
-                className="w-full rounded border border-gray-700 bg-gray-800 p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="w-full rounded-xs border border-gray-700 bg-gray-800 p-2 focus:outline-hidden focus:ring-2 focus:ring-gray-500"
                 onChange={handleChange}
             />
             <p className="h-4 text-sm text-red-500">{error}</p>

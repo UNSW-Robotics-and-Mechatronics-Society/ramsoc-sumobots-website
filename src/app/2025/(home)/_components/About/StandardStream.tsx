@@ -1,15 +1,15 @@
 import { RULEBOOK_URL } from "@/app/constants";
 import {
-  GraduationCap,
-  Scale,
-  Building,
-  UserCheck,
-  Ruler,
-  Weight,
-  DollarSign,
-  Wrench,
-  FileText,
-} from "lucide-react";
+  LuGraduationCap,
+  LuScale,
+  LuBuilding,
+  LuUserCheck,
+  LuRuler,
+  LuWeight,
+  LuDollarSign,
+  LuWrench,
+  LuFileText,
+} from "react-icons/lu";
 
 const StandardStream = () => {
   return (
@@ -17,38 +17,38 @@ const StandardStream = () => {
       {/* Features Section */}
       <div className="grid w-fit grid-cols-1 grid-rows-2 gap-6 md:grid-cols-2">
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <Building className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuBuilding className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">UNSW Exclusive</h3>
+            <h3 className="font-semibold">UNSW Exclusive</h3>
             <p>This competition is exclusive to UNSW students.</p>
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <GraduationCap className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuGraduationCap className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">Beginner Friendly</h3>
+            <h3 className="font-semibold">Beginner Friendly</h3>
             <p>This stream is designed for those who are new to the field.</p>
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <Scale className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuScale className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">Equal Opportunity</h3>
+            <h3 className="font-semibold">Equal Opportunity</h3>
             <p>All competitors use the same core components.</p>
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <UserCheck className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuUserCheck className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">Guidance and Support</h3>
+            <h3 className="font-semibold">Guidance and Support</h3>
             <p>
               Each team will be assigned a <b>mentor</b> to guide them
               throughout the competition.
@@ -58,7 +58,7 @@ const StandardStream = () => {
       </div>
 
       {/* Divider */}
-      <hr className="border-t-1 my-10 w-[90%] self-center border-gray-500" />
+      <hr className="my-10 w-[90%] self-center border-t-1 border-gray-500" />
 
       {/* Specifications Section */}
       <h3 className="mb-4 text-center font-semibold">Specifications</h3>
@@ -66,10 +66,10 @@ const StandardStream = () => {
         <table className="w-[80%] table-fixed border-collapse border border-gray-500 text-left">
           <thead className="bg-gray-800/50 text-white">
             <tr>
-              <th className="w-30 border border-gray-500 px-4 py-2">
+              <th className="w-1/2 border border-gray-500 px-4 py-2">
                 Attribute
               </th>
-              <th className="border border-gray-500 px-4 py-2">
+              <th className="w-1/2 border border-gray-500 px-4 py-2">
                 Specification
               </th>
             </tr>
@@ -78,7 +78,7 @@ const StandardStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <Ruler className="hidden h-5 w-5 text-white md:block" />
+                  <LuRuler className="hidden h-5 w-5 text-white md:block" />
                   <p>
                     <b>Max Dimension</b>
                   </p>
@@ -91,7 +91,7 @@ const StandardStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <Weight className="hidden h-5 w-5 text-white md:block" />
+                  <LuWeight className="hidden h-5 w-5 text-white md:block" />
                   <p>
                     <b>Max Weight</b>
                   </p>
@@ -104,7 +104,7 @@ const StandardStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <DollarSign className="hidden h-5 w-5 text-white md:block" />
+                  <LuDollarSign className="hidden h-5 w-5 text-white md:block" />
                   <p>
                     <b>Budget</b>
                   </p>
@@ -117,7 +117,7 @@ const StandardStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <Wrench className="hidden h-5 w-5 text-white md:block" />
+                  <LuWrench className="hidden h-5 w-5 text-white md:block" />
                   <p>
                     <b>Customization</b>
                   </p>
@@ -143,7 +143,7 @@ const StandardStream = () => {
           rel="noopener noreferrer"
           className="button self-center"
         >
-          <FileText className="h-5 w-5" />
+          <LuFileText className="h-5 w-5" />
           <span>Official Rulebook</span>
         </a>
       </div>

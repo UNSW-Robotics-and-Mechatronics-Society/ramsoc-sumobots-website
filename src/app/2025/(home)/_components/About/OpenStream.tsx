@@ -1,15 +1,15 @@
 import { RULEBOOK_URL } from "@/app/constants";
 import {
-  Settings,
-  Globe,
-  Lightbulb,
-  Trophy,
-  Ruler,
-  Weight,
-  DollarSign,
-  Wrench,
-  FileText,
-} from "lucide-react";
+  LuDollarSign,
+  LuFileText,
+  LuGlobe,
+  LuLightbulb,
+  LuRuler,
+  LuSettings,
+  LuTrophy,
+  LuWeight,
+  LuWrench,
+} from "react-icons/lu";
 
 const OpenStream = () => {
   return (
@@ -17,11 +17,11 @@ const OpenStream = () => {
       {/* Features Section */}
       <div className="grid w-fit grid-cols-1 grid-rows-2 gap-6 md:grid-cols-2">
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <Settings className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuSettings className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">Customization Freedom</h3>
+            <h3 className="font-semibold">Customization Freedom</h3>
             <p>
               Modify your bot with additional components and drivetrain
               upgrades.
@@ -29,29 +29,29 @@ const OpenStream = () => {
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <Globe className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuGlobe className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">Inter-University Competition</h3>
+            <h3 className="font-semibold">Inter-University Competition</h3>
             <p>Face off against top students from other universities.</p>
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <Lightbulb className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuLightbulb className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">Innovation & Engineering</h3>
+            <h3 className="font-semibold">Innovation & Engineering</h3>
             <p>Experiment with advanced mechanics and adaptive strategies.</p>
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <div className="flex w-20 flex-shrink-0 items-center justify-center">
-            <Trophy className="h-10 w-10 text-rose-600" />
+          <div className="flex w-20 shrink-0 items-center justify-center">
+            <LuTrophy className="h-10 w-10 text-rose-600" />
           </div>
           <div>
-            <h3 className="mb-0 font-semibold">High-Level Competition</h3>
+            <h3 className="font-semibold">High-Level Competition</h3>
             <p>
               Compete against the best in a fast-paced and unpredictable
               battlefield.
@@ -61,7 +61,7 @@ const OpenStream = () => {
       </div>
 
       {/* Divider */}
-      <hr className="border-t-1 my-10 w-[90%] self-center border-gray-500" />
+      <hr className="my-10 w-[90%] self-center border-t-1 border-gray-500" />
 
       {/* Specifications Section */}
       <h3 className="mb-4 text-center font-semibold">Specifications</h3>
@@ -69,10 +69,10 @@ const OpenStream = () => {
         <table className="w-[80%] table-fixed border-collapse border border-gray-500 text-left">
           <thead className="bg-gray-800/50 text-white">
             <tr>
-              <th className="w-30 border border-gray-500 px-4 py-2">
+              <th className="w-1/2 border border-gray-500 px-4 py-2">
                 Attribute
               </th>
-              <th className="border border-gray-500 px-4 py-2">
+              <th className="w-1/2 border border-gray-500 px-4 py-2">
                 Specification
               </th>
             </tr>
@@ -81,7 +81,7 @@ const OpenStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <Ruler className="hidden h-5 w-5 text-white md:block" />
+                  <LuRuler className="hidden size-5 shrink-0 text-white md:block" />
                   <p>
                     <b>Max Dimension</b>
                   </p>
@@ -94,7 +94,7 @@ const OpenStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <Weight className="hidden h-5 w-5 text-white md:block" />
+                  <LuWeight className="hidden size-5 shrink-0 text-white md:block" />
                   <p>
                     <b>Max Weight</b>
                   </p>
@@ -107,7 +107,7 @@ const OpenStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <DollarSign className="hidden h-5 w-5 text-white md:block" />
+                  <LuDollarSign className="hidden size-5 shrink-0 text-white md:block" />
                   <p>
                     <b>Budget</b>
                   </p>
@@ -120,7 +120,7 @@ const OpenStream = () => {
             <tr>
               <td className="table-cell items-center gap-2 border border-gray-500 px-4 py-2 text-white">
                 <div className="flex flex-row items-center gap-2">
-                  <Wrench className="hidden h-5 w-5 text-white md:block" />
+                  <LuWrench className="hidden size-5 shrink-0 text-white md:block" />
                   <p>
                     <b>Customization</b>
                   </p>
@@ -146,7 +146,7 @@ const OpenStream = () => {
           rel="noopener noreferrer"
           className="button"
         >
-          <FileText className="h-5 w-5" />
+          <LuFileText className="size-5" />
           <span>Official Rulebook</span>
         </a>
       </div>
