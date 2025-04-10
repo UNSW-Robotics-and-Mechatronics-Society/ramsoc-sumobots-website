@@ -93,11 +93,11 @@ const NavLink = ({
           {openDropdown && (
             <div
               className={`${
-                isMobile ? "relative" : "absolute right-0 top-full"
+                isMobile ? "relative" : "absolute top-full right-0"
               } z-50 pt-2`}
             >
               <motion.div
-                className="flex min-w-max flex-col gap-1 whitespace-nowrap rounded-lg border border-gray-300/50 bg-black/90 p-2"
+                className="flex min-w-max flex-col gap-1 rounded-lg border border-gray-300/50 bg-black/90 p-2 whitespace-nowrap"
                 variants={{
                   open: { opacity: 1, height: "auto" },
                   closed: { opacity: 0, height: 0 },
@@ -189,9 +189,9 @@ type NavLinksProps = {
 
 const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
   const orientationClasses = {
-    horizontal: "flex space-x-4",
-    vertical: "flex flex-col space-y-2",
-    wrap: "flex flex-wrap space-x-2",
+    horizontal: "flex gap-x-4",
+    vertical: "flex flex-col gap-y-2",
+    wrap: "flex flex-wrap gap-x-2",
   };
   const orientationClass =
     orientationClasses[orientation] || orientationClasses.horizontal;
@@ -215,7 +215,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              className="fixed right-0 top-16 z-40 flex max-h-[90vh] w-72 flex-col gap-4 overflow-y-auto rounded-lg border border-gray-300/50 bg-black/90 p-6"
+              className="fixed top-16 right-0 z-40 flex max-h-[90vh] w-72 flex-col gap-4 overflow-y-auto rounded-lg border border-gray-300/50 bg-black/90 p-6"
               variants={sidebarVariants}
               onClick={(e) => e.stopPropagation()}
               initial="closed"

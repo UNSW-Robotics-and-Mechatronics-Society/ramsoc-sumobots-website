@@ -1,7 +1,12 @@
+/* ----------------------------------------
+   Imports
+---------------------------------------- */
 @import url("https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&display=swap");
 @import "tailwindcss";
-/* layer(base); */
 
+/* ----------------------------------------
+   Theme Variables
+---------------------------------------- */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -9,24 +14,9 @@
   --color-secondary: #b3b3b3;
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
-
+/* ----------------------------------------
+   Utilities
+---------------------------------------- */
 @utility font-display {
   font-family: "Audiowide", serif;
   font-optical-sizing: auto;
@@ -50,6 +40,87 @@
   }
 }
 
+/* ----------------------------------------
+   Base Layer
+---------------------------------------- */
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  .container {
+    @apply mt-20 w-full scroll-mt-24 gap-x-8 px-4;
+  }
+
+  .shadow-centered {
+    --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
+    --tw-shadow-colored: 0 0px 72px -12px var(--tw-shadow-color);
+    box-shadow:
+      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+      var(--tw-shadow);
+  }
+
+  section + section {
+    @apply mt-20 w-full scroll-mt-24 gap-x-8 px-4;
+  }
+
+  h1 {
+    @apply font-display text-5xl;
+  }
+
+  h2 {
+    @apply font-display mb-5 text-4xl;
+  }
+
+  h3 {
+    @apply font-display text-xl;
+  }
+
+  th {
+    @apply font-display text-sm lg:text-lg;
+  }
+
+  td {
+    @apply font-main text-sm leading-snug lg:text-base;
+  }
+
+  p {
+    @apply font-main text-sm lg:text-base;
+  }
+
+  li {
+    @apply font-main text-sm lg:text-base;
+  }
+
+  legend {
+    @apply font-main ml-4 text-sm leading-none text-gray-300;
+  }
+
+  p b,
+  li b {
+    @apply text-primary font-bold;
+  }
+
+  img {
+    @apply h-full w-full object-cover;
+  }
+}
+
+/* ----------------------------------------
+   Utilities Layer
+---------------------------------------- */
 @layer utilities {
   html {
     scroll-behavior: smooth;
@@ -58,73 +129,20 @@
   body {
     background-image: url("/2025/background_gears.svg");
   }
-}
 
-@layer base {
-  .container {
-    @apply mt-20 w-full scroll-mt-24 gap-x-8 px-4;
+  .text-link {
+    @apply text-blue-400 underline duration-100 hover:text-blue-300;
   }
-  .shadow-centered {
-    --tw-shadow: 0 0 72px -12px rgb(0 0 0 / 0.25);
-    --tw-shadow-colored: 0 0px 72px -12px var(--tw-shadow-color);
-    box-shadow:
-      var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-      var(--tw-shadow);
+
+  .button {
+    @apply flex w-fit flex-row items-center gap-2 bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
+    @apply text-base;
+    @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
   }
-}
 
-section + section {
-  @apply mt-20 w-full scroll-mt-24 gap-x-8 px-4;
-}
-
-h1 {
-  @apply font-display text-5xl;
-}
-h2 {
-  @apply font-display mb-5 text-4xl;
-}
-h3 {
-  @apply font-display text-xl;
-}
-th {
-  @apply font-display text-sm lg:text-lg;
-}
-
-td {
-  @apply font-main text-sm leading-snug lg:text-base;
-}
-
-p {
-  @apply font-main text-sm lg:text-base;
-}
-li {
-  @apply font-main text-sm lg:text-base;
-}
-legend {
-  @apply font-main ml-4 text-sm leading-none text-gray-300;
-}
-
-p b,
-li b {
-  @apply text-primary font-bold;
-}
-
-img {
-  @apply h-full w-full object-cover;
-}
-
-.text-link {
-  @apply text-blue-400 underline duration-100 hover:text-blue-300;
-}
-
-.button {
-  @apply flex w-fit flex-row items-center gap-2 bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
-  @apply text-base;
-  @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
-}
-
-.button-white {
-  @apply block w-fit bg-white px-8 py-4 font-normal text-black duration-200 hover:font-bold;
-  @apply text-base;
-  @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
+  .button-white {
+    @apply block w-fit bg-white px-8 py-4 font-normal text-black duration-200 hover:font-bold;
+    @apply text-base;
+    @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
+  }
 }
