@@ -36,7 +36,7 @@ export default function TypingAnimation({
   }, [charIndex, isDeleting, wordIndex, words]);
 
   return (
-    <p className={className}>
+    <span className={className}>
       <motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -50,6 +50,6 @@ export default function TypingAnimation({
       >
         |
       </motion.span>
-    </p>
+    </span>
   );
 }

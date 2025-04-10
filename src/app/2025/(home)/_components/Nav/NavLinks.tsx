@@ -67,7 +67,7 @@ const NavLink = ({
         <motion.button
           className={`${variantClass} flex items-center justify-between gap-1 px-4 py-2 text-start ${
             openDropdown && !!href && "hover:underline"
-          } ${className || ""} rounded-sm border border-gray-300/50`}
+          } ${className || ""} rounded-xs border border-gray-300/50`}
           variants={{ open: { opacity: 1 }, closed: { opacity: 0 } }}
         >
           {openDropdown && !!href ? (
@@ -83,7 +83,7 @@ const NavLink = ({
           )}
           <div
             onClick={() => setOpenDropdown((prev) => !prev)}
-            className="rounded-sm border border-gray-300/30 p-1"
+            className="rounded-xs border border-gray-300/30 p-1"
           >
             <LuChevronsUpDown />
           </div>
@@ -237,7 +237,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-30 bg-black/10 backdrop-blur-sm"
+            className="fixed inset-0 z-30 bg-black/10 backdrop-blur-xs"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

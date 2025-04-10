@@ -28,7 +28,7 @@ export const Banner = ({
       id="banner"
       className="relative flex h-[100vh] min-h-[30rem] flex-col items-center justify-center"
     >
-      <div className="absolute left-[50vw] top-1/2 -translate-x-1/2 -translate-y-1/4">
+      <div className="absolute top-1/2 left-[50vw] -translate-x-1/2 -translate-y-1/4">
         <h1 ref={titleRef} className="leading-none">
           <span className="self-start text-[0.8rem] md:text-[1rem] xl:text-[1.5rem]">
             <span className="text-rose-600">2025</span> RAMSOC UNSW PRESENTS
@@ -43,14 +43,14 @@ export const Banner = ({
               words={["Learn.", "Build.", "Battle."]}
               className="pr-4 text-right align-top text-[1rem] text-gray-300 md:text-[1.5rem] xl:text-[1.7rem]"
             />
-            <p className="text-[1rem] md:text-[1.5rem] xl:text-[1.7rem]">
+            <span className="text-[1rem] md:text-[1.5rem] xl:text-[1.7rem]">
               INTER-UNI COMPETITION
-            </p>
+            </span>
           </div>
           <div className="mt-7 flex w-full flex-col gap-3 bg-gray-800/50 p-4">
-            <h3 className="mb-0 text-[1rem] leading-normal sm:text-[2rem]">
+            <span className="font-display text-[1.5rem] leading-normal">
               Join the robot battle.
-            </h3>
+            </span>
             <p>
               <strong>OPEN</strong> and <strong>STANDARD</strong> streams are
               now live! Sign up today to secure your place in UNSW’s largest

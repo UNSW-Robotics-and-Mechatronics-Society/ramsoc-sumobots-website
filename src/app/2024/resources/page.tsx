@@ -19,7 +19,7 @@ function ResourceCard({ title, url, image, description }: ResourceCardProps) {
     <Link
       href={`${url}`}
       target="_blank"
-      className="group col-span-full aspect-[3/4] bg-[#07070e] shadow-none shadow-[#23274c77] transition duration-300 hover:shadow-xl hover:shadow-[#23274c77] sm:col-span-6 lg:col-span-4 xl:col-span-3"
+      className="group col-span-full aspect-3/4 bg-[#07070e] shadow-none shadow-[#23274c77] transition duration-300 hover:shadow-xl hover:shadow-[#23274c77] sm:col-span-6 lg:col-span-4 xl:col-span-3"
     >
       <div className="aspect-video w-full overflow-hidden bg-black">
         <Image

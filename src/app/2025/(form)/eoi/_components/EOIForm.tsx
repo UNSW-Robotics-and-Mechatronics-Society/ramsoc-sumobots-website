@@ -112,7 +112,7 @@ const EOIForm = ({
         />
         <button
           type="submit"
-          className={`mt-2 w-full rounded bg-gray-700 px-4 py-2 font-medium text-white transition duration-300 hover:bg-gray-600 ${status === "loading" ? "cursor-not-allowed" : ""}`}
+          className={`mt-2 w-full rounded-xs bg-gray-700 px-4 py-2 font-medium text-white transition duration-300 hover:bg-gray-600 ${status === "loading" ? "cursor-not-allowed" : ""}`}
         >
           {status === "loading" ? "Submitting..." : "Submit"}
         </button>

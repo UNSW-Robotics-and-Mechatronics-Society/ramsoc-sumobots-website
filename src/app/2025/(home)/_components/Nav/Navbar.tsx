@@ -20,10 +20,10 @@ const NavHeader = ({
           opacity: isTitleVisible ? 0 : 1,
         }}
       >
-        <h1 className="font-main text-[0.6rem] leading-none text-gray-300">
+        <span className="text-[0.7rem] leading-none text-gray-300">
           RAMSOC UNSW
-        </h1>
-        <h1 className="text-[0.7rem] leading-none">SUMOBOTS</h1>
+        </span>
+        <span className="text-[1rem] leading-none font-bold">SUMOBOTS</span>
       </motion.div>
     </div>
   );
@@ -48,7 +48,7 @@ export default function Navbar({
   return (
     <motion.nav
       className={cn(
-        "fixed left-0 top-0 z-50 flex h-20 w-full items-center justify-between pl-4 transition-colors ease-out lg:pr-4",
+        "fixed top-0 left-0 z-50 flex h-20 w-full items-center justify-between pl-4 transition-colors ease-out lg:pr-4",
         !isTitleVisible ? "bg-black/50" : "bg-primary-transparent",
       )}
       initial={{ y: 0 }}

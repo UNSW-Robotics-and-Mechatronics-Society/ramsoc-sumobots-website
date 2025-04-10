@@ -20,11 +20,11 @@ const Social = ({
     return (
       <Link
         href={socialData.href}
-        className={`flex items-center justify-between gap-2 rounded-full bg-white px-4 py-2 text-center text-gray-950 hover:text-gray-400 ${className}`}
+        className={`flex items-center justify-between gap-2 rounded-full bg-white px-4 py-2 text-center text-gray-950 hover:text-gray-600 ${className}`}
         target="_blank"
       >
         {socialData.icon(size)}
-        <p className="text-sm text-gray-950">{socialData.label}</p>
+        <span className="text-sm">{socialData.label}</span>
       </Link>
     );
   }
