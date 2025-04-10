@@ -1,3 +1,4 @@
+@config "../../tailwind.config.ts";
 @import url("https://fonts.googleapis.com/css2?family=Anta&family=Audiowide&display=swap");
 @tailwind base;
 @tailwind components;
@@ -53,7 +54,7 @@ h1 {
   @apply font-display text-5xl lg:text-6xl;
 }
 h2 {
-  @apply font-display mb-5 text-4xl lg:mt-8 lg:mb-6;
+  @apply font-display mb-5 text-4xl lg:mb-6 lg:mt-8;
 }
 h3 {
   @apply font-display mb-4 text-xl;
