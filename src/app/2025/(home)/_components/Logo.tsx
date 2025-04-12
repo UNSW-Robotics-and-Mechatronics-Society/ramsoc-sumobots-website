@@ -1,28 +1,40 @@
 import Link from "next/link";
 import Image from "next/image";
-import { LogoData, LogoKeys } from "@/app/2025/_data/LogoData";
+import { LogoData, LogoKey } from "@/app/2025/_data/LogoData";
 
 type LogoProps = {
-  logoName: LogoKeys;
-  size: number;
+  logoName: LogoKey;
+  size?: number;
   className?: string;
+  disableLink?: boolean;
 };
 
-const Logo = ({ logoName, size, className }: LogoProps) => {
+const Logo = ({ logoName, size, className, disableLink }: LogoProps) => {
   const logoData = LogoData[logoName];
-  return (
+  const content = (
+    <Image
+      src={logoData.image_url}
+      alt={logoData.label}
+      width={96}
+      height={96}
+    />
+  );
+
+  return disableLink ? (
+    <div
+      className={className}
+      style={{ width: size ? `${size}px` : undefined }}
+    >
+      {content}
+    </div>
+  ) : (
     <Link
       href={logoData.href}
       className={className}
       style={{ width: size ? `${size}px` : undefined }}
       target="_blank"
     >
-      <Image
-        src={logoData.image_url}
-        alt={logoData.name}
-        width={96}
-        height={96}
-      />
+      {content}
     </Link>
   );
 };
