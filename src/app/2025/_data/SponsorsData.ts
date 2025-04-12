@@ -1,23 +1,8 @@
-interface SponsorData {
-  src: string;
-  name: string;
-}
+import { LogoKey } from "@/app/2025/_data/LogoData";
 
-export const SponsorData: SponsorData[] = [
-  {
-    src: "/images/sponsors/Ant.webp",
-    name: "Ant61",
-  },
-  {
-    src: "/images/sponsors/EA.webp",
-    name: "Engineers Australia",
-  },
-  {
-    src: "/images/sponsors/Makerspace.webp",
-    name: "Makerspace",
-  },
-  {
-    src: "/images/sponsors/robogals.webp",
-    name: "Robogals",
-  },
+export const SponsorData: LogoKey[] = [
+  "unsw_arc_green_outline",
+  "unsw_cse_school",
+  "unsw_mech_school",
+  "engineers_australia",
 ];
