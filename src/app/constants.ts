@@ -11,6 +11,10 @@ export const SUMOBOTS_WORKER_SITE_URL = "https://" + SUMOBOTS_WORKER_DOMAIN;
 // export const SUMOBOTS_WORKER_SITE_URL = "http://localhost:8787";
 
 export const UNSW_ARC_SITE_URL = "https://www.arc.unsw.edu.au";
+export const UNSW_CSE_SCHOOL_SITE_URL = "https://www.cse.unsw.edu.au/";
+export const UNSW_MECH_SCHOOL_SITE_URL =
+  "https://www.unsw.edu.au/engineering/our-schools/mechanical-and-manufacturing-engineering";
+
 export const INTER_UNI_SIGNUP_FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSfA8iTPh5ygi-dtmcjNHmbqvvdDdGU6czRAzeix97Y15cKZAg/viewform";
 export const UNSW_ONLY_SIGNUP_FORM_URL =
