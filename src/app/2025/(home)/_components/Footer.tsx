@@ -97,7 +97,7 @@ function Footer({
         {/* Arc Support Badge */}
         <div className="col-span-1 flex flex-col items-start space-y-4 sm:items-center">
           <p className="text-sm">Proudly supported by</p>
-          <Logo logoName="arc" size={80} />
+          <Logo logoName="unsw_arc_white" size={80} />
           <p className="text-xs">UNSW Student Life</p>
         </div>
       </div>

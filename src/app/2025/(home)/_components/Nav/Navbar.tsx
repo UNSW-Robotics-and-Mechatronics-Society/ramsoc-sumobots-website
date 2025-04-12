@@ -33,7 +33,7 @@ const NavContent = () => {
   return (
     <div className="flex h-full flex-row-reverse items-center gap-5 text-lg xl:flex-row">
       <NavLinks />
-      <Logo logoName="arc" className="self-start" size={80} />
+      <Logo logoName="unsw_arc_white" className="self-start" size={80} />
     </div>
   );
 };
