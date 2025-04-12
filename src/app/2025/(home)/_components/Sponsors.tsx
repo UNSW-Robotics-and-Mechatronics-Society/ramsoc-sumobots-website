@@ -31,25 +31,28 @@ export const Sponsors = () => {
   return (
     <section id="sponsor" className="container">
       <h2>Thank you to our sponsors!</h2>
-      <p>
-        Our sponsors allow us to host hundreds of students every year and
-        provide them with great learning opportunities and fun experiences.
-        <br />
-        If you would like to help us do the same this year, contact us at{" "}
-        <a className="text-link" href="mailto:industry@ramsocunsw.org">
-          industry@ramsocunsw.org
-        </a>
-        , today!
-      </p>
-      {SponsorData && SponsorData.length > 0 && (
-        <div className="mt-5 flex items-center justify-center">
-          <div className="grid w-fit grid-cols-1 items-center justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {SponsorData.map((name) => (
-              <SponsorCard key={name} logoName={name} />
-            ))}
+      <div className="flex flex-col justify-center gap-5">
+        <p>
+          Our sponsors allow us to host hundreds of students every year and
+          provide them with great learning opportunities and fun experiences.
+        </p>
+        {SponsorData && SponsorData.length > 0 && (
+          <div className="flex items-center justify-center">
+            <div className="grid w-fit grid-cols-1 items-center justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {SponsorData.map((name) => (
+                <SponsorCard key={name} logoName={name} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        <p>
+          If you would like to help us do the same this year, contact us at{" "}
+          <a className="text-link" href="mailto:industry@ramsocunsw.org">
+            industry@ramsocunsw.org
+          </a>
+          , today!
+        </p>
+      </div>
     </section>
   );
 };
