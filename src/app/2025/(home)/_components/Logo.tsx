@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { LogoData, LogoKey } from "@/app/2025/_data/LogoData";
+import logos, { LogoKey } from "@/app/2025/_data/logos";
 
 type LogoProps = {
   logoName: LogoKey;
@@ -10,7 +10,7 @@ type LogoProps = {
 };
 
 const Logo = ({ logoName, size, className, disableLink }: LogoProps) => {
-  const logoData = LogoData[logoName];
+  const logoData = logos[logoName];
   const content = (
     <Image
       src={logoData.image_url}

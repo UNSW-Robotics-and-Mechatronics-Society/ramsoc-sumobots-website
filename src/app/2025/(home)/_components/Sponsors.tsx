@@ -1,6 +1,6 @@
-import { SponsorData } from "@/app/2025/_data/SponsorsData";
+import { sponsors } from "@/app/2025/_data/sponsors";
 import Logo from "./Logo";
-import { LogoData, LogoKey } from "../../_data/LogoData";
+import logos, { LogoKey } from "@/app/2025/_data/logos";
 import Link from "next/link";
 import { LuSquareArrowOutUpRight } from "react-icons/lu";
 
@@ -9,7 +9,7 @@ interface SponsorCardProps {
 }
 
 export const SponsorCard = ({ logoName }: SponsorCardProps) => {
-  const logoData = LogoData[logoName];
+  const logoData = logos[logoName];
   return (
     <Link
       className="relative flex h-40 w-48 items-center justify-center rounded-sm border border-gray-700 p-4 transition-transform duration-200 hover:scale-105 sm:h-52 sm:w-64 sm:p-5"
@@ -36,10 +36,10 @@ export const Sponsors = () => {
           Our sponsors allow us to host hundreds of students every year and
           provide them with great learning opportunities and fun experiences.
         </p>
-        {SponsorData && SponsorData.length > 0 && (
+        {sponsors && sponsors.length > 0 && (
           <div className="flex items-center justify-center">
             <div className="grid w-fit grid-cols-1 items-center justify-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {SponsorData.map((name) => (
+              {sponsors.map((name) => (
                 <SponsorCard key={name} logoName={name} />
               ))}
             </div>

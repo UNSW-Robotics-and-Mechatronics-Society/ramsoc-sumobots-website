@@ -1,13 +1,12 @@
-import NavLinkData from "@/app/2025/_data/NavLinkData";
+import navItems, { NavItem } from "@/app/2025/_data/navItems";
 import useIsMobile from "@/app/2025/hooks/useIsMobile";
-import NavLinkType from "@/app/_types/NavLinkData";
 import Link from "next/link";
 import MenuToggler from "./MenuToggler";
 import { AnimatePresence, motion, useCycle, Variants } from "framer-motion";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { useEffect, useRef, useState } from "react";
 
-type NavLinkProps = NavLinkType & {
+type NavLinkProps = NavItem & {
   className?: string;
   onClick?: () => void;
 };
@@ -208,9 +207,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
         {isMobile ? (
           <MenuToggler onClickMenu={() => toggleOpen()} className="z-50 p-4" />
         ) : (
-          NavLinkData.map((navLink) => (
-            <NavLink key={navLink.name} {...navLink} />
-          ))
+          navItems.map((navLink) => <NavLink key={navLink.name} {...navLink} />)
         )}
         <AnimatePresence>
           {isOpen && (
@@ -222,7 +219,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
               animate="open"
               exit="closed"
             >
-              {NavLinkData.map((navLink) => (
+              {navItems.map((navLink) => (
                 <NavLink
                   key={navLink.name}
                   {...navLink}
