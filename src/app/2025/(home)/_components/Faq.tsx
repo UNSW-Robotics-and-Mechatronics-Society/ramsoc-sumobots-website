@@ -1,7 +1,7 @@
 import { FaAngleDown } from "react-icons/fa6";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import faqData from "@/app/2025/_data/FaqData";
+import faqs from "@/app/2025/_data/faqs";
 import Social from "./Social";
 
 const FaqRow = ({
@@ -94,7 +94,7 @@ const Faq = () => {
           </div>
         </div>
         <div className="mt-5 lg:mt-10">
-          <FaqList faqs={faqData} />
+          <FaqList faqs={faqs} />
         </div>
       </div>
     </div>

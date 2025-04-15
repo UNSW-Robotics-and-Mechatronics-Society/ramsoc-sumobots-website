@@ -1,4 +1,4 @@
-import { TimelineData } from "../../_data/TimelineData";
+import timelines from "@/app/2025/_data/timelines";
 import { FaLocationDot } from "react-icons/fa6";
 
 interface TimetableProps {
@@ -17,7 +17,7 @@ export const Timetable = ({ className }: TimetableProps) => {
       </p>
       <div className={`mt-6 w-fit items-center justify-center self-center`}>
         <div className="flex w-full flex-col space-y-4 sm:w-[35rem]">
-          {TimelineData.map((data, index) => (
+          {timelines.map((data, index) => (
             <div
               key={index}
               className="flex items-center rounded-xs border-[1px] border-white/10 bg-zinc-900/70"

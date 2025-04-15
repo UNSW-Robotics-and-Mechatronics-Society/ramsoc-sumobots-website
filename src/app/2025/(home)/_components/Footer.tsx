@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
 import Social from "./Social";
 import Logo from "./Logo";
-import NavLinkData from "../../_data/NavLinkData";
+import navData from "../../_data/navItems";
 
 function Footer({
   setFooterVisible = () => {},
@@ -18,10 +18,10 @@ function Footer({
     amount: "some",
   });
 
-  const links = NavLinkData.filter(
+  const links = navData.filter(
     (link) => !!link.href && !link.dropdown && link.name !== "Home",
   );
-  const dropdownLinks = NavLinkData.filter((link) => !!link.dropdown);
+  const dropdownLinks = navData.filter((link) => !!link.dropdown);
 
   useEffect(() => {
     setFooterVisible(isFooterInView);

@@ -1,18 +1,11 @@
-interface TimelineData {
+export type Timeline = {
   week: string;
   topics: string;
   location: string;
   date: string;
-}
-
-export const NextUpData = {
-  title: "Sumobots Finals",
-  time: "26th July 5-9 PM",
-  location: "IO Myers",
-  image: "",
 };
 
-export const TimelineData: TimelineData[] = [
+const timelines: Timeline[] = [
   {
     week: "1",
     topics: "Introduction and Kit Handouts",
@@ -56,3 +49,5 @@ export const TimelineData: TimelineData[] = [
     date: "--/-- 5-9 PM",
   },
 ];
+
+export default timelines;

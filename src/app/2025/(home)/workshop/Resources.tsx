@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  InternalResourceData,
-  ExternalResourceData,
-  InternalVideoResourceData,
-} from "@/app/2025/_data/ResourceData";
+  internalResources,
+  externalResources,
+  internalVideoResources,
+} from "@/app/2025/_data/resources";
 
 interface ResourceCardProps {
   title: string;
@@ -62,7 +62,7 @@ export default function Resources({ className }: { className?: string }) {
         <div>
           <h3 className="mt-6 mb-4 font-semibold text-blue-300">Slides</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {InternalResourceData.map((data, i) => (
+            {internalResources.map((data, i) => (
               <ResourceCard key={i} {...data} />
             ))}
           </div>
@@ -72,7 +72,7 @@ export default function Resources({ className }: { className?: string }) {
         <div>
           <h3 className="mb-4 font-semibold text-blue-300">Videos</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {InternalVideoResourceData.map((data, i) => (
+            {internalVideoResources.map((data, i) => (
               <ResourceCard key={i} {...data} />
             ))}
           </div>
@@ -82,7 +82,7 @@ export default function Resources({ className }: { className?: string }) {
         <div>
           <h3 className="mb-4 font-semibold text-blue-300">Others</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {ExternalResourceData.map((data, i) => (
+            {externalResources.map((data, i) => (
               <ResourceCard key={i} {...data} />
             ))}
           </div>

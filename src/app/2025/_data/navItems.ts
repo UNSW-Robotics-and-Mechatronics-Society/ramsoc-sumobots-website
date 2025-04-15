@@ -1,12 +1,19 @@
 import Path from "@/app/path";
-// import { OPEN_STREAM_FORM_URL } from "@/app/constants";
-import NavLinkDataType from "@/app/_types/NavLinkData";
 import {
   INTER_UNI_SIGNUP_FORM_URL,
   UNSW_ONLY_SIGNUP_FORM_URL,
 } from "@/app/constants";
 
-const NavLinkData: NavLinkDataType[] = [
+export type NavItem = {
+  name: string;
+  label: string;
+  href?: string | "";
+  color?: "default" | "white";
+  dropdown?: NavItem[];
+  isDisabled?: boolean;
+};
+
+const navItems: NavItem[] = [
   {
     name: "Home",
     label: "Go to home page",
@@ -78,4 +85,4 @@ const NavLinkData: NavLinkDataType[] = [
   },
 ];
 
-export default NavLinkData;
+export default navItems;

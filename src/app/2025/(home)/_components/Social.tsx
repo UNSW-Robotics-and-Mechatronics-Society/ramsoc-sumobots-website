@@ -1,8 +1,8 @@
-import { SocialData, SocialKeys } from "@/app/2025/_data/SocialData";
+import socials, { SocialKey } from "@/app/2025/_data/socials";
 import Link from "next/link";
 
 type SocialProps = {
-  socialName: SocialKeys;
+  socialName: SocialKey;
   size?: number;
   className?: string;
   variant?: "default" | "pill";
@@ -14,7 +14,7 @@ const Social = ({
   variant = "default",
   className,
 }: SocialProps) => {
-  const socialData = SocialData[socialName];
+  const socialData = socials[socialName];
 
   if (variant === "pill") {
     return (

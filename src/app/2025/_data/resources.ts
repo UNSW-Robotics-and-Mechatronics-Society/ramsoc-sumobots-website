@@ -1,11 +1,11 @@
-interface ResourceData {
+interface Resource {
   image: string;
   title: string;
   description?: string;
   url: string;
 }
 
-export const InternalResourceData: ResourceData[] = [
+export const internalResources: Resource[] = [
   {
     image: "/images/resources/info pack.png",
     title: "Info pack",
@@ -42,7 +42,7 @@ export const InternalResourceData: ResourceData[] = [
   },
 ];
 
-export const InternalVideoResourceData: ResourceData[] = [
+export const internalVideoResources: Resource[] = [
   {
     image: "/images/resources/ArduinoBasicsVideoThumbnail.jpg",
     title: "Arduino Basics Tutorial",
@@ -70,7 +70,7 @@ export const InternalVideoResourceData: ResourceData[] = [
   },
 ];
 
-export const ExternalResourceData: ResourceData[] = [
+export const externalResources: Resource[] = [
   {
     image: "/images/resources/WS badge.png",
     title: "Workshop Safety Badge",
