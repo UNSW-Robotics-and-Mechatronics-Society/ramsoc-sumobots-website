@@ -5,7 +5,7 @@ import {
   FaInstagram,
 } from "react-icons/fa6";
 
-export const SocialData = {
+const socials = {
   instagram: {
     href: "https://www.instagram.com/ramsocunsw",
     label: "RAMSOC UNSW Instagram",
@@ -28,4 +28,6 @@ export const SocialData = {
   },
 };
 
-export type SocialKeys = keyof typeof SocialData;
+export default socials;
+
+export type SocialKey = keyof typeof socials;

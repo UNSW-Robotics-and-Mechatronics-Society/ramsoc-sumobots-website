@@ -5,24 +5,7 @@ import {
   UNSW_MECH_SCHOOL_SITE_URL,
 } from "@/app/constants";
 
-export type LogoKey =
-  | "ramsoc"
-  | "unsw_arc_white"
-  | "unsw_arc_green_outline"
-  | "unsw_cse_school"
-  | "unsw_mech_school"
-  | "engineers_australia";
-
-export const LogoData: Record<
-  LogoKey,
-  {
-    label: string;
-    name: string;
-    image_url: string;
-    href: string;
-    bg_color: CSSStyleDeclaration["color"];
-  }
-> = {
+const logos = {
   ramsoc: {
     label: "ramsoc logo",
     name: "RAMSOC",
@@ -65,4 +48,8 @@ export const LogoData: Record<
     href: "https://www.engineersaustralia.org.au/",
     bg_color: "white",
   },
-} as const;
+};
+
+export default logos;
+
+export type LogoKey = keyof typeof logos;

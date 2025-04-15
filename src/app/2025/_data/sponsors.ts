@@ -1,6 +1,6 @@
-import { LogoKey } from "@/app/2025/_data/LogoData";
+import { LogoKey } from "@/app/2025/_data/logos";
 
-export const SponsorData: LogoKey[] = [
+export const sponsors: LogoKey[] = [
   "unsw_arc_green_outline",
   "unsw_cse_school",
   "unsw_mech_school",
