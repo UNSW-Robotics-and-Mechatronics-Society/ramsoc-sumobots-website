@@ -30,7 +30,7 @@
     "@opennextjs/cloudflare": "^0.5.8",
     "@tailwindcss/postcss": "^4.1.6",
     "@types/grecaptcha": "^3.0.9",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.21",
