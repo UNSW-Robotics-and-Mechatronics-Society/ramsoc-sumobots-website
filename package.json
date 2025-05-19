@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@opennextjs/cloudflare": "^0.5.8",
+    "@opennextjs/cloudflare": "^1.0.3",
     "@tailwindcss/postcss": "^4.1.6",
     "@types/grecaptcha": "^3.0.9",
     "@types/node": "^22",
