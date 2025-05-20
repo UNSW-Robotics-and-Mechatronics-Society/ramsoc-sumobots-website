@@ -37,7 +37,7 @@ export const Banner = ({
         </h1>
         <Image
           src="/2025/banner_text.svg"
-          alt="Banner Text"
+          alt="2025 RAMSOC UNSW SUMOBOTS banner"
           layout="responsive"
           width={800}
           height={250}
