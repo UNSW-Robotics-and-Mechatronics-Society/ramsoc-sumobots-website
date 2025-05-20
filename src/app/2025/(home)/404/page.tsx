@@ -48,21 +48,29 @@ export default function Custom404() {
                 alt="404 Gear"
                 layout="fill"
               />
-              <Image
-                className="relative object-contain z-0 "
-                src="/2025/404/RamboBroken.svg"
-                alt="404 Background"
-                layout="fill"
-              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                  className="relative w-5/8 h-5/8"
+                  style={{ transform: 'translate(-15%, 20%)' }} // Move left 15%, down 20% of its own size
+                >
+                  <Image
+                    className="relative object-contain z-0"
+                    src="/2025/404/RamboBroken.svg"
+                    alt="404 Background"
+                    layout="fill"
+                  />
+                </div>
+              </div>
             </div>
             </div>
-          </div>
+          
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl pt-10">
             Looks like you're a little lost?
           </p>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl">
+          <div className='pt-4'><p className="text-base sm:text-lg md:text-xl lg:text-2xl inline-flex items-center gap-2">
             Let's take you <BackHomeButton />
-          </p>
+          </p></div>
+          </div>
         </div>
 
       <style jsx global>{`
