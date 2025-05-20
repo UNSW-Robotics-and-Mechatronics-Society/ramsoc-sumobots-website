@@ -38,6 +38,7 @@ export const Banner = ({
         <Image
           src="/2025/banner_text.svg"
           alt="Banner Text"
+          layout="responsive"
           width={800}
           height={250}
         />
