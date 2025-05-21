@@ -32,23 +32,6 @@ const AnimatedCounter = ({ target, duration = 2 }: AnimatedCounterProps) => {
   }, [ref, target, inView]);
 
   return <span ref={ref} />;
-
-  // const count = useMotionValue(0);
-  // const rounded = useTransform(() => Math.round(count.get()));
-  // const [display, setDisplay] = React.useState(0);
-
-  // React.useEffect(() => {
-  //   const controls = animate(count, target, { duration: 2 });
-  //   const unsubscribe = rounded.on("change", (val) => {
-  //     setDisplay(val);
-  //   });
-  //   return () => {
-  //     controls.stop();
-  //     unsubscribe();
-  //   };
-  // }, []);
-
-  // return <span>{display}</span>;
 };
 
 export default AnimatedCounter;

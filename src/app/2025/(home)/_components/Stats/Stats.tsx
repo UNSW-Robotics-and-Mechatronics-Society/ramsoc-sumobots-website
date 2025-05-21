@@ -4,7 +4,6 @@ import {
   FaUsers,
   FaHandsHelping,
 } from "react-icons/fa";
-import { BsGearWide } from "react-icons/bs";
 
 import AnimatedCounter from "./AnimatedCounter";
 
