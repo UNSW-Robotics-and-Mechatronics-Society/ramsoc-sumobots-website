@@ -3,14 +3,16 @@
     "main": ".open-next/worker.js",
     "name": "ramsoc-sumobots-website",
     "compatibility_date": "2025-02-14",
-    "compatibility_flags": ["nodejs_compat"],
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
     "assets": {
-      "directory": ".open-next/assets",
-      "binding": "ASSETS"
+        "directory": ".open-next/assets",
+        "binding": "ASSETS"
     },
     "kv_namespaces": [
         {
-            "binding": "SB_NEXT_CACHE_WORKERS_KV",
+            "binding": "NEXT_INC_CACHE_KV",
             "id": "0671b7d2af184676a360e90412973140"
         }
     ],
@@ -24,4 +26,4 @@
             "custom_domain": true
         }
     ]
-  }
+}
