@@ -1,8 +1,7 @@
 "user-client";
 
-import { useIsomorphicLayoutEffect, animate, useInView } from "framer-motion";
 import React from "react";
-import { motion, useMotionValue, useTransform } from "motion/react";
+import { animate, useMotionValue, useTransform, useInView } from "motion/react";
 
 type AnimatedCounterProps = {
   target: number;
@@ -13,25 +12,24 @@ const AnimatedCounter = ({ target, duration = 2 }: AnimatedCounterProps) => {
   const ref = React.useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true }); // run only when ref is visible on screen
 
-  useIsomorphicLayoutEffect(() => {
-    const elemt = ref.current;
-    if (!elemt || !inView) return;
+  const count = useMotionValue(0);
+  const rounded = useTransform(() => Math.round(count.get()));
+  const [display, setDisplay] = React.useState(0);
 
-    const controls = animate(0, target, {
-      duration,
-      ease: "easeOut",
-      onUpdate(value) {
-        // Ensure integers
-        elemt.textContent = value.toFixed(0);
-      },
+  React.useEffect(() => {
+    if (!inView) return;
+
+    const controls = animate(count, target, { duration: duration });
+    const unsubscribe = rounded.on("change", (val) => {
+      setDisplay(val);
     });
-
     return () => {
       controls.stop();
+      unsubscribe();
     };
-  }, [ref, target, inView]);
+  }, [ref, inView]);
 
-  return <span ref={ref} />;
+  return <span ref={ref}>{display}</span>;
 };
 
 export default AnimatedCounter;
