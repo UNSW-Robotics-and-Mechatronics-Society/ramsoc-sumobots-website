@@ -60,18 +60,20 @@ export const Banner = ({
             <fieldset className="w-fit rounded-md border border-gray-500/50">
               <legend>WHO ARE YOU SIGNING UP AS?</legend>
               <div className="flex flex-row items-center justify-start gap-4 p-4">
-                <Link
-                  className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-                  href={UNSW_ONLY_SIGNUP_FORM_URL}
-                >
-                  I&apos;M A UNSW STUDENT
-                </Link>
-                <Link
-                  className="button-white bg-white text-[.7rem] leading-snug text-black sm:text-[1rem]"
-                  href={INTER_UNI_SIGNUP_FORM_URL}
-                >
-                  I&apos;M FROM ANOTHER UNI
-                </Link>
+                <div className="flex flex-1 gap-4 w-full">
+                  <Link
+                    className="flex flex-1 min-w-0 items-center justify-center rounded-md bg-white px-4 py-2 text-center text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                    href={UNSW_ONLY_SIGNUP_FORM_URL}
+                  >
+                    I&apos;M A UNSW STUDENT
+                  </Link>
+                  <Link
+                    className="flex flex-1 min-w-0 items-center justify-center rounded-md bg-white px-4 py-2 text-center text-[.7rem] leading-snug text-black sm:text-[1rem]"
+                    href={INTER_UNI_SIGNUP_FORM_URL}
+                  >
+                    I&apos;M FROM ANOTHER UNI
+                  </Link>
+                </div>
               </div>
             </fieldset>
           </div>
