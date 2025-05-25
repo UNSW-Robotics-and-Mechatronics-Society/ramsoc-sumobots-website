@@ -6,6 +6,7 @@ import { EventSchedule } from "./_components/EventSchedule";
 import { Sponsors } from "./_components/Sponsors";
 import Navbar from "./_components/Nav/Navbar";
 import { Banner } from "./_components/Banner";
+import { Prize } from "./_components/PrizePool";
 import Faq from "./_components/Faq";
 import FurtherSupport from "./_components/FurtherSupport";
 import Footer from "./_components/Footer";
@@ -23,6 +24,7 @@ export default function Page() {
       <div className="flex min-h-screen w-full flex-col items-center bg-black/30 pt-12">
         <div className="max-w-5xl">
           <About />
+          <Prize />
           <EventSchedule />
           <Faq />
           <Sponsors />
