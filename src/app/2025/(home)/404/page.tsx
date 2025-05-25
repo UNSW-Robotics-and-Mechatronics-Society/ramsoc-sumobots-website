@@ -24,21 +24,24 @@ export default function Custom404() {
               origin={{ left: "58%", top: "22%" }}
               minAngle={-30}
               maxAngle={30}
-              baseAngle={320} // rotates the whole burst upward
+              baseAngle={320}
+              seed={1} // Added seed
             />
             <SparkBurst
               count={8}
               origin={{ left: "38%", top: "30%" }}
               minAngle={-40}
               maxAngle={40}
-              baseAngle={210} // rotates the whole burst upward
+              baseAngle={210}
+              seed={2} // Added seed
             />
             <SparkBurst
               count={4}
               origin={{ left: "45%", top: "85%" }}
               minAngle={-30}
               maxAngle={30}
-              baseAngle={125} // rotates the whole burst upward
+              baseAngle={125}
+              seed={3} // Added seed
             />
             
             <div className="text-white rounded-full mx-auto mb-4 relative aspect-[1/1] h-full">

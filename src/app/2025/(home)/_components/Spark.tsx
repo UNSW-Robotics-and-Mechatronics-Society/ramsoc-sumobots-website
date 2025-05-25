@@ -1,5 +1,11 @@
 import React from "react";
 
+// Simple seeded pseudo-random generator
+function seededRandom(seed: number) {
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
 export function Spark({
   className = "",
   style = {},
@@ -23,7 +29,7 @@ export function Spark({
         style={{
           background: "#fff",
           animation,
-          animationDelay, // <-- pass directly here
+          animationDelay,
           opacity: 0,
         }}
       />
@@ -37,11 +43,15 @@ export function SparkBurst({
   minAngle = 0,
   maxAngle = 360,
   baseAngle = 0,
+  seed = 42, // Add a seed prop for deterministic output
 }) {
   const animationDuration = 1.5;
 
   const sparks = Array.from({ length: count }).map((_, i) => {
-    const angleDeg = baseAngle + minAngle + Math.random() * (maxAngle - minAngle);
+    // Use seededRandom instead of Math.random
+    const rand = seededRandom(seed + i);
+    let angleDeg = baseAngle + minAngle + rand * (maxAngle - minAngle);
+    angleDeg = Math.round(angleDeg * 100) / 100; // Round to 2 decimal places
     const distance = 100;
     const delay = (i / count) * animationDuration;
 
@@ -99,7 +109,7 @@ export function SparkBurst({
           className={spark.className}
           style={spark.style}
           animation={spark.animation}
-          animationDelay={spark.style.animationDelay} // <-- pass this prop
+          animationDelay={spark.style.animationDelay}
           angle={spark.angle}
         />
       ))}
