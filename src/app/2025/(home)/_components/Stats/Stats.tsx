@@ -14,7 +14,7 @@ const data = [
     suffix: "+",
     number: 2300,
     title: "Prizes Awarded",
-    desc: "Plus: A greener future One tree planted every signup!",
+    desc: "Plus: A greener future, one tree planted every signup!",
   },
   {
     icon: <FaGraduationCap size={32} className="text-black" />,
@@ -22,7 +22,7 @@ const data = [
     suffix: "",
     number: 168,
     title: "Students Participated",
-    desc: "Across all engineering dispiplines",
+    desc: "Across all engineering disciplines",
   },
   {
     icon: <FaUsers size={32} className="text-black" />,
@@ -38,7 +38,7 @@ const data = [
     suffix: "+",
     number: 40,
     title: "Engineering Volunteers",
-    desc: "Mechanical & Mechatronics delivering member workshops",
+    desc: "Dedicated to help you bring your SUMOBOT to life",
   },
 ];
 
