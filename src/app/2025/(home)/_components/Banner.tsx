@@ -2,6 +2,7 @@
 import { useInView } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import TypingAnimation from "./TypeWriter";
 import {
   INTER_UNI_SIGNUP_FORM_URL,
@@ -33,10 +34,14 @@ export const Banner = ({
           <span className="self-start text-[0.8rem] md:text-[1rem] xl:text-[1.5rem]">
             <span className="text-rose-600">2025</span> RAMSOC UNSW PRESENTS
           </span>
-          <span className="block text-[12vw] sm:text-[5.5rem] md:text-[7rem] xl:text-[8rem]">
-            SUMOBOTS
-          </span>
         </h1>
+        <Image
+          src="/2025/banner_text.svg"
+          alt="2025 RAMSOC UNSW SUMOBOTS banner"
+          layout="responsive"
+          width={800}
+          height={250}
+        />
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-row justify-between pt-4">
             <TypingAnimation
