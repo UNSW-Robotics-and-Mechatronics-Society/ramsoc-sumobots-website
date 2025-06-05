@@ -38,7 +38,7 @@ const timetable: Timetable[] = [
   },
   {
     week: "3",
-    topics: "Lasercutting | 3D Printing",
+    topics: "CAD | Lasercutting | 3D Printing",
     date_and_location: [
       {
         date: "TUES 6-8 PM",
@@ -79,7 +79,7 @@ const timetable: Timetable[] = [
     topics: "Sumobots Knockout",
     date_and_location: [
       {
-        date: "31/07 5-9 PM",
+        date: "31/07 (time TBC)",
         location: "To be confirmed",
       },
     ],
@@ -89,7 +89,7 @@ const timetable: Timetable[] = [
     topics: "Sumobots Finals",
     date_and_location: [
       {
-        date: "01/08 5-9 PM",
+        date: "01/08 (time TBC)",
         location: "Leighton Hall",
       },
     ],
