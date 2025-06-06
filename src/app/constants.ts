@@ -29,8 +29,6 @@ export const SUMOBOTS_INFO_PACK_URL =
   "https://www.canva.com/design/DAGh-iUsRKE/P4ZiyHShW1xyLvB6zs59KQ/watch?utlId=h75586c2a87";
 export const INTRO_WORKSHOP_SLIDES_URL =
   "https://www.canva.com/design/DAGoc5Db0XA/5Zhigc_C92IRfbqMz7AbOg/view?utm_content=DAGoc5Db0XA&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hefb91f5c09";
-export const ARDUINO_BASICS_WORKSHOP_URL =
-  "https://www.canva.com/design/DAGoc48wZDE/nA21N3VovPFqVAVKrG_Cww/edit?ui=eyJIIjp7IkEiOnRydWV9fQ";
 
 export const ARDUINO_BASICS_VIDEO_URL =
   "https://www.youtube.com/watch?v=Qaol1ywlcjQ";
