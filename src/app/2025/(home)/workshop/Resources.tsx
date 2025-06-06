@@ -50,17 +50,14 @@ export default function Resources({ className }: { className?: string }) {
   return (
     <div className={`${className} px-6 py-10`} id="resources">
       <h2 className="mb-6">Resources.</h2>
-      <p>
-        <b>Note:</b> These resources are from 2024 and serve as a reference for
-        your Sumobots journey. New resources will be updated before each
-        workshop, so stay tuned for the latest materials!
-      </p>
 
       {/* Sections */}
       <div className="space-y-10">
-        {/* Slides */}
+        {/* Documents / Slides */}
         <div>
-          <h3 className="mt-6 mb-4 font-semibold text-blue-300">Slides</h3>
+          <h3 className="mt-6 mb-4 font-semibold text-blue-300">
+            Documents / Slides
+          </h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {internalResources.map((data, i) => (
               <ResourceCard key={i} {...data} />
@@ -70,7 +67,7 @@ export default function Resources({ className }: { className?: string }) {
 
         {/* Videos */}
         <div>
-          <h3 className="mb-4 font-semibold text-blue-300">Videos</h3>
+          <h3 className="mb-4 font-semibold text-blue-300">Helpful Videos</h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {internalVideoResources.map((data, i) => (
               <ResourceCard key={i} {...data} />
@@ -80,7 +77,9 @@ export default function Resources({ className }: { className?: string }) {
 
         {/* Other Resources */}
         <div>
-          <h3 className="mb-4 font-semibold text-blue-300">Others</h3>
+          <h3 className="mb-4 font-semibold text-blue-300">
+            External Resources
+          </h3>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {externalResources.map((data, i) => (
               <ResourceCard key={i} {...data} />

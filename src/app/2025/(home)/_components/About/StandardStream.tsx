@@ -1,4 +1,4 @@
-import { RULEBOOK_URL } from "@/app/constants";
+import { SUMOBOTS_RULEBOOK_URL } from "@/app/constants";
 import {
   LuGraduationCap,
   LuScale,
@@ -138,7 +138,7 @@ const StandardStream = () => {
           official rulebook.
         </p>
         <a
-          href={RULEBOOK_URL}
+          href={SUMOBOTS_RULEBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="button self-center"

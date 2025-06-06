@@ -1,4 +1,4 @@
-import { RULEBOOK_URL } from "@/app/constants";
+import { SUMOBOTS_RULEBOOK_URL } from "@/app/constants";
 import {
   LuDollarSign,
   LuFileText,
@@ -141,7 +141,7 @@ const OpenStream = () => {
           official rulebook.
         </p>
         <a
-          href={RULEBOOK_URL}
+          href={SUMOBOTS_RULEBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="button"
