@@ -20,8 +20,6 @@ interface Resource {
   url: string;
 }
 
-// Resource URLs
-
 export const internalResources: Resource[] = [
   {
     image: "/thumbnails/sumobots_rulebook.png",
