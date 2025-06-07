@@ -143,7 +143,7 @@
   }
 
   .button-white {
-    @apply flex w-fit bg-white px-8 py-4 font-normal text-black duration-200 hover:font-bold;
+    @apply flex w-fit bg-white font-normal text-black duration-200 hover:font-bold;
     @apply text-base;
     @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
   }
