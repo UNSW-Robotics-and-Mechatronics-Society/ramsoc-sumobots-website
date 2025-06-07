@@ -28,7 +28,7 @@ export const Timetable = ({ className }: TimetableProps) => {
                 {data.week}
               </div>
               <div className="flex flex-col justify-center gap-1 p-2">
-                <div>{data.topics}</div>
+                <h3>{data.topics}</h3>
                 <div className="flex flex-col gap-2">
                   {data.date_and_location?.map(({ date, location }) => (
                     <div
