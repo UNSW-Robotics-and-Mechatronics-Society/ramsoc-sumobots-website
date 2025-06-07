@@ -17,7 +17,7 @@ const HomeButton = () => (
 const GearAndRambo = () => (
   <div className="relative mx-auto mb-4 aspect-square h-full">
     <Image
-      className="animate-wiggle z-1"
+      className="animate-wiggle z-[1]"
       src="/2025/404/gear.svg"
       alt="404 Gear"
       fill
