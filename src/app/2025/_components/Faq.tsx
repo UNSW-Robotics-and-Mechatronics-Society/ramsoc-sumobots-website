@@ -18,7 +18,7 @@ const FaqRow = ({
   return (
     <div className="border-b border-gray-300 py-2">
       <button
-        className="flex w-full items-center justify-between p-2 text-left text-lg font-medium"
+        className="flex w-full items-center justify-between p-2 text-left text-lg font-medium text-white"
         onClick={onClick}
       >
         <span>{question}</span>

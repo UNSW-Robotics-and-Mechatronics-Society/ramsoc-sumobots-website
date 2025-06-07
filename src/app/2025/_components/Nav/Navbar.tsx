@@ -21,7 +21,9 @@ const NavHeader = ({
         }}
       >
         <p className="text-[0.7rem] leading-none text-gray-300">RAMSOC UNSW</p>
-        <p className="text-[1rem] leading-none font-bold">SUMOBOTS</p>
+        <p className="text-[1rem] leading-none font-bold text-white">
+          SUMOBOTS
+        </p>
       </motion.div>
     </div>
   );
