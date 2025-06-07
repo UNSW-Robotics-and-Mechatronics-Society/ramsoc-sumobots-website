@@ -123,11 +123,13 @@
 ---------------------------------------- */
 @layer utilities {
   html {
-    scroll-behavior: smooth;
+    @apply scroll-smooth;
+    @apply no-scrollbar overflow-y-scroll antialiased;
   }
 
   body {
     background-image: url("/2025/background_gears.svg");
+    @apply font-main bg-black;
   }
 
   .text-link {

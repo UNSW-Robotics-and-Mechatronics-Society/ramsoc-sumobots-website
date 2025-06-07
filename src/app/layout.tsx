@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import "@/app/styles.css";
 import { SUMOBOTS_SITE_URL } from "@/app/constants";
+import Head from "next/head";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SUMOBOTS_SITE_URL),
@@ -32,8 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="no-scrollbar overflow-y-scroll antialiased">
-      <body className="font-main w-full bg-black text-2xl text-white">
+    <html lang="en">
+      <Head>
+        <link rel="icon" href="/ramsoc_logo.svg" />
+      </Head>
+      <body>
         <main>{children}</main>
       </body>
     </html>

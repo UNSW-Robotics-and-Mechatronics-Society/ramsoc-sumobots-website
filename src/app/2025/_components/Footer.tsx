@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { useInView } from "framer-motion";
 import Social from "./Social";
 import Logo from "./Logo";
-import navData from "../../_data/navItems";
+import navData from "../_data/navItems";
 
 function Footer({
   setFooterVisible = () => {},
