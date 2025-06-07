@@ -40,6 +40,7 @@ export const Banner = ({
           alt="2025 RAMSOC UNSW SUMOBOTS banner"
           width={800}
           height={250}
+          sizes="(max-width: 768px) 100vw, 800px"
           priority
         />
         <div className="flex w-full flex-col gap-4">
