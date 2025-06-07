@@ -2,7 +2,7 @@ import React from "react";
 
 // Simple seeded pseudo-random generator
 function seededRandom(seed: number) {
-  let x = Math.sin(seed) * 10000;
+  const x = Math.sin(seed) * 10000;
   return x - Math.floor(x);
 }
 
@@ -25,7 +25,7 @@ export function Spark({
       }}
     >
       <div
-        className="w-6 h-0.5 rounded-full"
+        className="h-0.5 w-6 rounded-full"
         style={{
           background: "#fff",
           animation,
@@ -99,7 +99,8 @@ export function SparkBurst({
         position: "absolute",
         zIndex: -1,
         overflow: "visible",
-        left: typeof origin.left === "number" ? `${origin.left}px` : origin.left,
+        left:
+          typeof origin.left === "number" ? `${origin.left}px` : origin.left,
         top: typeof origin.top === "number" ? `${origin.top}px` : origin.top,
       }}
     >
@@ -113,50 +114,11 @@ export function SparkBurst({
           angle={spark.angle}
         />
       ))}
-      <style jsx global>{allKeyframes}</style>
+      <style jsx global>
+        {allKeyframes}
+      </style>
     </div>
   );
 }
 
 export default Spark;
-
-{/* Place this style block ONCE in your page or layout (not in every Spark) */}
-/*
-<style jsx global>{`
-  .spark-time-gradient {
-    background: #fefce8;
-  }
-  @keyframes parabolaSpark {
-    0% {
-      opacity: 1;
-      background: #fefce8;
-      transform: translate(0, 0) scale(0.3, 0.3) rotate(0deg);
-    }
-    20% {
-      background: #fef08a;
-      opacity: 1;
-      transform: translate(10px, -18px) scale(0.5, 0.5) rotate(20deg);
-    }
-    40% {
-      background: #fde047;
-      opacity: 0.9;
-      transform: translate(22px, -32px) scale(0.7, 0.7) rotate(40deg);
-    }
-    60% {
-      background: #fbbf24;
-      opacity: 0.7;
-      transform: translate(36px, -40px) scale(0.9, 1) rotate(60deg);
-    }
-    80% {
-      background: #f59e42;
-      opacity: 0.4;
-      transform: translate(50px, -44px) scale(1.1, 1.2) rotate(80deg);
-    }
-    100% {
-      background: #ea580c;
-      opacity: 0;
-      transform: translate(65px, -45px) scale(1.3, 1.5) rotate(100deg);
-    }
-  }
-`}</style>
-*/
