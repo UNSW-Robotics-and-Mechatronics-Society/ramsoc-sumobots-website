@@ -38,9 +38,9 @@ export const Banner = ({
         <Image
           src="/2025/banner_text.svg"
           alt="2025 RAMSOC UNSW SUMOBOTS banner"
-          layout="responsive"
           width={800}
           height={250}
+          priority
         />
         <div className="flex w-full flex-col gap-4">
           <div className="flex w-full flex-row justify-between pt-4">
