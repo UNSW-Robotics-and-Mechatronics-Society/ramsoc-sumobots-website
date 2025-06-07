@@ -205,7 +205,11 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
         animate={isOpen || !isMobile ? "open" : "closed"}
       >
         {isMobile ? (
-          <MenuToggler onClickMenu={() => toggleOpen()} className="z-50 p-4" />
+          <MenuToggler
+            onClickMenu={() => toggleOpen()}
+            isOpen={isOpen}
+            className="z-50 p-4"
+          />
         ) : (
           navItems.map((navLink) => <NavLink key={navLink.name} {...navLink} />)
         )}

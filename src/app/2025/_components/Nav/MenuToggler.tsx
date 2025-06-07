@@ -17,13 +17,23 @@ const Path = (
 
 const MenuToggler = ({
   onClickMenu,
+  isOpen,
   ...props
-}: { onClickMenu: () => void } & React.DetailedHTMLProps<
+}: {
+  onClickMenu: () => void;
+  isOpen: boolean;
+} & React.DetailedHTMLProps<
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >) => (
   <button onClick={onClickMenu} {...props}>
-    <svg width="23" height="23" viewBox="0 0 23 23">
+    <motion.svg
+      width="23"
+      height="23"
+      viewBox="0 0 23 23"
+      initial="closed"
+      animate={isOpen ? "open" : "closed"}
+    >
       <Path
         variants={{
           closed: { d: "M 2 2.5 L 20 2.5" },
@@ -44,7 +54,7 @@ const MenuToggler = ({
           open: { d: "M 3 2.5 L 17 16.346" },
         }}
       />
-    </svg>
+    </motion.svg>
   </button>
 );
 

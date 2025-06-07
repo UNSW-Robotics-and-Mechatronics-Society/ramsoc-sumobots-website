@@ -20,10 +20,8 @@ const NavHeader = ({
           opacity: isTitleVisible ? 0 : 1,
         }}
       >
-        <span className="text-[0.7rem] leading-none text-gray-300">
-          RAMSOC UNSW
-        </span>
-        <span className="text-[1rem] leading-none font-bold">SUMOBOTS</span>
+        <p className="text-[0.7rem] leading-none text-gray-300">RAMSOC UNSW</p>
+        <p className="text-[1rem] leading-none font-bold">SUMOBOTS</p>
       </motion.div>
     </div>
   );
