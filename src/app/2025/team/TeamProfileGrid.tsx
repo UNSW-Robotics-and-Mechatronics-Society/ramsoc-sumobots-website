@@ -42,7 +42,7 @@ const TeamProfileGrid = () => {
   return (
     <div className="container" id="team">
       <fieldset className="mb-5 rounded-lg border border-dashed border-gray-300 px-4 py-8">
-        <legend className="text-left">
+        <legend className="ml-1 text-left">
           <h3>Main Organisers</h3>
         </legend>
         <div className="mb-4 grid w-full grid-cols-1 gap-4 md:grid-cols-3">
