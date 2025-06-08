@@ -5,10 +5,10 @@ export const SUMOBOTS_DOMAIN = "sumobots." + MAIN_DOMAIN;
 export const SUMOBOTS_SITE_URL = "https://" + SUMOBOTS_DOMAIN;
 
 export const SUMOBOTS_WORKER_DOMAIN = "sumobots.worker." + MAIN_DOMAIN;
-export const SUMOBOTS_WORKER_SITE_URL = "https://" + SUMOBOTS_WORKER_DOMAIN;
+// export const SUMOBOTS_WORKER_SITE_URL = "https://" + SUMOBOTS_WORKER_DOMAIN;
 
 // Use this for local development
-// export const SUMOBOTS_WORKER_SITE_URL = "http://localhost:8787";
+export const SUMOBOTS_WORKER_SITE_URL = "http://localhost:8787";
 
 // Sponsors URLs
 export const UNSW_ARC_SITE_URL = "https://www.arc.unsw.edu.au";

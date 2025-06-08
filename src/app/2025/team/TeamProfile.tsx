@@ -28,6 +28,10 @@ const TeamProfile = ({
     );
   }
 
+  const selfie = member.selfie
+    ? { src: member.selfie, alt: member.name }
+    : { src: "/2025/team/default_profile.png", alt: "Default Selfie" };
+
   return (
     <div className="relative flex flex-col items-center text-center">
       <div className="relative">
@@ -35,15 +39,17 @@ const TeamProfile = ({
           width={128}
           height={128}
           className={`${sizeClass} rounded-full object-cover`}
-          src={member.selfie}
-          alt={member.name}
+          src={selfie.src}
+          alt={selfie.alt}
+          priority
+          draggable={false}
         />
         {member.linkedin && (
           <Link
             href={member.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute bottom-0 right-0 rounded-[4px] border-2 border-black bg-black"
+            className="absolute right-0 bottom-0 rounded-[4px] border-2 border-black bg-black"
           >
             <FaLinkedin size={size === "s" ? 32 : 48} />
           </Link>
