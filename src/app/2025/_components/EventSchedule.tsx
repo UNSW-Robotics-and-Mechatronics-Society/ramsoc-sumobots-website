@@ -31,7 +31,7 @@ export const EventSchedule = () => {
           <h3 className="leading-relaxed">Meanwhile,</h3>
           <p>Follow us on our socials for our latest updates!</p>
           <div className="mt-6 flex flex-col justify-center gap-4">
-            <div className="flex h-12 justify-center gap-8">
+            <div className="flex h-12 justify-center gap-8 text-white">
               <Social socialName="instagram" size={32} />
               <Social socialName="facebook" size={32} />
               <Social socialName="discord" size={32} />

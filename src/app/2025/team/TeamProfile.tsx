@@ -43,7 +43,7 @@ const TeamProfile = ({
             href={member.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="absolute bottom-0 right-0 rounded-[4px] border-2 border-black bg-black"
+            className="absolute right-0 bottom-0 rounded-[4px] border-2 border-black bg-black text-white"
           >
             <FaLinkedin size={size === "s" ? 32 : 48} />
           </Link>
