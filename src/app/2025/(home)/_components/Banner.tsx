@@ -61,13 +61,13 @@ export const Banner = ({
               <legend>WHO ARE YOU SIGNING UP AS?</legend>
               <div className="flex w-full gap-4 p-4">
                 <Link
-                  className="button-white flex flex-grow items-center justify-start rounded-md text-left text-[.7rem] leading-snug sm:text-[1rem]"
+                  className="button-white flex flex-1 items-center justify-start rounded-md text-left text-[.7rem] leading-snug sm:text-[1rem]"
                   href={UNSW_ONLY_SIGNUP_FORM_URL}
                 >
                   I&apos;M A UNSW STUDENT
                 </Link>
                 <Link
-                  className="button-white flex flex-grow items-center justify-start rounded-md text-left text-[.7rem] leading-snug sm:text-[1rem]"
+                  className="button-white flex flex-1 items-center justify-start rounded-md text-left text-[.7rem] leading-snug sm:text-[1rem]"
                   href={INTER_UNI_SIGNUP_FORM_URL}
                 >
                   I&apos;M FROM ANOTHER UNI
