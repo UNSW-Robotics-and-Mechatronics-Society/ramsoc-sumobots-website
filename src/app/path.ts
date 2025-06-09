@@ -17,6 +17,7 @@ const Path = {
     },
     Team: "/2025/team",
     EOI: "/2025/eoi",
+    NotFound: "/2025/404",
   },
 } as const;
 

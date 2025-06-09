@@ -46,17 +46,15 @@ This website is automatically built and deployed when changes are merged into th
 
 Deployment Workflow
 
-1. Create a pull request with your changes.
-2. Once approved and merged into the dev branch, deployment will begin automatically via Cloudflare Workers.
-
-> Note: Cloudflare Workers does not support preview URLs for PRs at this time. Use `npm run preview` locally to verify your implementation before submitting a PR.
+1. Create a pull request with your changes, a preview url will begin automatically via Cloudflare Workers.
+2. Once approved and merged into the main branch, deployment will begin automatically via Cloudflare Workers.
 
 ## 📦 Scripts Overview
 
 - `npm run dev` – Launches local development server with Turbopack
 - `npm run preview` – Starts local preview using Cloudflare Workers
 - `npm run lint` – Lints codebase
-- `npm run deploy` – Runs preview and deploys using Wrangler (DO NOT RUN THIS)
+- `npm run deploy` – Runs preview and deploys using Wrangler (!!!DO NOT RUN THIS!!!)
 - `npm run cf-typegen` – Generates Cloudflare environment typings
 
 ## 📎 Tech Stack

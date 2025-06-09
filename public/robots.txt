@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://sumobots.ramsocunsw.org
+
+# Sitemaps
+Sitemap: https://sumobots.ramsocunsw.org/sitemap.xml
