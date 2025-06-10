@@ -18,7 +18,7 @@ export async function getTeamProfiles(year: number): Promise<{
     },
   );
   const data = await response.json();
-  console.log("Team data:", data);
+
   if (!response.ok) {
     throw new Error(data.error);
   }
