@@ -1,4 +1,4 @@
-import { TeamMember } from "@/app/_types/Team";
+import { TeamMember } from "@/app/_types/team";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLinkedin } from "react-icons/fa6";
@@ -28,6 +28,10 @@ const TeamProfile = ({
     );
   }
 
+  const selfie = member.selfie
+    ? { src: member.selfie, alt: member.name }
+    : { src: "/2025/team/default_profile.png", alt: "Default Selfie" };
+
   return (
     <div className="relative flex flex-col items-center text-center">
       <div className="relative">
@@ -35,8 +39,10 @@ const TeamProfile = ({
           width={128}
           height={128}
           className={`${sizeClass} rounded-full object-cover`}
-          src={member.selfie}
-          alt={member.name}
+          src={selfie.src}
+          alt={selfie.alt}
+          priority
+          draggable={false}
         />
         {member.linkedin && (
           <Link
@@ -50,7 +56,7 @@ const TeamProfile = ({
         )}
       </div>
       <h3 className="mb-0">{member.name}</h3>
-      <p>{member.roleName}</p>
+      <p>{member.role}</p>
     </div>
   );
 };
