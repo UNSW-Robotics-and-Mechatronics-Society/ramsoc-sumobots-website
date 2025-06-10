@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getTeamProfiles } from "@/app/_utils/teamProfiles";
 import TeamProfile from "./TeamProfile";
-import { TeamMember } from "@/app/_types/Team";
+import { TeamMember } from "@/app/_types/team";
 
 const TeamProfileSkeleton = ({
   length,

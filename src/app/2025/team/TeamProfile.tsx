@@ -1,4 +1,4 @@
-import { TeamMember } from "@/app/_types/Team";
+import { TeamMember } from "@/app/_types/team";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLinkedin } from "react-icons/fa6";
@@ -56,7 +56,7 @@ const TeamProfile = ({
         )}
       </div>
       <h3 className="mb-0">{member.name}</h3>
-      <p>{member.roleName}</p>
+      <p>{member.role}</p>
     </div>
   );
 };

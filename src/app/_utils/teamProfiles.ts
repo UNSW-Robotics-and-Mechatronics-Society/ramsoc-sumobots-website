@@ -1,6 +1,6 @@
 "use server";
 
-import { TeamMember } from "@/app/_types/Team";
+import { TeamMember } from "@/app/_types/team";
 import { SUMOBOTS_WORKER_SITE_URL } from "../constants";
 
 export async function getTeamProfiles(year: number): Promise<{
