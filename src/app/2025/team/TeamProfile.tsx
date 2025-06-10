@@ -56,7 +56,7 @@ const TeamProfile = ({
         )}
       </div>
       <h3 className="mb-0">{member.name}</h3>
-      <p>{member.role}</p>
+      <p>{member.roleName}</p>
     </div>
   );
 };

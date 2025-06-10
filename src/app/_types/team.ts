@@ -2,6 +2,7 @@ export type TeamMember = {
   id: string;
   name: string;
   role: TeamRole;
+  roleName: string;
   position: TeamPosition;
   year: number;
   selfie: string;
