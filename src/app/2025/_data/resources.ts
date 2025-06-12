@@ -11,6 +11,8 @@ import {
   SUMOBOTS_RULEBOOK_URL,
   SUMOBOTS_INFO_PACK_URL,
   WORKSHOP_SAFETY_BADGE_URL,
+  SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
+  W2_WORKSHOP_SLIDES_URL,
 } from "@/app/constants";
 
 interface Resource {
@@ -40,9 +42,23 @@ export const internalResources: Resource[] = [
       "Introduction to SUMOBOTS: Overview of competition rules, robot design, and team expectations.",
     url: INTRO_WORKSHOP_SLIDES_URL,
   },
+  {
+    image: "/thumbnails/wk2_workshop_slide.png",
+    title: "Week 2 Workshop Slides",
+    description:
+      "Introduction to SUMOBOTS: Overview of competition rules, robot design, and team expectations.",
+    url: W2_WORKSHOP_SLIDES_URL,
+  },
 ];
 
 export const internalVideoResources: Resource[] = [
+  {
+    image: "/thumbnails/sumobots_finals_2024_live_stream.jpg",
+    title: "SUMOBOTS Finals 2024 Live Stream",
+    description:
+      "Need some inspiration? Watch the live stream of the SUMOBOTS Finals 2024!",
+    url: SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
+  },
   {
     image: "/thumbnails/arduino_basics_vid.jpg",
     title: "Arduino Basics Tutorial",
