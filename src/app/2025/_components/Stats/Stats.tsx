@@ -21,7 +21,7 @@ const data = [
     prefix: "",
     suffix: "",
     number: 261,
-    title: "Standard Stream Sign Ups",
+    title: "Standard Stream Sign-Ups",
     desc: "Across all engineering disciplines",
   },
   {
@@ -29,8 +29,8 @@ const data = [
     prefix: "",
     suffix: "",
     number: 113,
-    title: "Open Stream Sign Ups",
-    desc: "Include participants from other universities and high schools",
+    title: "Open Stream Sign-Ups",
+    desc: "Includes participants from other universities and high schools",
   },
   {
     icon: <FaHandsHelping size={32} className="text-black" />,
