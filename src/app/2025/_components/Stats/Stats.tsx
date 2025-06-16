@@ -12,7 +12,7 @@ const data = [
     icon: <FaTrophy size={32} className="text-black" />,
     prefix: "$",
     suffix: "+",
-    number: 2000,
+    number: 3200,
     title: "Prizes Award",
     desc: "Plus: A greener future, one tree planted every signup!",
   },
