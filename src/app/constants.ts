@@ -29,7 +29,11 @@ export const SUMOBOTS_INFO_PACK_URL =
   "https://www.canva.com/design/DAGh-iUsRKE/P4ZiyHShW1xyLvB6zs59KQ/watch?utlId=h75586c2a87";
 export const INTRO_WORKSHOP_SLIDES_URL =
   "https://www.canva.com/design/DAGoc5Db0XA/5Zhigc_C92IRfbqMz7AbOg/view?utm_content=DAGoc5Db0XA&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hefb91f5c09";
+export const W2_WORKSHOP_SLIDES_URL =
+  "https://www.canva.com/design/DAGoc48wZDE/D3Xsspf9x_u0kia5pEVQuA/view";
 
+export const SUMOBOTS_FINALS_2024_LIVE_STREAM_URL =
+  "https://www.youtube.com/live/rF5C53Vflls";
 export const ARDUINO_BASICS_VIDEO_URL =
   "https://www.youtube.com/watch?v=Qaol1ywlcjQ";
 export const CAD_VIDEO_URL = "https://www.youtube.com/watch?v=2V1Y9ENvDSM";
