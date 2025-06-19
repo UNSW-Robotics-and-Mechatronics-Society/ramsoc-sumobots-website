@@ -27,7 +27,7 @@ export const Banner = ({
   return (
     <div
       id="banner"
-      className="relative flex h-[100vh] min-h-[30rem] flex-col items-center justify-center"
+      className="relative flex h-[100vh] min-h-[50rem] flex-col items-center justify-center"
     >
       <div className="absolute top-1/2 left-[50vw] -translate-x-1/2 -translate-y-1/4">
         <h1 ref={titleRef} className="leading-none">
