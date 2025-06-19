@@ -13,6 +13,7 @@ import {
   WORKSHOP_SAFETY_BADGE_URL,
   SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
   W2_WORKSHOP_SLIDES_URL,
+  W3_WORKSHOP_SLIDES_URL,
 } from "@/app/constants";
 
 interface Resource {
@@ -46,8 +47,15 @@ export const internalResources: Resource[] = [
     image: "/thumbnails/wk2_workshop_slide.png",
     title: "Week 2 Workshop Slides",
     description:
-      "Introduction to SUMOBOTS: Overview of competition rules, robot design, and team expectations.",
+      "Workshop on Arduino Basics: Setting up the Arduino IDE, understanding basic programming concepts, and writing your first program.",
     url: W2_WORKSHOP_SLIDES_URL,
+  },
+  {
+    image: "/thumbnails/wk3_workshop_slide.png",
+    title: "Week 3 Workshop Slides",
+    description:
+      "Workshop on CAD and 3D Printing: Introduction to CAD and laser cutting software, designing robot parts, and preparing for 3D printing.",
+    url: W3_WORKSHOP_SLIDES_URL,
   },
 ];
 
