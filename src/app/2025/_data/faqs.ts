@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "What's the prize for winners?",
     answer:
-      "The prize pool for SUMOBOTS 2025 is over $2000! The exact prize breakdown for each category is currently being finalised.",
+      "The prize pool for SUMOBOTS 2025 is over $3200! The exact prize breakdown for each category is currently being finalised.",
   },
   {
     question: "How many team members do I need?",

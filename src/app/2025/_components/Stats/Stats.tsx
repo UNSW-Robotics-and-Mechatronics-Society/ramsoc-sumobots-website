@@ -1,36 +1,32 @@
-import {
-  FaTrophy,
-  FaGraduationCap,
-  FaUsers,
-  FaHandsHelping,
-} from "react-icons/fa";
+import { FaTrophy, FaGraduationCap, FaHandsHelping } from "react-icons/fa";
 
 import AnimatedCounter from "./AnimatedCounter";
+import { LuGlobe } from "react-icons/lu";
 
 const data = [
   {
     icon: <FaTrophy size={32} className="text-black" />,
     prefix: "$",
     suffix: "+",
-    number: 2300,
-    title: "Prizes Awarded",
+    number: 3200,
+    title: "Prizes Award",
     desc: "Plus: A greener future, one tree planted every signup!",
   },
   {
     icon: <FaGraduationCap size={32} className="text-black" />,
     prefix: "",
     suffix: "",
-    number: 168,
-    title: "Students Participated",
+    number: 261,
+    title: "Standard Sign-Ups",
     desc: "Across all engineering disciplines",
   },
   {
-    icon: <FaUsers size={32} className="text-black" />,
+    icon: <LuGlobe size={32} className="text-black" />,
     prefix: "",
-    suffix: "+",
-    number: 220,
-    title: "Attendees",
-    desc: "During Knockouts & Finals of the competition",
+    suffix: "",
+    number: 113,
+    title: "Open Sign-Ups",
+    desc: "Includes participants from other unis and high schools",
   },
   {
     icon: <FaHandsHelping size={32} className="text-black" />,
