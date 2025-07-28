@@ -123,11 +123,13 @@
 ---------------------------------------- */
 @layer utilities {
   html {
-    scroll-behavior: smooth;
+    @apply scroll-smooth;
+    @apply no-scrollbar overflow-y-scroll antialiased;
   }
 
   body {
     background-image: url("/2025/background_gears.svg");
+    @apply font-main bg-black;
   }
 
   .text-link {
@@ -135,14 +137,12 @@
   }
 
   .button {
-    @apply flex w-fit flex-row items-center gap-2 bg-rose-600 px-8 py-4 font-normal duration-200 hover:font-bold;
-    @apply text-base;
+    @apply flex w-fit items-center gap-2 bg-rose-600 font-normal text-white duration-200 hover:font-bold;
     @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
   }
 
   .button-white {
-    @apply block w-fit bg-white px-8 py-4 font-normal text-black duration-200 hover:font-bold;
-    @apply text-base;
+    @apply flex w-fit bg-white font-normal text-black duration-200 hover:font-bold;
     @apply px-2 py-2 md:py-3 lg:px-3 lg:py-4;
   }
 }

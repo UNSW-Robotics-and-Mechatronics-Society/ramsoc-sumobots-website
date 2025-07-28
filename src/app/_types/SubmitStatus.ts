@@ -1,1 +1,0 @@
-export type SubmitStatus = 'success' | 'error' | 'initial' | 'loading';

@@ -1,3 +1,21 @@
+import {
+  ARDUINO_BASICS_VIDEO_URL,
+  ARDUINO_IDE_URL,
+  CAD_VIDEO_URL,
+  CH340G_DRIVERS_URL,
+  INTRO_WORKSHOP_SLIDES_URL,
+  LIPO_BATTERY_QUIZ_URL,
+  MOTOR_CONTROL_VIDEO_URL,
+  ONSHAPE_URL,
+  PRINTING_VIDEO_URL,
+  SUMOBOTS_RULEBOOK_URL,
+  SUMOBOTS_INFO_PACK_URL,
+  WORKSHOP_SAFETY_BADGE_URL,
+  SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
+  W2_WORKSHOP_SLIDES_URL,
+  W3_WORKSHOP_SLIDES_URL,
+} from "@/app/constants";
+
 interface Resource {
   image: string;
   title: string;
@@ -7,96 +25,109 @@ interface Resource {
 
 export const internalResources: Resource[] = [
   {
-    image: "/images/resources/info pack.png",
-    title: "Info pack",
-    description: "Read up on our information about Sumobots.",
-    url: "https://shorturl.at/yJMCJ",
-  },
-
-  {
-    image: "/images/resources/week1.png",
-    title: "Introductory Workshop",
-    description: "Please come to meet new people, get the kits, and the food.",
-    url: "https://www.canva.com/design/DAFfr7SEwpI/IdsFkLRWD8QVTibkSQLPUw/view?utm_content=DAFfr7SEwpI&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink",
+    image: "/thumbnails/sumobots_rulebook.png",
+    title: "Official Rule Book",
+    description: "Read the official 2025 SUMOBOTS Rule Book.",
+    url: SUMOBOTS_RULEBOOK_URL,
   },
   {
-    image: "/images/resources/week2.png",
-    title: "Arduino Basics",
+    image: "/thumbnails/info_pack.jpg",
+    title: "Info Pack",
+    description: "Read up on our general information about SUMOBOTS.",
+    url: SUMOBOTS_INFO_PACK_URL,
+  },
+  {
+    image: "/thumbnails/intro_workshop_slide.png",
+    title: "Introductory Workshop Slides",
     description:
-      "This week we will be covering, how to use and wire your Arduino, teaching you how to code your Arduino and how to get your sensors working.",
-    url: "https://www.canva.com/design/DAFgEsGFhco/CGrXbUDpfd7z80CzwlTq5A/edit?utm_content=DAFgEsGFhco&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
+      "Introduction to SUMOBOTS: Overview of competition rules, robot design, and team expectations.",
+    url: INTRO_WORKSHOP_SLIDES_URL,
   },
   {
-    image: "/images/resources/week3.png",
-    title: "CAD, Lasercutting and 3D Printing",
+    image: "/thumbnails/wk2_workshop_slide.png",
+    title: "Week 2 Workshop Slides",
     description:
-      "This week we will be covering, how to use OnShape, lasercut and steps to prepare and send in your 3D prints.",
-    url: "https://www.canva.com/design/DAFkp004xdI/1QBIaEl4c851xfqZBEOk7Q/view?utm_content=DAFkp004xdI&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink",
+      "Workshop on Arduino Basics: Setting up the Arduino IDE, understanding basic programming concepts, and writing your first program.",
+    url: W2_WORKSHOP_SLIDES_URL,
   },
   {
-    image: "/images/resources/week4.png",
-    title: "Soldering, Wiring, and Motor Control Workshop",
+    image: "/thumbnails/wk3_workshop_slide.png",
+    title: "Week 3 Workshop Slides",
     description:
-      "This week we will be covering the basics of soldering, connecting motors to the Arduino and controlling the motor in the Arduino IDE.",
-    url: "https://www.canva.com/design/DAGHu56fBBY/QIXAzySqHjnR_vCATQyx5w/edit?utm_content=DAGHu56fBBY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
+      "Workshop on CAD and 3D Printing: Introduction to CAD and laser cutting software, designing robot parts, and preparing for 3D printing.",
+    url: W3_WORKSHOP_SLIDES_URL,
   },
 ];
 
 export const internalVideoResources: Resource[] = [
   {
-    image: "/images/resources/ArduinoBasicsVideoThumbnail.jpg",
+    image: "/thumbnails/sumobots_finals_2024_live_stream.jpg",
+    title: "SUMOBOTS Finals 2024 Live Stream",
+    description:
+      "Need some inspiration? Watch the live stream of the SUMOBOTS Finals 2024!",
+    url: SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
+  },
+  {
+    image: "/thumbnails/arduino_basics_vid.jpg",
     title: "Arduino Basics Tutorial",
     description: "Watch our Arduino Basics Tutorial on our Youtube!",
-    url: "https://www.youtube.com/watch?v=Qaol1ywlcjQ",
+    url: ARDUINO_BASICS_VIDEO_URL,
   },
   {
-    image: "/images/resources/CADVideoThumbnail.jpg",
+    image: "/thumbnails/CAD_vid.jpg",
     title: "CAD - Sumobots 2024",
     description: "This video covers basic CAD using Onshape!",
-    url: "https://www.youtube.com/watch?v=2V1Y9ENvDSM",
+    url: CAD_VIDEO_URL,
   },
   {
-    image: "/images/resources/MotorControl.jpg",
+    image: "/thumbnails/motor_control_vid.jpg",
     title: "Motor Control - Sumobots 2024",
     description:
       "This video covers motor control using the Arduino and L298N motor driver to get your motors spinning!",
-    url: "https://www.youtube.com/watch?v=PFLQC4x5NoQ",
+    url: MOTOR_CONTROL_VIDEO_URL,
   },
   {
-    image: "/images/resources/3DPrintingVideoThumbnail.jpg",
+    image: "/thumbnails/3d_printing_vid.jpg",
     title: "3D Printing With Cura - Sumobots 2024",
     description: "This video covers basic 3D printing with Cura!",
-    url: "https://www.youtube.com/watch?v=uO-_3uxiNsw",
+    url: PRINTING_VIDEO_URL,
   },
 ];
 
 export const externalResources: Resource[] = [
   {
-    image: "/images/resources/WS badge.png",
+    image: "/thumbnails/lipo_safety_quiz_thumbnail.png",
+    title: "Lipo Battery Safety Quiz",
+    description:
+      "‼️IMPORTANT‼️ Most team members (over half) must score 100% on the Lipo Battery Safety Quiz to receive your battery kits. For teams of 2, both members must pass.",
+    url: LIPO_BATTERY_QUIZ_URL,
+  },
+  {
+    image: "/thumbnails/workshop_badge.png",
     title: "Workshop Safety Badge",
     description:
       "‼️IMPORTANT‼️ If you or any of your team members do not have a makerspace safety induction badge, be sure to get one before our Week 3 workshops!",
-    url: "https://www.making.unsw.edu.au/access/badges/b/workshop-safety-badge/",
+    url: WORKSHOP_SAFETY_BADGE_URL,
   },
   {
-    image: "/images/resources/arduino.png",
+    image: "/thumbnails/arduino.png",
     title: "Arduino IDE",
     description:
       "Please make sure you have installed the Arduino IDE before attending the workshop!",
-    url: "https://www.arduino.cc/en/software",
+    url: ARDUINO_IDE_URL,
   },
   {
-    image: "/images/resources/sparkfun.jfif",
+    image: "/thumbnails/sparkfun.jfif",
     title: "CH340G Drivers",
     description:
       "For all windows users make sure you install the CH340G drivers as well!",
-    url: "https://learn.sparkfun.com/tutorials/how-to-install-ch340-drivers/all",
+    url: CH340G_DRIVERS_URL,
   },
   {
-    image: "/images/resources/onshape.png",
+    image: "/thumbnails/onshape.png",
     title: "Onshape",
     description:
       "Please make sure you make an account for OnShape BEFORE the workshop, using your school email.",
-    url: "https://www.onshape.com/en/",
+    url: ONSHAPE_URL,
   },
 ];

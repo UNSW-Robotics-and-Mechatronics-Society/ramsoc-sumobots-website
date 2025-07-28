@@ -1,16 +1,15 @@
 "use server";
 
-import { Team, TeamMember } from "@/app/_types/Team";
+import { TeamMember } from "@/app/_types/team";
 import { SUMOBOTS_WORKER_SITE_URL } from "../constants";
 
-export async function getTeamProfiles(
-  year: number,
-): Promise<{
-  organisers: { technicalExecutive: TeamMember; otherOrganisers: TeamMember[] };
-  nonOrganisers: TeamMember[];
+export async function getTeamProfiles(year: number): Promise<{
+  primaryOrganisers: TeamMember[];
+  secondaryOrganisers: TeamMember[];
+  others: TeamMember[];
 }> {
   const response = await fetch(
-    `${SUMOBOTS_WORKER_SITE_URL}/api/team/get?year=${year}`,
+    `${SUMOBOTS_WORKER_SITE_URL}/api/team?year=${year}`,
     {
       method: "GET",
       headers: {
@@ -19,13 +18,23 @@ export async function getTeamProfiles(
     },
   );
   const data = await response.json();
+
   if (!response.ok) {
     throw new Error(data.error);
   }
 
-  const team = Team.processRawData(data);
+  if (
+    !data ||
+    !data.primaryOrganisers ||
+    !data.secondaryOrganisers ||
+    !data.others
+  ) {
+    throw new Error("Invalid team data");
+  }
+
   return {
-    organisers: team.organisers,
-    nonOrganisers: team.nonOrganisers,
+    primaryOrganisers: data.primaryOrganisers,
+    secondaryOrganisers: data.secondaryOrganisers,
+    others: data.others,
   };
 }
