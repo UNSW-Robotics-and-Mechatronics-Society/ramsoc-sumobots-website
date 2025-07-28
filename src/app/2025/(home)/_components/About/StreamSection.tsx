@@ -35,7 +35,7 @@ const StreamSection = () => {
 
   return (
     <div className="mt-8 flex flex-col justify-center">
-      <h3 className="font-display self-center text-xl font-bold uppercase text-gray-100">
+      <h3 className="font-display self-center text-xl font-bold text-gray-100 uppercase">
         Select Your Path
       </h3>
 
