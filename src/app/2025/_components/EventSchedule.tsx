@@ -93,49 +93,6 @@ export const EventSchedule = () => {
     },
   ];
 
-  // const sponsors: Sponsors[] = [
-  //   {
-  //     source: "/engineers_australia_logo.svg",
-  //     alt: "Engineers Australia",
-  //     style: "h-25 w-auto",
-  //   },
-  //   {
-  //     source: "/bt_imaging_logo.png",
-  //     alt: "BT Imaging",
-  //     style: "h-15 w-auto",
-  //   },
-  //   {
-  //     source: "/crest_robotics_logo.png",
-  //     alt: "CREST Robotics",
-  //     style: "h-15 w-auto",
-  //   },
-  //   {
-  //     source: "/CSIRO_Logo.png",
-  //     alt: "CSIRO",
-  //     style: "h-25 w-auto",
-  //   },
-  //   {
-  //     source: "/Dematic_logo.svg",
-  //     alt: "Dematic",
-  //     style: "h-15 w-auto",
-  //   },
-  //   {
-  //     source: "/pearler_logo.png",
-  //     alt: "Pearler",
-  //     style: "h-15 w-auto",
-  //   },
-  //   {
-  //     source: "/ResMed_logo.svg",
-  //     alt: "ResMed",
-  //     style: "h-20 w-auto",
-  //   },
-  //   {
-  //     source: "/Rode_Microphones_logo.png",
-  //     alt: "Rode Microphones",
-  //     style: "h-25 w-auto",
-  //   },
-  // ];
-
   const sponsors: Sponsors[] = [
     {
       source: "/engineers_australia_logo.svg",
