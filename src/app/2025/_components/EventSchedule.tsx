@@ -176,7 +176,7 @@ export const EventSchedule = () => {
     <section id="schedule" className="container">
       <h2 className="col-span-full">Event Schedule.</h2>
       <p>
-        Get ready for the usltimate showdown! Teams will battle head-to-head,
+        Get ready for the ultimate showdown! Teams will battle head-to-head,
         pushing their Sumobots to the limit in a test of strategy, speed, and
         control.
       </p>
