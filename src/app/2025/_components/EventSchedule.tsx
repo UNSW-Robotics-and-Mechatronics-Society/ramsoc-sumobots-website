@@ -9,14 +9,20 @@ export const EventSchedule = () => {
     roundStatus: string;
   }
 
-  interface events {
+  interface Events {
     time: string;
     event: string;
-    details: string;
+    details?: string;
     showLogos?: boolean;
   }
 
-  const knockOutSchedule: events[] = [
+  interface Sponsors {
+    source: string;
+    alt: string;
+    style: string;
+  }
+
+  const knockOutSchedule: Events[] = [
     {
       time: "15:00 PM",
       event: "Opening remarks",
@@ -47,38 +53,129 @@ export const EventSchedule = () => {
     },
   ];
 
-  const FinalsSchedule: events[] = [
+  const finalsSchedule: Events[] = [
     {
       time: "16:45 PM",
-      event: "Opening remarks",
+      event: "Opening Remarks",
       details: "Confirm attendance, bot checking.",
     },
     {
-      time: "17:45 PM",
-      event: "Briefing",
+      time: "17:15 PM",
+      event: "Opening Presentation & Guest Speakers",
       details:
-        "Welcoming attendees, acknowledgment, explain rules, introduce Pick-A-Bot !!",
+        "Welcoming attendees, acknowledgment, explain rules, guest speaker, introduce Pick-A-Bot !!",
     },
     {
       time: "18:00 PM",
-      event: "Finals Matches",
+      event: "Sumobot Matches (Finals)",
       details: "Speed run matches",
     },
     {
       time: "19:00 PM",
       event: "Announcement",
-      details: "Awards and announcing winners, group photo, handout prizes.",
+      details:
+        "Awards and announcing winners, group photos with winning teams, handout prizes.",
     },
     {
       time: "19:20 PM",
-      event: "Dinner",
-      details: "Everybody get food",
+      event: "Industry Guest Speaker",
+      details: "Presentation by Dematic",
     },
     {
-      time: "19:45 PM",
-      event: "Industry Night",
+      time: "19:35 PM",
+      event: "Industry Night & Networking",
       details: "Companies:",
       showLogos: true,
+    },
+    {
+      time: "21:15 PM",
+      event: "Official Event End",
+    },
+  ];
+
+  // const sponsors: Sponsors[] = [
+  //   {
+  //     source: "/engineers_australia_logo.svg",
+  //     alt: "Engineers Australia",
+  //     style: "h-25 w-auto",
+  //   },
+  //   {
+  //     source: "/bt_imaging_logo.png",
+  //     alt: "BT Imaging",
+  //     style: "h-15 w-auto",
+  //   },
+  //   {
+  //     source: "/crest_robotics_logo.png",
+  //     alt: "CREST Robotics",
+  //     style: "h-15 w-auto",
+  //   },
+  //   {
+  //     source: "/CSIRO_Logo.png",
+  //     alt: "CSIRO",
+  //     style: "h-25 w-auto",
+  //   },
+  //   {
+  //     source: "/Dematic_logo.svg",
+  //     alt: "Dematic",
+  //     style: "h-15 w-auto",
+  //   },
+  //   {
+  //     source: "/pearler_logo.png",
+  //     alt: "Pearler",
+  //     style: "h-15 w-auto",
+  //   },
+  //   {
+  //     source: "/ResMed_logo.svg",
+  //     alt: "ResMed",
+  //     style: "h-20 w-auto",
+  //   },
+  //   {
+  //     source: "/Rode_Microphones_logo.png",
+  //     alt: "Rode Microphones",
+  //     style: "h-25 w-auto",
+  //   },
+  // ];
+
+  const sponsors: Sponsors[] = [
+    {
+      source: "/engineers_australia_logo.svg",
+      alt: "Engineers Australia",
+      style: "h-16 sm:h-25 w-auto",
+    },
+    {
+      source: "/bt_imaging_logo.png",
+      alt: "BT Imaging",
+      style: "h-10 sm:h-15 w-auto",
+    },
+    {
+      source: "/crest_robotics_logo.png",
+      alt: "CREST Robotics",
+      style: "h-10 sm:h-15 w-auto",
+    },
+    {
+      source: "/CSIRO_Logo.png",
+      alt: "CSIRO",
+      style: "h-16 sm:h-25 w-auto",
+    },
+    {
+      source: "/Dematic_logo.svg",
+      alt: "Dematic",
+      style: "h-10 sm:h-15 w-auto",
+    },
+    {
+      source: "/pearler_logo.png",
+      alt: "Pearler",
+      style: "h-10 sm:h-12 w-auto",
+    },
+    {
+      source: "/ResMed_logo.svg",
+      alt: "ResMed",
+      style: "h-12 sm:h-20 w-auto",
+    },
+    {
+      source: "/Rode_Microphones_logo.png",
+      alt: "Rode Microphones",
+      style: "h-16 sm:h-25 w-auto",
     },
   ];
 
@@ -99,7 +196,7 @@ export const EventSchedule = () => {
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
 
   const scheduleData =
-    activeTab.roundStatus === "knockout" ? knockOutSchedule : FinalsSchedule;
+    activeTab.roundStatus === "knockout" ? knockOutSchedule : finalsSchedule;
 
   // Motions:
   const containerVariants = {
@@ -176,42 +273,15 @@ export const EventSchedule = () => {
                   {/* Logo */}
                   {item.showLogos && (
                     <div className="relative mt-6 rounded-xl border border-white/10 bg-white/70 p-6 shadow-inner">
-                      <div className="flex flex-wrap items-center justify-between gap-6">
-                        <img
-                          src="/engineers_australia_logo.svg"
-                          alt="Engineers Australia"
-                          className="h-25 w-auto"
-                        />
-                        <img
-                          src="/bt_imaging_logo.png"
-                          alt="BT Imaging"
-                          className="h-12 w-auto"
-                        />
-                        <img
-                          src="/crest_robotics_logo.png"
-                          alt="CREST Robotics"
-                          className="h-12 w-auto"
-                        />
-                        <img
-                          src="/CSIRO_Logo.png"
-                          alt="CSIRO"
-                          className="h-20 w-auto"
-                        />
-                        <img
-                          src="/Dematic_logo.svg"
-                          alt="Dematic"
-                          className="h-12 w-auto"
-                        />
-                        <img
-                          src="/pearler_logo.png"
-                          alt="Pearler"
-                          className="h-10 w-auto"
-                        />
-                        <img
-                          src="/ResMed_logo.svg"
-                          alt="ResMed"
-                          className="h-16 w-auto"
-                        />
+                      <div className="flex flex-wrap items-center justify-center gap-6">
+                        {sponsors.map((item, index) => (
+                          <img
+                            key={index}
+                            src={item.source}
+                            alt={item.alt}
+                            className={item.style}
+                          />
+                        ))}
                       </div>
                     </div>
                   )}
