@@ -1,13 +1,9 @@
 "use client";
 import { useInView } from "motion/react";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import TypingAnimation from "./TypeWriter";
-import {
-  INTER_UNI_SIGNUP_FORM_URL,
-  UNSW_ONLY_SIGNUP_FORM_URL,
-} from "@/app/constants";
+import Social from "./Social";
 
 export const Banner = ({
   setPageTitleVisible,
@@ -53,33 +49,25 @@ export const Banner = ({
               INTER-UNI COMPETITION
             </span>
           </div>
-          <div className="mt-7 flex w-full flex-col gap-3 bg-gray-800/50 p-4">
+          <div className="mt-4 rounded-md border border-amber-500/50 bg-amber-900/30 p-3 text-amber-200">
+            <p className="text-sm">
+              <strong>Note:</strong> This website contains information from
+              Sumobots 2025. Details for 2026 are subject to change.
+            </p>
+          </div>
+          <div className="mt-3 flex w-full flex-col gap-3 bg-gray-800/50 p-4">
             <span className="font-display text-[1.5rem] leading-normal">
-              Join the robot battle.
+              Sumobots 2026 is coming!
             </span>
             <p>
-              <strong>OPEN</strong> and <strong>STANDARD</strong> streams are
-              now live! Sign up today to secure your place in UNSW’s largest
-              robotics competition. Registrations close on{" "}
-              <strong>31st May 2025</strong>.
+              Registrations for <strong>Sumobots 2026</strong> will open soon.
+              Keep an eye out for updates on our socials!
             </p>
-            <fieldset className="w-fit rounded-md border border-gray-500/50">
-              <legend>WHO ARE YOU SIGNING UP AS?</legend>
-              <div className="flex w-full gap-4 p-4">
-                <Link
-                  className="button-white flex flex-1 items-center justify-start rounded-md text-left text-[.7rem] leading-snug sm:text-[1rem]"
-                  href={UNSW_ONLY_SIGNUP_FORM_URL}
-                >
-                  I&apos;M A UNSW STUDENT
-                </Link>
-                <Link
-                  className="button-white flex flex-1 items-center justify-start rounded-md text-left text-[.7rem] leading-snug sm:text-[1rem]"
-                  href={INTER_UNI_SIGNUP_FORM_URL}
-                >
-                  I&apos;M FROM ANOTHER UNI
-                </Link>
-              </div>
-            </fieldset>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Social socialName="instagram" variant="pill" size={20} />
+              <Social socialName="facebook" variant="pill" size={20} />
+              <Social socialName="discord" variant="pill" size={20} />
+            </div>
           </div>
         </div>
       </div>
