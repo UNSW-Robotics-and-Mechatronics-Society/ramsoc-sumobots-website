@@ -10,23 +10,12 @@ import Stats from "./_components/Stats/Stats";
 import Faq from "./_components/Faq";
 import FurtherSupport from "./_components/FurtherSupport";
 import Footer from "./_components/Footer";
-import Link from "next/link";
-import { FaArrowRight } from "react-icons/fa6";
 
 export default function Page() {
   const [isTitleVisible, setTitleVisible] = useState(true);
   const [isFooterVisible, setFooterVisible] = useState(false);
   return (
     <Fragment>
-      <div className="fixed top-20 left-0 z-40 flex w-full items-center justify-center bg-rose-600 px-4 py-2 text-white">
-        <Link
-          href="/2026"
-          className="flex items-center gap-2 text-sm font-semibold hover:underline md:text-base"
-        >
-          Sumobots 2026 is here! Check out the new page
-          <FaArrowRight />
-        </Link>
-      </div>
       <Navbar
         isTitleVisible={isTitleVisible}
         isFooterVisible={isFooterVisible}
