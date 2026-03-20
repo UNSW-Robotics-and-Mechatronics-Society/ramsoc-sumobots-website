@@ -1,8 +1,4 @@
 import Path from "@/app/path";
-import {
-  INTER_UNI_SIGNUP_FORM_URL,
-  UNSW_ONLY_SIGNUP_FORM_URL,
-} from "@/app/constants";
 
 export type NavItem = {
   name: string;
@@ -67,21 +63,10 @@ const navItems: NavItem[] = [
   //   href: Path[2026].EOI,
   // },
   {
-    name: "Apply",
-    label: "Go to application form",
+    name: "Register",
+    label: "Go to registration dashboard",
+    href: Path[2026].Dashboard,
     color: "white",
-    dropdown: [
-      {
-        name: "UNSW ONLY Sign-up",
-        label: "Go to UNSW students sign-up form",
-        href: UNSW_ONLY_SIGNUP_FORM_URL,
-      },
-      {
-        name: "INTER-UNI Sign-up",
-        label: "Go to inter-uni sign-up form",
-        href: INTER_UNI_SIGNUP_FORM_URL,
-      },
-    ],
   },
 ];
 

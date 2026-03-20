@@ -32,6 +32,10 @@ const Path = {
     },
     Team: "/2026/team",
     EOI: "/2026/eoi",
+    SignIn: "/2026/sign-in",
+    SignUp: "/2026/sign-up",
+    Onboarding: "/2026/onboarding",
+    Dashboard: "/2026/dashboard",
     NotFound: "/2026/404",
   },
 } as const;
