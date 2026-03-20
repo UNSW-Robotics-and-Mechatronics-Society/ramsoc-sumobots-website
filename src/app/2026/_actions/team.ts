@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { getSupabaseSecretClient } from "@/app/_utils/supabase";
-import type { TeamWithMembers } from "@/app/_types/registration";
+import type { TeamWithMembers, TeamBrowseItem } from "@/app/_types/registration";
 
 const JOIN_CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no O/0/I/1
 
@@ -211,6 +211,97 @@ export async function joinTeam(
   }
 
   return { success: true };
+}
+
+export async function leaveTeam(): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  const { userId } = await auth();
+  if (!userId) return { success: false, error: "Not authenticated" };
+
+  const profileId = await getProfileId(userId);
+  if (!profileId) return { success: false, error: "Profile not found" };
+
+  const supabase = getSupabaseSecretClient();
+
+  // Find membership
+  const { data: membership } = await supabase
+    .from("team_members")
+    .select("id, team_id, role")
+    .eq("profile_id", profileId)
+    .limit(1)
+    .single();
+
+  if (!membership) {
+    return { success: false, error: "You are not on a team" };
+  }
+
+  if (membership.role === "captain") {
+    // Check if there are other members
+    const { data: otherMembers } = await supabase
+      .from("team_members")
+      .select("id, profile_id, joined_at")
+      .eq("team_id", membership.team_id)
+      .neq("profile_id", profileId)
+      .order("joined_at", { ascending: true });
+
+    if (otherMembers && otherMembers.length > 0) {
+      // Promote earliest member to captain
+      const { error: promoteError } = await supabase
+        .from("team_members")
+        .update({ role: "captain" })
+        .eq("id", otherMembers[0].id);
+
+      if (promoteError) {
+        console.error("Failed to promote new captain:", promoteError);
+        return { success: false, error: "Failed to leave team" };
+      }
+    } else {
+      // Solo captain — delete the team (CASCADE cleans up team_members)
+      const { error: deleteError } = await supabase
+        .from("teams")
+        .delete()
+        .eq("id", membership.team_id);
+
+      if (deleteError) {
+        console.error("Failed to delete team:", deleteError);
+        return { success: false, error: "Failed to leave team" };
+      }
+      return { success: true };
+    }
+  }
+
+  // Remove member row
+  const { error } = await supabase
+    .from("team_members")
+    .delete()
+    .eq("id", membership.id);
+
+  if (error) {
+    console.error("Failed to leave team:", error);
+    return { success: false, error: "Failed to leave team" };
+  }
+
+  return { success: true };
+}
+
+export async function browseTeams(): Promise<TeamBrowseItem[]> {
+  const supabase = getSupabaseSecretClient();
+
+  const { data: teams } = await supabase
+    .from("teams")
+    .select("name, category, team_members(id)")
+    .eq("competition_year", 2026)
+    .order("name", { ascending: true });
+
+  if (!teams) return [];
+
+  return teams.map((t) => ({
+    name: t.name,
+    category: t.category as "standard" | "open",
+    member_count: Array.isArray(t.team_members) ? t.team_members.length : 0,
+  }));
 }
 
 export async function getMyTeam(): Promise<TeamWithMembers | null> {

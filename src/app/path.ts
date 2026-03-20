@@ -36,6 +36,9 @@ const Path = {
     SignUp: "/2026/sign-up",
     Onboarding: "/2026/onboarding",
     Dashboard: "/2026/dashboard",
+    Admin: "/2026/admin",
+    AdminTeams: "/2026/admin/teams",
+    AdminIndividuals: "/2026/admin/individuals",
     NotFound: "/2026/404",
   },
 } as const;

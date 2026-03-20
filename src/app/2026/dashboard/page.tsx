@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 import { getProfile } from "@/app/2026/_actions/profile";
-import { getMyTeam } from "@/app/2026/_actions/team";
+import { getMyTeam, browseTeams } from "@/app/2026/_actions/team";
 import Path from "@/app/path";
 import ProfileCard from "./_components/ProfileCard";
 import TeamCard from "./_components/TeamCard";
 import MemberList from "./_components/MemberList";
 import JoinCodeDisplay from "./_components/JoinCodeDisplay";
 import NoTeamState from "./_components/NoTeamState";
+import LeaveTeamButton from "./_components/LeaveTeamButton";
 
 export default async function DashboardPage() {
   const profile = await getProfile();
@@ -36,9 +37,10 @@ export default async function DashboardPage() {
               <TeamCard team={team} />
               <JoinCodeDisplay code={team.join_code} />
               <MemberList members={team.members} />
+              <LeaveTeamButton />
             </>
           ) : (
-            <NoTeamState />
+            <NoTeamState teams={await browseTeams()} />
           )}
         </div>
       </div>

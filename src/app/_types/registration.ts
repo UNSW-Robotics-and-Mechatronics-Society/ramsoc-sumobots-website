@@ -40,3 +40,20 @@ export type TeamMember = {
 export type TeamWithMembers = Team & {
   members: (TeamMember & { profile: Profile })[];
 };
+
+export type TeamBrowseItem = {
+  name: string;
+  category: "standard" | "open";
+  member_count: number;
+};
+
+export type ProfileWithTeam = Profile & {
+  team_name: string | null;
+  team_id: string | null;
+  team_role: "captain" | "member" | null;
+};
+
+export type AdminTeamRow = Team & {
+  member_count: number;
+  member_names: string[];
+};
