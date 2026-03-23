@@ -18,10 +18,6 @@ export default async function OnboardingPage() {
     <div className="flex min-h-screen flex-col items-center px-4 pt-12 pb-24">
       <div className="w-full max-w-lg">
         <GlassPanel>
-          <h1 className="mb-2 text-center text-3xl sm:text-4xl">Register</h1>
-          <p className="mb-8 text-center text-gray-400">
-            Set up your profile and join a team
-          </p>
           <OnboardingFlow
             hasProfile={!!profile}
             hasTeam={!!team}
