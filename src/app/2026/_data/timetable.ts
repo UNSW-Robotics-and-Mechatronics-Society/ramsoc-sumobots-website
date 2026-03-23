@@ -14,11 +14,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Tyree Energy Technologies Building LG03",
+        location: "To be confirmed.",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Design Next studio (Ainsworth LVL5)",
+        location: "To be confirmed.",
       },
     ],
   },
@@ -28,11 +28,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Tyree Energy Technologies Building LG03",
+        location: "To be confirmed.",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Design Next studio (Ainsworth LVL5)",
+        location: "To be confirmed.",
       },
     ],
   },
@@ -42,11 +42,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Ainsworth 203/204",
+        location: "To be confirmed.",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Ainsworth 203/204",
+        location: "To be confirmed.",
       },
     ],
   },
@@ -56,11 +56,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Tyree Energy Technologies Building LG03",
+        location: "To be confirmed.",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Design Next studio (Ainsworth LVL5)",
+        location: "To be confirmed.",
       },
     ],
   },
@@ -70,7 +70,17 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES & THURS 6-8 PM",
-        location: "Kirby Makerspace",
+        location: "To be confirmed.",
+      },
+    ],
+  },
+  {
+    week: "9",
+    topics: "Sumobots Qualifiers",
+    date_and_location: [
+      {
+        date: "28th July (time TBC)",
+        location: "To be confirmed",
       },
     ],
   },
@@ -79,7 +89,7 @@ const timetable: Timetable[] = [
     topics: "Sumobots Knockout",
     date_and_location: [
       {
-        date: "31/07 (time TBC)",
+        date: "30th July (time TBC)",
         location: "To be confirmed",
       },
     ],
@@ -89,8 +99,8 @@ const timetable: Timetable[] = [
     topics: "Sumobots Finals",
     date_and_location: [
       {
-        date: "01/08 (time TBC)",
-        location: "Leighton Hall",
+        date: "31st July (time TBC)",
+        location: "To be confirmed",
       },
     ],
   },

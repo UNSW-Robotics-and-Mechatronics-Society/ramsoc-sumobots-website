@@ -9,15 +9,10 @@ const RulebookBox = () => {
         For more detailed competition rules and guidelines, refer to the
         official rulebook.
       </p>
-      <Link
-        href={SUMOBOTS_RULEBOOK_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="button flex"
-      >
+      <div className="button flex cursor-default opacity-50">
         <LuFileText className="size-5" />
-        Official Rulebook
-      </Link>
+          Coming Soon.
+      </div>
     </div>
   );
 };

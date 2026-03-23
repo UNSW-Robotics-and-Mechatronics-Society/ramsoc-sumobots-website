@@ -8,7 +8,7 @@ const data = [
     icon: <FaTrophy size={32} className="text-black" />,
     prefix: "$",
     suffix: "+",
-    number: 3200,
+    number: 3500,
     title: "Prizes Award",
     desc: "Plus: A greener future, one tree planted every signup!",
   },

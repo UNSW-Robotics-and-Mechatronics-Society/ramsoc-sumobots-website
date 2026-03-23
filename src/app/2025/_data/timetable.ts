@@ -14,11 +14,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Tyree Energy Technologies Building LG03",
+        location: "TBD",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Design Next studio (Ainsworth LVL5)",
+        location: "TBD",
       },
     ],
   },
@@ -28,11 +28,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Tyree Energy Technologies Building LG03",
+        location: "TBD",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Design Next studio (Ainsworth LVL5)",
+        location: "TBD",
       },
     ],
   },
@@ -42,11 +42,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Ainsworth 203/204",
+        location: "TBD",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Ainsworth 203/204",
+        location: "TBD",
       },
     ],
   },
@@ -56,11 +56,11 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES 6-8 PM",
-        location: "Tyree Energy Technologies Building LG03",
+        location: "TBD",
       },
       {
         date: "THURS 6-8 PM",
-        location: "Design Next studio (Ainsworth LVL5)",
+        location: "TBD",
       },
     ],
   },
@@ -70,7 +70,7 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "TUES & THURS 6-8 PM",
-        location: "Kirby Makerspace",
+        location: "TBD",
       },
     ],
   },
@@ -80,7 +80,7 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "31/07 (time TBC)",
-        location: "To be confirmed",
+        location: "TBD",
       },
     ],
   },
@@ -90,7 +90,7 @@ const timetable: Timetable[] = [
     date_and_location: [
       {
         date: "01/08 (time TBC)",
-        location: "Leighton Hall",
+        location: "TBD",
       },
     ],
   },
