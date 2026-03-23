@@ -526,14 +526,14 @@ function OnboardingSection() {
           {step === 1 && (
             <motion.div
               key="step-1"
-              initial={{ opacity: 0, x: 40, scale: 0.98 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -40, scale: 0.98 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Mock StudentDetailsForm */}
               <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4">
-                <OnboardingField delay={0.05}>
+                <OnboardingField delay={0.1}>
                   <Input
                     label="Full Name"
                     name="full_name"
@@ -543,7 +543,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.1}>
+                <OnboardingField delay={0.2}>
                   <div className="flex items-center gap-3">
                     <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
                       <input
@@ -557,7 +557,7 @@ function OnboardingSection() {
                   </div>
                 </OnboardingField>
 
-                <OnboardingField delay={0.15}>
+                <OnboardingField delay={0.3}>
                   {isUnsw ? (
                     <Input
                       label="zID"
@@ -576,7 +576,7 @@ function OnboardingSection() {
                   )}
                 </OnboardingField>
 
-                <OnboardingField delay={0.2}>
+                <OnboardingField delay={0.4}>
                   <Select
                     label="Year of Study"
                     name="year_of_study"
@@ -586,7 +586,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.25}>
+                <OnboardingField delay={0.5}>
                   <Input
                     label="Degree"
                     name="degree"
@@ -595,7 +595,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.3}>
+                <OnboardingField delay={0.6}>
                   <Input
                     label="Faculty"
                     name="faculty"
@@ -604,7 +604,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.35}>
+                <OnboardingField delay={0.7}>
                   <Select
                     label="Gender"
                     name="gender"
@@ -613,7 +613,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.4}>
+                <OnboardingField delay={0.8}>
                   <Input
                     label="Dietary Requirements"
                     name="dietary_requirements"
@@ -621,7 +621,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.45}>
+                <OnboardingField delay={0.9}>
                   <Input
                     label="Phone Number"
                     name="phone"
@@ -631,7 +631,7 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.5}>
+                <OnboardingField delay={1.0}>
                   <div className="sticky bottom-4 mt-4 pt-4">
                     <Button type="submit" size="full">
                       Continue
@@ -645,9 +645,9 @@ function OnboardingSection() {
           {step === 2 && (
             <motion.div
               key="step-2"
-              initial={{ opacity: 0, x: 40, scale: 0.98 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -40, scale: 0.98 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Mock TeamStep */}

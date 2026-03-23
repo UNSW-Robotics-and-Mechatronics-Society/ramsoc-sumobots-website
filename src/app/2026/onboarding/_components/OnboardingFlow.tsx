@@ -10,21 +10,18 @@ import { Button } from "@/app/2026/_components/ui/Button";
 import Path from "@/app/path";
 
 const stepVariants = {
-  enter: (direction: number) => ({
+  enter: {
     opacity: 0,
-    x: direction > 0 ? 40 : -40,
-    scale: 0.98,
-  }),
+    y: 30,
+  },
   center: {
     opacity: 1,
-    x: 0,
-    scale: 1,
+    y: 0,
   },
-  exit: (direction: number) => ({
+  exit: {
     opacity: 0,
-    x: direction > 0 ? -40 : 40,
-    scale: 0.98,
-  }),
+    y: -20,
+  },
 };
 
 export default function OnboardingFlow({
@@ -37,15 +34,11 @@ export default function OnboardingFlow({
   const router = useRouter();
   const initialStep = hasProfile ? 2 : 0;
   const [step, setStep] = useState(initialStep);
-  const [direction, setDirection] = useState(1);
-
   function handleStart() {
-    setDirection(1);
     setStep(1);
   }
 
   function handleProfileComplete() {
-    setDirection(1);
     setStep(2);
   }
 
@@ -56,7 +49,7 @@ export default function OnboardingFlow({
   return (
     <div>
       {step > 0 && <StepIndicator currentStep={step} totalSteps={2} />}
-      <AnimatePresence mode="wait" custom={direction}>
+      <AnimatePresence mode="wait">
         {step === 0 && (
           <motion.div
             key="welcome"
@@ -106,7 +99,6 @@ export default function OnboardingFlow({
         {step === 1 && (
           <motion.div
             key="step-1"
-            custom={direction}
             variants={stepVariants}
             initial="enter"
             animate="center"
@@ -122,7 +114,6 @@ export default function OnboardingFlow({
         {step === 2 && (
           <motion.div
             key="step-2"
-            custom={direction}
             variants={stepVariants}
             initial="enter"
             animate="center"

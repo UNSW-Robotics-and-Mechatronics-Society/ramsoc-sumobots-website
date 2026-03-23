@@ -79,11 +79,11 @@ export default function StudentDetailsForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Field delay={0.05}>
+      <Field delay={0.1}>
         <Input label="Full Name" name="full_name" required autoComplete="name" />
       </Field>
 
-      <Field delay={0.1}>
+      <Field delay={0.2}>
         <div className="flex items-center gap-3">
           <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
             <input
@@ -97,7 +97,7 @@ export default function StudentDetailsForm({
         </div>
       </Field>
 
-      <Field delay={0.15}>
+      <Field delay={0.3}>
         {isUnsw ? (
           <Input
             label="zID"
@@ -117,7 +117,7 @@ export default function StudentDetailsForm({
         )}
       </Field>
 
-      <Field delay={0.2}>
+      <Field delay={0.4}>
         <Select
           label="Year of Study"
           name="year_of_study"
@@ -127,15 +127,15 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.25}>
+      <Field delay={0.5}>
         <Input label="Degree" name="degree" placeholder="e.g. B.Eng (Mechatronics)" />
       </Field>
 
-      <Field delay={0.3}>
+      <Field delay={0.6}>
         <Input label="Faculty" name="faculty" placeholder="e.g. Engineering" />
       </Field>
 
-      <Field delay={0.35}>
+      <Field delay={0.7}>
         <Select
           label="Gender"
           name="gender"
@@ -144,7 +144,7 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.4}>
+      <Field delay={0.8}>
         <Input
           label="Dietary Requirements"
           name="dietary_requirements"
@@ -152,7 +152,7 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.45}>
+      <Field delay={0.9}>
         <Input
           label="Phone Number"
           name="phone"
@@ -166,7 +166,7 @@ export default function StudentDetailsForm({
         <p className="text-sm text-red-400">{error}</p>
       )}
 
-      <Field delay={0.5}>
+      <Field delay={1.0}>
         <div className="sticky bottom-4 mt-4 pt-4">
           <Button type="submit" size="full" disabled={loading}>
             {loading ? "Saving..." : "Continue"}

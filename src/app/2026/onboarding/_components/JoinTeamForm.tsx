@@ -71,7 +71,7 @@ export default function JoinTeamForm({
   if (preview) {
     return (
       <div className="flex flex-col gap-5">
-        <Field delay={0.05}>
+        <Field delay={0.2}>
           <div className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
             <h3 className="mb-2">{preview.name}</h3>
             <div className="flex items-center gap-2">
@@ -87,7 +87,7 @@ export default function JoinTeamForm({
 
         {error && <p className="text-sm text-red-400">{error}</p>}
 
-        <Field delay={0.1}>
+        <Field delay={0.2}>
           <div className="flex gap-3">
             <Button
               variant="secondary"
@@ -110,7 +110,7 @@ export default function JoinTeamForm({
 
   return (
     <div className="flex flex-col gap-4">
-      <Field delay={0.05}>
+      <Field delay={0.2}>
         <Input
           label="Join Code"
           value={code}
@@ -124,7 +124,7 @@ export default function JoinTeamForm({
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
-      <Field delay={0.1}>
+      <Field delay={0.2}>
         <div className="sticky bottom-4 mt-4 pt-4">
           <Button
             size="full"

@@ -107,7 +107,7 @@ export default function CreateTeamForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Field delay={0.05}>
+      <Field delay={0.4}>
         <Input
           label="Team Name"
           name="team_name"
@@ -116,7 +116,7 @@ export default function CreateTeamForm({
         />
       </Field>
 
-      <Field delay={0.1}>
+      <Field delay={0.4}>
         <Select
           label="Category"
           name="category"
@@ -126,7 +126,7 @@ export default function CreateTeamForm({
         />
       </Field>
 
-      <Field delay={0.15}>
+      <Field delay={0.3}>
         <p className="font-main text-xs text-gray-500">
           <b>Standard:</b> UNSW students only, 3-6 members.{" "}
           <b>Open:</b> Any university, 1-6 members.
@@ -135,7 +135,7 @@ export default function CreateTeamForm({
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
-      <Field delay={0.2}>
+      <Field delay={0.4}>
         <div className="sticky bottom-4 mt-4 pt-4">
           <Button type="submit" size="full" disabled={loading}>
             {loading ? "Creating..." : "Create Team"}
