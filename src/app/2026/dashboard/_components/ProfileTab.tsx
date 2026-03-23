@@ -184,7 +184,7 @@ export default function ProfileTab({
             <Button
               variant="primary"
               size="default"
-              className="bg-red-900 text-white hover:bg-red-800"
+              className="bg-red-600 text-white hover:bg-red-700"
               onClick={() => setShowDeleteConfirm(true)}
             >
               Delete Account

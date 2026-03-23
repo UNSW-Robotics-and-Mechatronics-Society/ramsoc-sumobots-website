@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import type {
   Profile,
@@ -243,7 +244,8 @@ export default function DashboardContent({
         </motion.div>
       </AnimatePresence>
 
-      <BottomTabBar tab={tab} setTab={setTab} />
+      {typeof document !== "undefined" &&
+        createPortal(<BottomTabBar tab={tab} setTab={setTab} />, document.body)}
     </>
   );
 }

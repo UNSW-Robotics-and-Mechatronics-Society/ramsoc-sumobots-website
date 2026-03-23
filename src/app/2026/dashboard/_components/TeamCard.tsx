@@ -64,35 +64,7 @@ export default function TeamCard({
     <Card>
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <div className="mb-1 flex min-w-0 items-center gap-2">
-            {editing ? (
-              <input
-                ref={inputRef}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                onKeyDown={handleKeyDown}
-                onBlur={handleSave}
-                className="font-display w-full rounded border border-white/20 bg-white/5 px-2 py-1 text-xl text-white outline-none focus:border-rose-500"
-                autoFocus
-                disabled={isPending}
-              />
-            ) : (
-              <>
-                <h3 className="truncate">{team.name}</h3>
-                {isCaptain && (
-                  <button
-                    onClick={() => setEditing(true)}
-                    className="font-main shrink-0 rounded px-2 py-0.5 text-xs text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
-                  >
-                    Rename
-                  </button>
-                )}
-              </>
-            )}
-          </div>
-          {error && (
-            <p className="font-main mb-1 text-xs text-red-400">{error}</p>
-          )}
+          <h3 className="mb-1 truncate">{team.name}</h3>
           <div className="flex items-center gap-2">
             <Badge variant="info">
               {team.category === "standard" ? "Standard" : "Open"}
@@ -106,6 +78,55 @@ export default function TeamCard({
           {team.members.length} member{team.members.length !== 1 ? "s" : ""}
         </span>
       </div>
+
+      {isCaptain && !editing && (
+        <button
+          onClick={() => setEditing(true)}
+          className="font-main mt-3 rounded px-2 py-0.5 text-xs text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+        >
+          Rename team
+        </button>
+      )}
+
+      {editing && (
+        <div className="mt-3 flex flex-col gap-2">
+          <input
+            ref={inputRef}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="font-display w-full rounded border border-white/20 bg-white/5 px-2 py-1 text-xl text-white outline-none focus:border-rose-500"
+            autoFocus
+            disabled={isPending}
+          />
+          {error && (
+            <p className="font-main text-xs text-red-400">{error}</p>
+          )}
+          <div className="flex gap-2">
+            <Button
+              variant="ghost"
+              size="default"
+              className="h-8 px-3 text-xs"
+              onClick={() => {
+                setEditing(false);
+                setName(team.name);
+                setError(undefined);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              size="default"
+              className="h-8 px-3 text-xs"
+              onClick={handleSave}
+              disabled={isPending}
+            >
+              {isPending ? "Saving..." : "Save"}
+            </Button>
+          </div>
+        </div>
+      )}
 
       {!team.paid && (
         <div className="mt-4 border-t border-white/10 pt-4">
