@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { UserButton } from "@clerk/nextjs";
 import type { Profile } from "@/app/_types/registration";
 import Card from "@/app/2026/_components/ui/Card";
 import { Button } from "@/app/2026/_components/ui/Button";
@@ -49,20 +50,30 @@ export default function ProfileCard({ profile }: { profile: Profile }) {
 
   return (
     <Card>
-      <div className="mb-3 flex items-center justify-between">
-        <h3>Your Profile</h3>
+      <div className="mb-4 flex items-center gap-4">
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "h-12 w-12",
+            },
+          }}
+        />
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate leading-tight">{profile.full_name}</h3>
+          <p className="font-main truncate text-sm text-gray-400">
+            {profile.email}
+          </p>
+        </div>
         <Button
           variant="ghost"
           size="default"
-          className="h-8 px-3 text-xs text-gray-400 hover:text-white"
+          className="h-8 shrink-0 px-3 text-xs text-gray-400 hover:text-white"
           onClick={() => setEditing(true)}
         >
           Edit
         </Button>
       </div>
       <div className="font-main grid grid-cols-2 gap-y-2 text-sm">
-        <ProfileRow label="Name" value={profile.full_name} />
-        <ProfileRow label="Email" value={profile.email} />
         <ProfileRow
           label="University"
           value={
