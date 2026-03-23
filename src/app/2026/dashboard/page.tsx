@@ -27,21 +27,23 @@ export default async function DashboardPage() {
   return (
     <div className="flex min-h-screen flex-col items-center px-4 pt-12 pb-24">
       <div className="w-full max-w-lg">
-        <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-xl sm:p-8">
+          <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
 
-        <div className="flex flex-col gap-5">
-          <ProfileCard profile={profile} />
+          <div className="flex flex-col gap-5">
+            <ProfileCard profile={profile} />
 
-          {team ? (
-            <>
-              <TeamCard team={team} />
-              <JoinCodeDisplay code={team.join_code} />
-              <MemberList members={team.members} />
-              <LeaveTeamButton />
-            </>
-          ) : (
-            <NoTeamState teams={await browseTeams()} />
-          )}
+            {team ? (
+              <>
+                <TeamCard team={team} />
+                <JoinCodeDisplay code={team.join_code} />
+                <MemberList members={team.members} />
+                <LeaveTeamButton />
+              </>
+            ) : (
+              <NoTeamState teams={await browseTeams()} />
+            )}
+          </div>
         </div>
       </div>
     </div>

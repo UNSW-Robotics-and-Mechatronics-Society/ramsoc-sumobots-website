@@ -30,7 +30,7 @@ export default function NoTeamState({ teams }: { teams: TeamBrowseItem[] }) {
             {teams.map((team) => (
               <li
                 key={team.name}
-                className="flex items-center justify-between rounded-lg bg-gray-800/50 px-3 py-2.5"
+                className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2.5"
               >
                 <span className="font-main min-w-0 truncate text-sm text-white">
                   {team.name}

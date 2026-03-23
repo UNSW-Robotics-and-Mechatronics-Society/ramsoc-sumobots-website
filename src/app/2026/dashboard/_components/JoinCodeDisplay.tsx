@@ -19,7 +19,7 @@ export default function JoinCodeDisplay({ code }: { code: string }) {
       </p>
       <button
         onClick={handleCopy}
-        className="mx-auto block rounded-lg border border-gray-700 bg-gray-800 px-6 py-3 transition-colors hover:border-rose-500"
+        className="mx-auto block rounded-lg border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-sm transition-colors hover:border-rose-500"
       >
         <span className="font-display text-3xl tracking-[0.3em]">{code}</span>
       </button>

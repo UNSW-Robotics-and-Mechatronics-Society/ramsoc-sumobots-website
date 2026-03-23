@@ -58,7 +58,7 @@ export default function JoinTeamForm({
   if (preview) {
     return (
       <div className="flex flex-col gap-5">
-        <div className="rounded-xl border border-gray-700 bg-gray-900/50 p-5">
+        <div className="rounded-xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
           <h3 className="mb-2">{preview.name}</h3>
           <div className="flex items-center gap-2">
             <Badge variant="info">

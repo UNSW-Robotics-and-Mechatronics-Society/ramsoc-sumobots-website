@@ -56,7 +56,7 @@ export default function CreateTeamForm({
           <p className="text-gray-400">Share this code with your teammates</p>
         </div>
         <div
-          className="cursor-pointer rounded-xl border border-gray-700 bg-gray-900 px-8 py-6 transition-colors hover:border-rose-500"
+          className="cursor-pointer rounded-xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-sm transition-colors hover:border-rose-500"
           onClick={() => navigator.clipboard.writeText(joinCode)}
           title="Click to copy"
         >

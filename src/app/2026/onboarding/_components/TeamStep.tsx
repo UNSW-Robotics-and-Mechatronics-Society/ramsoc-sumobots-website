@@ -32,7 +32,7 @@ export default function TeamStep({
         <motion.button
           type="button"
           onClick={() => setMode("create")}
-          className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-gray-700 bg-gray-900/50 p-5 text-white transition-colors hover:border-rose-500 hover:bg-gray-800"
+          className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
           whileTap={{ scale: 0.98 }}
         >
           <span className="font-display text-lg">Create a Team</span>
@@ -43,7 +43,7 @@ export default function TeamStep({
         <motion.button
           type="button"
           onClick={() => setMode("join")}
-          className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-gray-700 bg-gray-900/50 p-5 text-white transition-colors hover:border-rose-500 hover:bg-gray-800"
+          className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
           whileTap={{ scale: 0.98 }}
         >
           <span className="font-display text-lg">Join a Team</span>

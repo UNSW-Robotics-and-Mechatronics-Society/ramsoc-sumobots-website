@@ -16,7 +16,7 @@ export default function MemberList({
         {members.map((member) => (
           <li
             key={member.id}
-            className="flex items-center justify-between rounded-lg bg-gray-800/50 px-3 py-2.5"
+            className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2.5"
           >
             <div className="min-w-0 flex-1">
               <p className="font-main truncate text-sm text-white">
