@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import { createTeam } from "@/app/2026/_actions/team";
 import { markOnboarded } from "@/app/2026/_actions/profile";
 import Input from "@/app/2026/_components/ui/Input";
@@ -10,13 +11,25 @@ import { Button } from "@/app/2026/_components/ui/Button";
 const CATEGORY_OPTIONS = [
   {
     value: "standard",
-    label: "Standard (UNSW only, 3–6 members)",
+    label: "Standard (UNSW only, 3-6 members)",
   },
   {
     value: "open",
-    label: "Open (Inter-uni, 1–6 members)",
+    label: "Open (Inter-uni, 1-6 members)",
   },
 ];
+
+function Field({ delay, children }: { delay: number; children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function CreateTeamForm({
   onComplete,
@@ -51,56 +64,84 @@ export default function CreateTeamForm({
   if (joinCode) {
     return (
       <div className="flex flex-col items-center gap-6 text-center">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <h3 className="mb-2">Team Created!</h3>
           <p className="text-gray-400">Share this code with your teammates</p>
-        </div>
-        <div
+        </motion.div>
+        <motion.div
           className="cursor-pointer rounded-xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-sm transition-colors hover:border-rose-500"
           onClick={() => navigator.clipboard.writeText(joinCode)}
           title="Click to copy"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
         >
           <span className="font-display text-4xl tracking-[0.3em]">
             {joinCode}
           </span>
-        </div>
-        <p className="text-xs text-gray-500">Tap the code to copy</p>
-        <Button size="full" onClick={onComplete}>
-          Go to Dashboard
-        </Button>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.3 }}
+        >
+          <p className="text-xs text-gray-500">Tap the code to copy</p>
+        </motion.div>
+        <motion.div
+          className="w-full"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.3 }}
+        >
+          <Button size="full" onClick={onComplete}>
+            Go to Dashboard
+          </Button>
+        </motion.div>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Input
-        label="Team Name"
-        name="team_name"
-        required
-        placeholder="e.g. The Destroyers"
-      />
+      <Field delay={0.05}>
+        <Input
+          label="Team Name"
+          name="team_name"
+          required
+          placeholder="e.g. The Destroyers"
+        />
+      </Field>
 
-      <Select
-        label="Category"
-        name="category"
-        options={CATEGORY_OPTIONS}
-        required
-        defaultValue="standard"
-      />
+      <Field delay={0.1}>
+        <Select
+          label="Category"
+          name="category"
+          options={CATEGORY_OPTIONS}
+          required
+          defaultValue="standard"
+        />
+      </Field>
 
-      <p className="font-main text-xs text-gray-500">
-        <b>Standard:</b> UNSW students only, 3–6 members.{" "}
-        <b>Open:</b> Any university, 1–6 members.
-      </p>
+      <Field delay={0.15}>
+        <p className="font-main text-xs text-gray-500">
+          <b>Standard:</b> UNSW students only, 3-6 members.{" "}
+          <b>Open:</b> Any university, 1-6 members.
+        </p>
+      </Field>
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
-      <div className="sticky bottom-4 mt-4 pt-4">
-        <Button type="submit" size="full" disabled={loading}>
-          {loading ? "Creating..." : "Create Team"}
-        </Button>
-      </div>
+      <Field delay={0.2}>
+        <div className="sticky bottom-4 mt-4 pt-4">
+          <Button type="submit" size="full" disabled={loading}>
+            {loading ? "Creating..." : "Create Team"}
+          </Button>
+        </div>
+      </Field>
     </form>
   );
 }

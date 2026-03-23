@@ -424,6 +424,18 @@ const CATEGORY_OPTIONS = [
   { value: "open", label: "Open (Inter-uni, 1–6 members)" },
 ];
 
+function OnboardingField({ delay, children }: { delay: number; children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
 function OnboardingSection() {
   const [step, setStep] = useState(0);
   const [teamMode, setTeamMode] = useState<"choose" | "create" | "join">(
@@ -521,86 +533,111 @@ function OnboardingSection() {
             >
               {/* Mock StudentDetailsForm */}
               <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4">
-                <Input
-                  label="Full Name"
-                  name="full_name"
-                  required
-                  autoComplete="name"
-                  defaultValue="Alice Zhang"
-                />
+                <OnboardingField delay={0.05}>
+                  <Input
+                    label="Full Name"
+                    name="full_name"
+                    required
+                    autoComplete="name"
+                    defaultValue="Alice Zhang"
+                  />
+                </OnboardingField>
 
-                <div className="flex items-center gap-3">
-                  <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
-                    <input
-                      type="checkbox"
-                      checked={isUnsw}
-                      onChange={(e) => setIsUnsw(e.target.checked)}
-                      className="h-5 w-5 rounded accent-rose-600"
+                <OnboardingField delay={0.1}>
+                  <div className="flex items-center gap-3">
+                    <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
+                      <input
+                        type="checkbox"
+                        checked={isUnsw}
+                        onChange={(e) => setIsUnsw(e.target.checked)}
+                        className="h-5 w-5 rounded accent-rose-600"
+                      />
+                      I am a UNSW student
+                    </label>
+                  </div>
+                </OnboardingField>
+
+                <OnboardingField delay={0.15}>
+                  {isUnsw ? (
+                    <Input
+                      label="zID"
+                      name="zid"
+                      placeholder="z1234567"
+                      required
+                      defaultValue="z5555555"
                     />
-                    I am a UNSW student
-                  </label>
-                </div>
+                  ) : (
+                    <Input
+                      label="University"
+                      name="university"
+                      required
+                      placeholder="e.g. University of Sydney"
+                    />
+                  )}
+                </OnboardingField>
 
-                {isUnsw ? (
-                  <Input
-                    label="zID"
-                    name="zid"
-                    placeholder="z1234567"
-                    required
-                    defaultValue="z5555555"
+                <OnboardingField delay={0.2}>
+                  <Select
+                    label="Year of Study"
+                    name="year_of_study"
+                    options={YEAR_OPTIONS}
+                    placeholder="Select year"
+                    defaultValue="3"
                   />
-                ) : (
+                </OnboardingField>
+
+                <OnboardingField delay={0.25}>
                   <Input
-                    label="University"
-                    name="university"
-                    required
-                    placeholder="e.g. University of Sydney"
+                    label="Degree"
+                    name="degree"
+                    placeholder="e.g. B.Eng (Mechatronics)"
+                    defaultValue="Computer Science"
                   />
-                )}
+                </OnboardingField>
 
-                <Select
-                  label="Year of Study"
-                  name="year_of_study"
-                  options={YEAR_OPTIONS}
-                  placeholder="Select year"
-                  defaultValue="3"
-                />
-                <Input
-                  label="Degree"
-                  name="degree"
-                  placeholder="e.g. B.Eng (Mechatronics)"
-                  defaultValue="Computer Science"
-                />
-                <Input
-                  label="Faculty"
-                  name="faculty"
-                  placeholder="e.g. Engineering"
-                  defaultValue="Engineering"
-                />
-                <Select
-                  label="Gender"
-                  name="gender"
-                  options={GENDER_OPTIONS}
-                  defaultValue=""
-                />
-                <Input
-                  label="Dietary Requirements"
-                  name="dietary_requirements"
-                  placeholder="e.g. Vegetarian, Halal"
-                />
-                <Input
-                  label="Phone Number"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  placeholder="04XX XXX XXX"
-                />
+                <OnboardingField delay={0.3}>
+                  <Input
+                    label="Faculty"
+                    name="faculty"
+                    placeholder="e.g. Engineering"
+                    defaultValue="Engineering"
+                  />
+                </OnboardingField>
 
-                <div className="sticky bottom-4 mt-4 pt-4">
-                  <Button type="submit" size="full">
-                    Continue
-                  </Button>
-                </div>
+                <OnboardingField delay={0.35}>
+                  <Select
+                    label="Gender"
+                    name="gender"
+                    options={GENDER_OPTIONS}
+                    defaultValue=""
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.4}>
+                  <Input
+                    label="Dietary Requirements"
+                    name="dietary_requirements"
+                    placeholder="e.g. Vegetarian, Halal"
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.45}>
+                  <Input
+                    label="Phone Number"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="04XX XXX XXX"
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.5}>
+                  <div className="sticky bottom-4 mt-4 pt-4">
+                    <Button type="submit" size="full">
+                      Continue
+                    </Button>
+                  </div>
+                </OnboardingField>
               </form>
             </motion.div>
           )}
