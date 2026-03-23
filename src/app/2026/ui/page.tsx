@@ -883,7 +883,7 @@ function DashboardTeamSection() {
               <ProfileCard profile={mockProfile} />
             </FadeIn>
             <FadeIn delay={0.2}>
-              <TeamCard team={currentTeam} />
+              <TeamCard team={currentTeam} isCaptain={isCaptainView} />
             </FadeIn>
             <FadeIn delay={0.3}>
               <JoinCodeDisplay code={currentTeam.join_code} />

@@ -66,7 +66,7 @@ export default function DashboardContent({
 
               {team ? (
                 <>
-                  <TeamCard team={team} />
+                  <TeamCard team={team} isCaptain={isCaptain} />
                   <JoinCodeDisplay code={team.join_code} />
                   <MemberList
                     members={team.members}

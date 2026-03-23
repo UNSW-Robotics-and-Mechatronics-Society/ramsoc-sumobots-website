@@ -404,6 +404,45 @@ export async function promoteMember(
   return { success: true };
 }
 
+export async function renameTeam(
+  newName: string,
+): Promise<{ success: boolean; error?: string }> {
+  const { userId } = await auth();
+  if (!userId) return { success: false, error: "Not authenticated" };
+
+  const trimmed = newName.trim();
+  if (!trimmed) return { success: false, error: "Team name is required" };
+
+  const profileId = await getProfileId(userId);
+  if (!profileId) return { success: false, error: "Profile not found" };
+
+  const supabase = getSupabaseSecretClient();
+
+  // Find user's team membership
+  const { data: membership } = await supabase
+    .from("team_members")
+    .select("team_id, role")
+    .eq("profile_id", profileId)
+    .single();
+
+  if (!membership) return { success: false, error: "You are not on a team" };
+  if (membership.role !== "captain") {
+    return { success: false, error: "Only the captain can rename the team" };
+  }
+
+  const { error } = await supabase
+    .from("teams")
+    .update({ name: trimmed })
+    .eq("id", membership.team_id);
+
+  if (error) {
+    console.error("Failed to rename team:", error);
+    return { success: false, error: "Failed to rename team" };
+  }
+
+  return { success: true };
+}
+
 export async function kickMember(
   teamMemberId: string,
 ): Promise<{ success: boolean; error?: string }> {
