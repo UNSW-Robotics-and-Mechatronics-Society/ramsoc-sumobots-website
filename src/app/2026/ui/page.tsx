@@ -25,6 +25,8 @@ import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
 import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
+import GlassPanel from "@/app/2026/_components/ui/GlassPanel";
+import FadeIn from "@/app/2026/_components/ui/FadeIn";
 
 // ── Mock Data ──────────────────────────────────────────────
 
@@ -266,13 +268,23 @@ export default function UIPreviewPage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-8">
-        {active === "Primitives" && <PrimitivesSection />}
-        {active === "Onboarding" && <OnboardingSection />}
-        {active === "Dashboard (Team)" && <DashboardTeamSection />}
-        {active === "Dashboard (No Team)" && <DashboardNoTeamSection />}
-        {active === "Admin Login" && <AdminLoginSection />}
-        {active === "Admin Teams" && <AdminTeamsSection />}
-        {active === "Admin Individuals" && <AdminIndividualsSection />}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={{ opacity: 0, y: 20, scale: 0.99 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.99 }}
+            transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            {active === "Primitives" && <PrimitivesSection />}
+            {active === "Onboarding" && <OnboardingSection />}
+            {active === "Dashboard (Team)" && <DashboardTeamSection />}
+            {active === "Dashboard (No Team)" && <DashboardNoTeamSection />}
+            {active === "Admin Login" && <AdminLoginSection />}
+            {active === "Admin Teams" && <AdminTeamsSection />}
+            {active === "Admin Individuals" && <AdminIndividualsSection />}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -308,59 +320,79 @@ function PrimitivesSection() {
     <div>
       <SectionTitle>Primitives</SectionTitle>
 
-      <SubSection title="Buttons">
-        <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="primary" disabled>
-            Disabled
-          </Button>
-          <Button variant="primary" size="lg">
-            Large
-          </Button>
-        </div>
-      </SubSection>
+      <FadeIn delay={0}>
+        <SubSection title="Buttons">
+          <div className="flex flex-wrap items-center gap-3">
+            <Button variant="primary">Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="primary" disabled>
+              Disabled
+            </Button>
+            <Button variant="primary" size="lg">
+              Large
+            </Button>
+          </div>
+        </SubSection>
+      </FadeIn>
 
-      <SubSection title="Badges">
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="default">Default</Badge>
-          <Badge variant="success">Paid</Badge>
-          <Badge variant="warning">Unpaid</Badge>
-          <Badge variant="info">Open</Badge>
-          <Badge variant="captain">Captain</Badge>
-        </div>
-      </SubSection>
+      <FadeIn delay={0.1}>
+        <SubSection title="Badges">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge variant="default">Default</Badge>
+            <Badge variant="success">Paid</Badge>
+            <Badge variant="warning">Unpaid</Badge>
+            <Badge variant="info">Open</Badge>
+            <Badge variant="captain">Captain</Badge>
+          </div>
+        </SubSection>
+      </FadeIn>
 
-      <SubSection title="Inputs">
-        <div className="flex max-w-sm flex-col gap-4">
-          <Input label="Full Name" placeholder="Enter your name" />
-          <Input
-            label="Email"
-            type="email"
-            placeholder="you@example.com"
-            error="Invalid email address"
-          />
-          <Select
-            label="Category"
-            options={[
-              { value: "standard", label: "Standard" },
-              { value: "open", label: "Open" },
-            ]}
-            placeholder="Select a category"
-          />
-        </div>
-      </SubSection>
+      <FadeIn delay={0.2}>
+        <SubSection title="Inputs">
+          <div className="flex max-w-sm flex-col gap-4">
+            <Input label="Full Name" placeholder="Enter your name" />
+            <Input
+              label="Email"
+              type="email"
+              placeholder="you@example.com"
+              error="Invalid email address"
+            />
+            <Select
+              label="Category"
+              options={[
+                { value: "standard", label: "Standard" },
+                { value: "open", label: "Open" },
+              ]}
+              placeholder="Select a category"
+            />
+          </div>
+        </SubSection>
+      </FadeIn>
 
-      <SubSection title="Card">
-        <div className="max-w-sm">
-          <Card>
-            <p className="font-main text-sm text-gray-300">
-              A basic card container with border and subtle background.
-            </p>
-          </Card>
-        </div>
-      </SubSection>
+      <FadeIn delay={0.3}>
+        <SubSection title="Card">
+          <div className="max-w-sm">
+            <Card>
+              <p className="font-main text-sm text-gray-300">
+                A basic card container with border and subtle background.
+              </p>
+            </Card>
+          </div>
+        </SubSection>
+      </FadeIn>
+
+      <FadeIn delay={0.4}>
+        <SubSection title="Glass Panel with Ambient Glow">
+          <div className="max-w-sm">
+            <GlassPanel>
+              <p className="font-main text-sm text-gray-300">
+                A glassmorphism panel with animated ambient light gradient drifting behind it.
+              </p>
+            </GlassPanel>
+          </div>
+        </SubSection>
+      </FadeIn>
     </div>
   );
 }
@@ -426,16 +458,17 @@ function OnboardingSection() {
         </Button>
       </div>
       <div className="mx-auto max-w-lg">
+        <GlassPanel>
         <StepIndicator currentStep={step} totalSteps={2} />
 
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div
               key="step-1"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: 40, scale: 0.98 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -40, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Mock StudentDetailsForm */}
               <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4">
@@ -526,10 +559,10 @@ function OnboardingSection() {
           {step === 2 && (
             <motion.div
               key="step-2"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0, x: 40, scale: 0.98 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -40, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               {/* Mock TeamStep */}
               {teamMode === "choose" && (
@@ -541,6 +574,7 @@ function OnboardingSection() {
                     type="button"
                     onClick={() => setTeamMode("create")}
                     className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
+                    whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Create a Team</span>
@@ -552,6 +586,7 @@ function OnboardingSection() {
                     type="button"
                     onClick={() => setTeamMode("join")}
                     className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
+                    whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Join a Team</span>
@@ -702,6 +737,7 @@ function OnboardingSection() {
             </motion.div>
           )}
         </AnimatePresence>
+        </GlassPanel>
       </div>
     </div>
   );
@@ -713,19 +749,36 @@ function DashboardTeamSection() {
   return (
     <div>
       <SectionTitle>Dashboard — Has Team</SectionTitle>
-      <div className="mx-auto flex max-w-lg flex-col gap-5">
-        <ProfileCard profile={mockProfile} />
-        <TeamCard team={mockTeam} />
-        <JoinCodeDisplay code={mockTeam.join_code} />
-        <MemberList members={mockTeam.members} />
-        <LeaveTeamButton />
+      <div className="mx-auto max-w-lg">
+        <GlassPanel>
+          <FadeIn delay={0} direction="none">
+            <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
+          </FadeIn>
+          <div className="flex flex-col gap-5">
+            <FadeIn delay={0.1}>
+              <ProfileCard profile={mockProfile} />
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <TeamCard team={mockTeam} />
+            </FadeIn>
+            <FadeIn delay={0.3}>
+              <JoinCodeDisplay code={mockTeam.join_code} />
+            </FadeIn>
+            <FadeIn delay={0.4}>
+              <MemberList members={mockTeam.members} />
+            </FadeIn>
+            <FadeIn delay={0.5}>
+              <LeaveTeamButton />
+            </FadeIn>
+          </div>
 
-        <div className="mt-4 border-t border-gray-800 pt-4">
-          <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
-            Paid variant
-          </h3>
-          <TeamCard team={mockPaidTeam} />
-        </div>
+          <div className="mt-6 border-t border-white/10 pt-4">
+            <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
+              Paid variant
+            </h3>
+            <TeamCard team={mockPaidTeam} />
+          </div>
+        </GlassPanel>
       </div>
     </div>
   );
@@ -737,9 +790,20 @@ function DashboardNoTeamSection() {
   return (
     <div>
       <SectionTitle>Dashboard — No Team</SectionTitle>
-      <div className="mx-auto flex max-w-lg flex-col gap-5">
-        <ProfileCard profile={mockProfile} />
-        <NoTeamState teams={mockBrowseTeams} />
+      <div className="mx-auto max-w-lg">
+        <GlassPanel>
+          <FadeIn delay={0} direction="none">
+            <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
+          </FadeIn>
+          <div className="flex flex-col gap-5">
+            <FadeIn delay={0.1}>
+              <ProfileCard profile={mockProfile} />
+            </FadeIn>
+            <FadeIn delay={0.2}>
+              <NoTeamState teams={mockBrowseTeams} />
+            </FadeIn>
+          </div>
+        </GlassPanel>
       </div>
     </div>
   );
@@ -752,10 +816,14 @@ function AdminLoginSection() {
     <div>
       <SectionTitle>Admin Login</SectionTitle>
       <div className="mx-auto max-w-sm">
-        <Card>
-          <h1 className="mb-6 text-center text-2xl">Admin Login</h1>
-          <AdminLoginForm />
-        </Card>
+        <GlassPanel>
+          <FadeIn delay={0} direction="none">
+            <h1 className="mb-6 text-center text-2xl">Admin Login</h1>
+          </FadeIn>
+          <FadeIn delay={0.15}>
+            <AdminLoginForm />
+          </FadeIn>
+        </GlassPanel>
       </div>
     </div>
   );
