@@ -45,17 +45,17 @@ export default function IndividualsTable({
         placeholder="Search by name, email, or zID..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="font-main max-w-sm min-h-[40px] rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500 focus:border-rose-500"
+        className="font-main max-w-sm min-h-[40px] rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none backdrop-blur-sm placeholder:text-gray-500 focus:border-rose-500"
       />
 
       <div className="font-main text-sm text-gray-400">
         {filtered.length} profile{filtered.length !== 1 ? "s" : ""}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-800">
+      <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="w-full text-left">
           <thead>
-            <tr className="border-b border-gray-800 bg-gray-900/80">
+            <tr className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
               <th className="font-main px-4 py-3 text-xs font-medium text-gray-400">
                 Name
               </th>
@@ -77,7 +77,7 @@ export default function IndividualsTable({
             {filtered.map((p) => (
               <tr
                 key={p.id}
-                className="border-b border-gray-800/50 transition-colors hover:bg-gray-800/30"
+                className="border-b border-white/5 transition-colors hover:bg-white/5"
               >
                 <td className="font-main px-4 py-3 text-sm text-white">
                   {p.full_name}

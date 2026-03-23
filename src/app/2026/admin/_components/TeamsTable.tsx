@@ -79,12 +79,12 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
           placeholder="Search teams..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="font-main min-h-[40px] rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500 focus:border-rose-500"
+          className="font-main min-h-[40px] rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-3 py-2 text-sm text-white outline-none placeholder:text-gray-500 focus:border-rose-500"
         />
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="font-main min-h-[40px] rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white outline-none focus:border-rose-500"
+          className="font-main min-h-[40px] rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-3 py-2 text-sm text-white outline-none focus:border-rose-500"
         >
           <option value="all">All Categories</option>
           <option value="standard">Standard</option>
@@ -93,7 +93,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
         <select
           value={paidFilter}
           onChange={(e) => setPaidFilter(e.target.value)}
-          className="font-main min-h-[40px] rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-white outline-none focus:border-rose-500"
+          className="font-main min-h-[40px] rounded-lg border border-white/10 bg-white/5 backdrop-blur-sm px-3 py-2 text-sm text-white outline-none focus:border-rose-500"
         >
           <option value="all">All Status</option>
           <option value="paid">Paid</option>
@@ -105,10 +105,10 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
         {filtered.length} team{filtered.length !== 1 ? "s" : ""}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-800">
+      <div className="overflow-x-auto rounded-lg border border-white/10">
         <table className="w-full text-left">
           <thead>
-            <tr className="border-b border-gray-800 bg-gray-900/80">
+            <tr className="border-b border-white/10 bg-white/5 backdrop-blur-sm">
               <th className="font-main px-4 py-3 text-xs font-medium text-gray-400">
                 Team Name
               </th>
@@ -132,7 +132,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
                 <tr
                   key={team.id}
                   onClick={() => toggleExpand(team.id)}
-                  className="cursor-pointer border-b border-gray-800/50 transition-colors hover:bg-gray-800/30"
+                  className="cursor-pointer border-b border-white/5 transition-colors hover:bg-white/5"
                 >
                   <td className="font-main px-4 py-3 text-sm text-white">
                     {team.name}
@@ -158,7 +158,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
                 </tr>
                 {expandedId === team.id && (
                   <tr key={`${team.id}-detail`}>
-                    <td colSpan={5} className="bg-gray-900/30 px-4 py-4">
+                    <td colSpan={5} className="bg-white/5 px-4 py-4">
                       {isPending && !detail ? (
                         <p className="font-main text-sm text-gray-400">
                           Loading...
@@ -174,7 +174,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
                               {detail.members.map((m) => (
                                 <div
                                   key={m.id}
-                                  className="flex items-center justify-between rounded-lg bg-gray-800/50 px-3 py-2"
+                                  className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2"
                                 >
                                   <div className="flex items-center gap-3">
                                     <div>
@@ -257,7 +257,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
                           </div>
 
                           {/* Team actions */}
-                          <div className="flex flex-wrap items-center gap-2 border-t border-gray-800 pt-4">
+                          <div className="flex flex-wrap items-center gap-2 border-t border-white/10 pt-4">
                             <Button
                               variant="secondary"
                               size="default"

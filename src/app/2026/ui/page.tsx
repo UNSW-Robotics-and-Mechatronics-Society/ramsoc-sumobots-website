@@ -244,7 +244,7 @@ export default function UIPreviewPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Nav */}
-      <div className="sticky top-0 z-50 border-b border-gray-800 bg-gray-950/90 backdrop-blur">
+      <div className="sticky top-0 z-50 border-b border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center gap-4 overflow-x-auto px-4 py-3">
           <span className="shrink-0 text-sm font-semibold text-rose-400">
             UI Preview
@@ -255,7 +255,7 @@ export default function UIPreviewPage() {
               onClick={() => setActive(s)}
               className={`font-main shrink-0 rounded-md px-3 py-1.5 text-sm transition-colors ${
                 active === s
-                  ? "bg-gray-800 text-white"
+                  ? "bg-white/10 text-white"
                   : "text-gray-400 hover:text-white"
               }`}
             >
@@ -280,7 +280,7 @@ export default function UIPreviewPage() {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mb-6 border-b border-gray-800 pb-2 text-lg">{children}</h2>
+    <h2 className="mb-6 border-b border-white/10 pb-2 text-lg">{children}</h2>
   );
 }
 
@@ -540,7 +540,7 @@ function OnboardingSection() {
                   <motion.button
                     type="button"
                     onClick={() => setTeamMode("create")}
-                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-gray-700 bg-gray-900/50 p-5 text-white transition-colors hover:border-rose-500 hover:bg-gray-800"
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Create a Team</span>
@@ -551,7 +551,7 @@ function OnboardingSection() {
                   <motion.button
                     type="button"
                     onClick={() => setTeamMode("join")}
-                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-gray-700 bg-gray-900/50 p-5 text-white transition-colors hover:border-rose-500 hover:bg-gray-800"
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Join a Team</span>
@@ -610,7 +610,7 @@ function OnboardingSection() {
                     </p>
                   </div>
                   <div
-                    className="cursor-pointer rounded-xl border border-gray-700 bg-gray-900 px-8 py-6 transition-colors hover:border-rose-500"
+                    className="cursor-pointer rounded-xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-sm transition-colors hover:border-rose-500"
                     onClick={() => navigator.clipboard.writeText(createdCode)}
                     title="Click to copy"
                   >
@@ -668,7 +668,7 @@ function OnboardingSection() {
 
               {teamMode === "join" && showJoinPreview && (
                 <div className="flex flex-col gap-5">
-                  <div className="rounded-xl border border-gray-700 bg-gray-900/50 p-5">
+                  <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5">
                     <h3 className="mb-2">Sumo Slammers</h3>
                     <div className="flex items-center gap-2">
                       <Badge variant="info">Standard</Badge>
