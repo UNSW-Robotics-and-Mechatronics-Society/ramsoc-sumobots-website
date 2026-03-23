@@ -3,12 +3,12 @@ import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
 
-const MIN_MEMBERS_TO_PAY = 3;
+const MIN_MEMBERS_TO_ACTIVATE = 3;
 
 export default function TeamCard({ team }: { team: TeamWithMembers }) {
-  const canPay = !team.paid && team.members.length >= MIN_MEMBERS_TO_PAY;
-  const needsMoreMembers = !team.paid && team.members.length < MIN_MEMBERS_TO_PAY;
-  const membersNeeded = MIN_MEMBERS_TO_PAY - team.members.length;
+  const canActivate = !team.paid && team.members.length >= MIN_MEMBERS_TO_ACTIVATE;
+  const needsMoreMembers = !team.paid && team.members.length < MIN_MEMBERS_TO_ACTIVATE;
+  const membersNeeded = MIN_MEMBERS_TO_ACTIVATE - team.members.length;
 
   return (
     <Card>
@@ -20,7 +20,7 @@ export default function TeamCard({ team }: { team: TeamWithMembers }) {
               {team.category === "standard" ? "Standard" : "Open"}
             </Badge>
             <Badge variant={team.paid ? "success" : "warning"}>
-              {team.paid ? "Paid" : "Unpaid"}
+              {team.paid ? "Active" : "Not Active"}
             </Badge>
           </div>
         </div>
@@ -31,16 +31,19 @@ export default function TeamCard({ team }: { team: TeamWithMembers }) {
 
       {!team.paid && (
         <div className="mt-4 border-t border-white/10 pt-4">
+          <p className="font-main mb-3 text-center text-sm text-gray-400">
+            Team is not currently active. Pay the entry fee to activate your team.
+          </p>
           <Button
             size="full"
-            disabled={!canPay}
-            className={canPay ? "" : "cursor-not-allowed"}
+            disabled={!canActivate}
+            className={canActivate ? "" : "cursor-not-allowed"}
           >
-            Pay for Team
+            Pay Entry Fee
           </Button>
           {needsMoreMembers && (
             <p className="font-main mt-2 text-center text-xs text-gray-500">
-              Need {membersNeeded} more member{membersNeeded !== 1 ? "s" : ""} to pay (minimum {MIN_MEMBERS_TO_PAY})
+              Need {membersNeeded} more member{membersNeeded !== 1 ? "s" : ""} to activate (minimum {MIN_MEMBERS_TO_ACTIVATE})
             </p>
           )}
         </div>

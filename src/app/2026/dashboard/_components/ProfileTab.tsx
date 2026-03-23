@@ -180,14 +180,16 @@ export default function ProfileTab({
             </div>
           </div>
         ) : (
-          <Button
-            variant="ghost"
-            size="full"
-            className="text-red-400 hover:text-red-300"
-            onClick={() => setShowDeleteConfirm(true)}
-          >
-            Delete Account
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              variant="primary"
+              size="default"
+              className="bg-red-900 text-white hover:bg-red-800"
+              onClick={() => setShowDeleteConfirm(true)}
+            >
+              Delete Account
+            </Button>
+          </div>
         )}
       </Card>
     </div>
