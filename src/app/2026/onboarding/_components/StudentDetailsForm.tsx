@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import { createProfile } from "@/app/2026/_actions/profile";
 import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
@@ -22,6 +23,18 @@ const GENDER_OPTIONS = [
   { value: "non-binary", label: "Non-binary" },
   { value: "other", label: "Other" },
 ];
+
+function Field({ delay, children }: { delay: number; children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function StudentDetailsForm({
   onComplete,
@@ -66,70 +79,88 @@ export default function StudentDetailsForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Input label="Full Name" name="full_name" required autoComplete="name" />
+      <Field delay={0.1}>
+        <Input label="Full Name" name="full_name" required autoComplete="name" />
+      </Field>
 
-      <div className="flex items-center gap-3">
-        <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
-          <input
-            type="checkbox"
-            checked={isUnsw}
-            onChange={(e) => setIsUnsw(e.target.checked)}
-            className="h-5 w-5 rounded accent-rose-600"
+      <Field delay={0.2}>
+        <div className="flex items-center gap-3">
+          <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
+            <input
+              type="checkbox"
+              checked={isUnsw}
+              onChange={(e) => setIsUnsw(e.target.checked)}
+              className="h-5 w-5 rounded accent-rose-600"
+            />
+            I am a UNSW student
+          </label>
+        </div>
+      </Field>
+
+      <Field delay={0.3}>
+        {isUnsw ? (
+          <Input
+            label="zID"
+            name="zid"
+            placeholder="z1234567"
+            required
+            pattern="z\d{7}"
+            title="zID must be in the format z1234567"
           />
-          I am a UNSW student
-        </label>
-      </div>
+        ) : (
+          <Input
+            label="University"
+            name="university"
+            required
+            placeholder="e.g. University of Sydney"
+          />
+        )}
+      </Field>
 
-      {isUnsw ? (
-        <Input
-          label="zID"
-          name="zid"
-          placeholder="z1234567"
-          required
-          pattern="z\d{7}"
-          title="zID must be in the format z1234567"
+      <Field delay={0.4}>
+        <Select
+          label="Year of Study"
+          name="year_of_study"
+          options={YEAR_OPTIONS}
+          placeholder="Select year"
+          defaultValue=""
         />
-      ) : (
-        <Input
-          label="University"
-          name="university"
-          required
-          placeholder="e.g. University of Sydney"
+      </Field>
+
+      <Field delay={0.5}>
+        <Input label="Degree" name="degree" placeholder="e.g. B.Eng (Mechatronics)" />
+      </Field>
+
+      <Field delay={0.6}>
+        <Input label="Faculty" name="faculty" placeholder="e.g. Engineering" />
+      </Field>
+
+      <Field delay={0.7}>
+        <Select
+          label="Gender"
+          name="gender"
+          options={GENDER_OPTIONS}
+          defaultValue=""
         />
-      )}
+      </Field>
 
-      <Select
-        label="Year of Study"
-        name="year_of_study"
-        options={YEAR_OPTIONS}
-        placeholder="Select year"
-        defaultValue=""
-      />
+      <Field delay={0.8}>
+        <Input
+          label="Dietary Requirements"
+          name="dietary_requirements"
+          placeholder="e.g. Vegetarian, Halal"
+        />
+      </Field>
 
-      <Input label="Degree" name="degree" placeholder="e.g. B.Eng (Mechatronics)" />
-
-      <Input label="Faculty" name="faculty" placeholder="e.g. Engineering" />
-
-      <Select
-        label="Gender"
-        name="gender"
-        options={GENDER_OPTIONS}
-        defaultValue=""
-      />
-
-      <Input
-        label="Dietary Requirements"
-        name="dietary_requirements"
-        placeholder="e.g. Vegetarian, Halal"
-      />
-
-      <Input
-        label="Phone Number"
-        name="phone"
-        type="tel"
-        autoComplete="tel"
-        placeholder="04XX XXX XXX"
-      />
+      <Field delay={0.9}>
+        <Input
+          label="Phone Number"
+          name="phone"
+          type="tel"
+          autoComplete="tel"
+          placeholder="04XX XXX XXX"
+        />
+      </Field>
 
       {error && (
         <p className="text-sm text-red-400">{error}</p>

@@ -9,7 +9,7 @@ import type { TeamBrowseItem } from "@/app/_types/registration";
 
 export default function NoTeamState({ teams }: { teams: TeamBrowseItem[] }) {
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <Card className="text-center">
         <h3 className="mb-2">No Team Yet</h3>
         <p className="font-main mb-4 text-sm text-gray-400">
@@ -30,7 +30,7 @@ export default function NoTeamState({ teams }: { teams: TeamBrowseItem[] }) {
             {teams.map((team) => (
               <li
                 key={team.name}
-                className="flex items-center justify-between rounded-lg bg-gray-800/50 px-3 py-2.5"
+                className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2.5"
               >
                 <span className="font-main min-w-0 truncate text-sm text-white">
                   {team.name}
@@ -52,6 +52,6 @@ export default function NoTeamState({ teams }: { teams: TeamBrowseItem[] }) {
           </ul>
         </Card>
       )}
-    </>
+    </div>
   );
 }

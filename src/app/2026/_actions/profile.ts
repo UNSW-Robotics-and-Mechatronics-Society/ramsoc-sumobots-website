@@ -96,6 +96,64 @@ export async function createProfile(
   return { success: true };
 }
 
+type UpdateProfileInput = {
+  full_name: string;
+  is_unsw: boolean;
+  university: string;
+  zid: string;
+  year_of_study: number | null;
+  degree: string;
+  faculty: string;
+  gender: string;
+  dietary_requirements: string;
+  phone: string;
+};
+
+export async function updateProfile(
+  input: UpdateProfileInput,
+): Promise<{ success: boolean; error?: string }> {
+  const { userId } = await auth();
+  if (!userId) return { success: false, error: "Not authenticated" };
+
+  if (!input.full_name.trim()) {
+    return { success: false, error: "Full name is required" };
+  }
+
+  if (input.is_unsw && !input.zid.trim()) {
+    return { success: false, error: "zID is required for UNSW students" };
+  }
+
+  if (!input.is_unsw && !input.university.trim()) {
+    return { success: false, error: "University is required" };
+  }
+
+  const supabase = getSupabaseSecretClient();
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      full_name: input.full_name.trim(),
+      is_unsw: input.is_unsw,
+      university: input.is_unsw ? "UNSW" : input.university.trim(),
+      zid: input.is_unsw ? input.zid.trim() : "",
+      year_of_study: input.year_of_study,
+      degree: input.degree.trim(),
+      faculty: input.faculty.trim(),
+      gender: input.gender,
+      dietary_requirements: input.dietary_requirements.trim(),
+      phone: input.phone.trim(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("clerk_user_id", userId);
+
+  if (error) {
+    console.error("Failed to update profile:", error);
+    return { success: false, error: "Failed to update profile" };
+  }
+
+  return { success: true };
+}
+
 export async function markOnboarded(): Promise<{
   success: boolean;
   error?: string;

@@ -31,7 +31,7 @@ export default function AdminShell({
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-gray-800 bg-gray-900/80">
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-6">
             <h1 className="text-lg font-semibold">Admin</h1>
@@ -43,7 +43,7 @@ export default function AdminShell({
                   className={cn(
                     "font-main rounded-md px-3 py-1.5 text-sm transition-colors",
                     pathname === tab.href
-                      ? "bg-gray-800 text-white"
+                      ? "bg-white/10 text-white"
                       : "text-gray-400 hover:text-white",
                   )}
                 >
