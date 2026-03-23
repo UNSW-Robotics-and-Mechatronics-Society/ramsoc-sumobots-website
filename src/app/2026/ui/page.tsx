@@ -232,9 +232,7 @@ const mockProfiles: ProfileWithTeam[] = [
 const sections = [
   "Primitives",
   "Onboarding",
-  "Dashboard (Team)",
-  "Dashboard (No Team)",
-  "Dashboard (Profile)",
+  "Dashboard",
   "Admin Login",
   "Admin Teams",
   "Admin Individuals",
@@ -280,9 +278,7 @@ export default function UIPreviewPage() {
           >
             {active === "Primitives" && <PrimitivesSection />}
             {active === "Onboarding" && <OnboardingSection />}
-            {active === "Dashboard (Team)" && <DashboardTeamSection />}
-            {active === "Dashboard (No Team)" && <DashboardNoTeamSection />}
-            {active === "Dashboard (Profile)" && <DashboardProfileSection />}
+            {active === "Dashboard" && <DashboardSection />}
             {active === "Admin Login" && <AdminLoginSection />}
             {active === "Admin Teams" && <AdminTeamsSection />}
             {active === "Admin Individuals" && <AdminIndividualsSection />}
@@ -829,11 +825,20 @@ function OnboardingSection() {
   );
 }
 
-// ── Dashboard with Team ────────────────────────────────────
+// ── Dashboard ─────────────────────────────────────────────
 
-function DashboardTeamSection() {
+type DashboardTab = "home" | "team" | "profile";
+const dashboardTabLabels: Record<DashboardTab, string> = {
+  home: "Home",
+  team: "Team",
+  profile: "Profile",
+};
+
+function DashboardSection() {
+  const [dashTab, setDashTab] = useState<DashboardTab>("home");
   const [isCaptainView, setIsCaptainView] = useState(true);
   const [memberCount, setMemberCount] = useState(4);
+  const [hasTeamToggle, setHasTeamToggle] = useState(true);
 
   const visibleMembers = mockMembers.slice(0, memberCount);
   const currentTeam: TeamWithMembers = {
@@ -842,12 +847,23 @@ function DashboardTeamSection() {
     members: visibleMembers,
   };
 
+  const hasEnoughMembers = visibleMembers.length >= 3;
+
   return (
     <div>
-      <SectionTitle>Dashboard — Has Team</SectionTitle>
+      <SectionTitle>Dashboard</SectionTitle>
 
-      {/* Toggles */}
+      {/* Test toggles */}
       <div className="mb-4 flex flex-wrap items-center gap-4">
+        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+          <input
+            type="checkbox"
+            checked={hasTeamToggle}
+            onChange={(e) => setHasTeamToggle(e.target.checked)}
+            className="h-4 w-4 rounded accent-rose-600"
+          />
+          Has team
+        </label>
         <label className="font-main flex items-center gap-2 text-sm text-gray-300">
           <input
             type="checkbox"
@@ -875,86 +891,146 @@ function DashboardTeamSection() {
 
       <div className="mx-auto max-w-lg">
         <GlassPanel>
-          <FadeIn delay={0} direction="none">
-            <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
-          </FadeIn>
-          <div className="flex flex-col gap-5">
-            <FadeIn delay={0.1}>
-              <ProfileCard profile={mockProfile} />
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <TeamCard team={currentTeam} isCaptain={isCaptainView} />
-            </FadeIn>
-            <FadeIn delay={0.3}>
-              <JoinCodeDisplay code={currentTeam.join_code} />
-            </FadeIn>
-            <FadeIn delay={0.4}>
-              <MemberList
-                members={visibleMembers}
-                isCaptain={isCaptainView}
-                currentProfileId="p1"
-              />
-            </FadeIn>
-            <FadeIn delay={0.5}>
-              <LeaveTeamButton />
-            </FadeIn>
+          <div className="flex min-h-[50vh] flex-col">
+          <div className="flex-1 pb-4">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={dashTab}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              {/* Home tab */}
+              {dashTab === "home" && (
+                <div className="flex flex-col gap-5">
+                  <Card>
+                    <h3 className="mb-1">Welcome, Alice</h3>
+                    <p className="font-main text-sm text-gray-400">
+                      {hasTeamToggle && currentTeam.paid
+                        ? "You're all set for the competition!"
+                        : "Here's what you need to do to get ready."}
+                    </p>
+                  </Card>
+                  <Card>
+                    <h3 className="mb-3 text-base">Action Items</h3>
+                    <div className="flex flex-col gap-2">
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-white/5 text-gray-500 line-through" : "bg-white/5 text-white"}`}>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-white/20"}`}>
+                          {hasTeamToggle ? "\u2713" : ""}
+                        </span>
+                        Create or join a team
+                      </div>
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasEnoughMembers ? "bg-white/5 text-gray-500 line-through" : "bg-white/5 text-white"}`}>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasEnoughMembers ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-white/20"}`}>
+                          {hasEnoughMembers ? "\u2713" : ""}
+                        </span>
+                        Get at least 3 team members
+                      </div>
+                      <div className="font-main flex items-center gap-3 rounded-lg bg-white/5 px-4 py-3 text-sm text-white">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/20 text-xs" />
+                        Pay the entry fee to activate your team
+                      </div>
+                    </div>
+                  </Card>
+                  {hasTeamToggle && (
+                    <Card>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-main text-xs text-gray-500">Your team</p>
+                          <h3 className="text-base">{currentTeam.name}</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="warning">Not Active</Badge>
+                          <span className="font-main text-sm text-gray-400">{visibleMembers.length}/6</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setDashTab("team")}
+                        className="font-main mt-3 text-sm text-rose-400 transition-colors hover:text-rose-300"
+                      >
+                        View team details &rarr;
+                      </button>
+                    </Card>
+                  )}
+                </div>
+              )}
+
+              {/* Team tab */}
+              {dashTab === "team" && (
+                <div className="flex flex-col gap-5">
+                  {hasTeamToggle ? (
+                    <>
+                      <TeamCard team={currentTeam} isCaptain={isCaptainView} />
+                      <JoinCodeDisplay code={currentTeam.join_code} />
+                      <MemberList
+                        members={visibleMembers}
+                        isCaptain={isCaptainView}
+                        currentProfileId="p1"
+                      />
+                      <LeaveTeamButton />
+
+                      <div className="mt-2 border-t border-white/10 pt-4">
+                        <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
+                          Paid variant
+                        </h3>
+                        <TeamCard team={mockPaidTeam} />
+                      </div>
+                    </>
+                  ) : (
+                    <NoTeamState teams={mockBrowseTeams} />
+                  )}
+                </div>
+              )}
+
+              {/* Profile tab */}
+              {dashTab === "profile" && (
+                <ProfileTab
+                  profile={mockProfile}
+                  onLogout={() => alert("Would log out")}
+                  onDeleteAccount={() => alert("Would delete account")}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
           </div>
 
-          <div className="mt-6 border-t border-white/10 pt-4">
-            <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
-              Paid variant
-            </h3>
-            <TeamCard team={mockPaidTeam} />
+          {/* Bottom tab bar */}
+          <div className="sticky bottom-0 -mx-6 border-t border-white/10 bg-black/60 px-6 pb-6 pt-2 backdrop-blur-xl sm:-mx-8 sm:px-8 sm:pb-8">
+            <div className="flex justify-around">
+              {(["home", "team", "profile"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setDashTab(t)}
+                  className={`flex flex-col items-center gap-1 rounded-lg px-6 py-2 transition-colors ${
+                    dashTab === t
+                      ? "text-rose-400"
+                      : "text-gray-500 hover:text-gray-300"
+                  }`}
+                >
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={dashTab === t ? 2.5 : 1.5}
+                  >
+                    {t === "home" && (
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" />
+                    )}
+                    {t === "team" && (
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                    )}
+                    {t === "profile" && (
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    )}
+                  </svg>
+                  <span className="font-main text-xs">{dashboardTabLabels[t]}</span>
+                </button>
+              ))}
+            </div>
           </div>
-        </GlassPanel>
-      </div>
-    </div>
-  );
-}
-
-// ── Dashboard No Team ──────────────────────────────────────
-
-function DashboardNoTeamSection() {
-  return (
-    <div>
-      <SectionTitle>Dashboard — No Team</SectionTitle>
-      <div className="mx-auto max-w-lg">
-        <GlassPanel>
-          <FadeIn delay={0} direction="none">
-            <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
-          </FadeIn>
-          <div className="flex flex-col gap-5">
-            <FadeIn delay={0.1}>
-              <ProfileCard profile={mockProfile} />
-            </FadeIn>
-            <FadeIn delay={0.2}>
-              <NoTeamState teams={mockBrowseTeams} />
-            </FadeIn>
           </div>
-        </GlassPanel>
-      </div>
-    </div>
-  );
-}
-
-// ── Dashboard Profile ─────────────────────────────────────
-
-function DashboardProfileSection() {
-  return (
-    <div>
-      <SectionTitle>Dashboard — Profile Tab</SectionTitle>
-      <div className="mx-auto max-w-lg">
-        <GlassPanel>
-          <FadeIn delay={0} direction="none">
-            <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <ProfileTab
-              profile={mockProfile}
-              onLogout={() => alert("Would log out")}
-              onDeleteAccount={() => alert("Would delete account")}
-            />
-          </FadeIn>
         </GlassPanel>
       </div>
     </div>

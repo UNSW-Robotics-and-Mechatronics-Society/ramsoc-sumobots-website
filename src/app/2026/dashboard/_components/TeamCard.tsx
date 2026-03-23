@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { TeamWithMembers } from "@/app/_types/registration";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
-import Input from "@/app/2026/_components/ui/Input";
 import { renameTeam } from "@/app/2026/_actions/team";
 
 const MIN_MEMBERS_TO_ACTIVATE = 3;
@@ -27,11 +26,21 @@ export default function TeamCard({
   const [error, setError] = useState<string>();
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editing) inputRef.current?.select();
+  }, [editing]);
 
   function handleSave() {
-    if (!name.trim()) return;
+    const trimmed = name.trim();
+    if (!trimmed || trimmed === team.name) {
+      setEditing(false);
+      setName(team.name);
+      return;
+    }
     startTransition(async () => {
-      const result = await renameTeam(name);
+      const result = await renameTeam(trimmed);
       if (result.success) {
         setEditing(false);
         setError(undefined);
@@ -42,55 +51,45 @@ export default function TeamCard({
     });
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === "Enter") handleSave();
+    if (e.key === "Escape") {
+      setEditing(false);
+      setName(team.name);
+      setError(undefined);
+    }
+  }
+
   return (
     <Card>
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          {editing ? (
-            <div className="mb-2 flex items-center gap-2">
-              <Input
-                label="Team Name"
+          <div className="mb-1 flex items-center gap-2">
+            {editing ? (
+              <input
+                ref={inputRef}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="text-lg"
+                onKeyDown={handleKeyDown}
+                onBlur={handleSave}
+                className="font-display w-full rounded border border-white/20 bg-white/5 px-2 py-1 text-xl text-white outline-none focus:border-rose-500"
                 autoFocus
-              />
-              <Button
-                variant="primary"
-                size="default"
-                className="h-[44px] shrink-0 px-3 text-xs"
-                onClick={handleSave}
-                disabled={isPending || !name.trim()}
-              >
-                {isPending ? "..." : "Save"}
-              </Button>
-              <Button
-                variant="ghost"
-                size="default"
-                className="h-[44px] shrink-0 px-3 text-xs"
-                onClick={() => {
-                  setEditing(false);
-                  setName(team.name);
-                  setError(undefined);
-                }}
                 disabled={isPending}
-              >
-                Cancel
-              </Button>
-            </div>
-          ) : (
-            <div className="mb-1 flex items-center gap-2">
-              <h3 className="truncate">{team.name}</h3>
-              {isCaptain && (
-                <button
-                  onClick={() => setEditing(true)}
-                  className="font-main shrink-0 rounded px-2 py-0.5 text-xs text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
-                >
-                  Rename
-                </button>
-              )}
-            </div>
-          )}
+              />
+            ) : (
+              <>
+                <h3 className="truncate">{team.name}</h3>
+                {isCaptain && (
+                  <button
+                    onClick={() => setEditing(true)}
+                    className="font-main shrink-0 rounded px-2 py-0.5 text-xs text-gray-400 transition-colors hover:bg-white/5 hover:text-white"
+                  >
+                    Rename
+                  </button>
+                )}
+              </>
+            )}
+          </div>
           {error && (
             <p className="font-main mb-1 text-xs text-red-400">{error}</p>
           )}
