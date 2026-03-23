@@ -166,13 +166,11 @@ export default function StudentDetailsForm({
         <p className="text-sm text-red-400">{error}</p>
       )}
 
-      <Field delay={1.0}>
-        <div className="sticky bottom-4 mt-4 pt-4">
-          <Button type="submit" size="full" disabled={loading}>
-            {loading ? "Saving..." : "Continue"}
-          </Button>
-        </div>
-      </Field>
+      <div className="sticky bottom-4 mt-4 pt-4">
+        <Button type="submit" size="full" disabled={loading}>
+          {loading ? "Saving..." : "Continue"}
+        </Button>
+      </div>
     </form>
   );
 }

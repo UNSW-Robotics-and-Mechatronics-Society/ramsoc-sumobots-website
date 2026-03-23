@@ -27,8 +27,8 @@ function ProfileRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
     <>
-      <span className="text-gray-400">{label}</span>
-      <span className="text-white">{value}</span>
+      <span className="shrink-0 text-gray-400">{label}</span>
+      <span className="min-w-0 break-words text-white">{value}</span>
     </>
   );
 }

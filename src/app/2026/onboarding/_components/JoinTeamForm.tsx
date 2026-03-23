@@ -124,17 +124,15 @@ export default function JoinTeamForm({
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
-      <Field delay={0.2}>
-        <div className="sticky bottom-4 mt-4 pt-4">
-          <Button
-            size="full"
-            onClick={handlePreview}
-            disabled={loading || code.length !== 6}
-          >
-            {loading ? "Looking up..." : "Find Team"}
-          </Button>
-        </div>
-      </Field>
+      <div className="sticky bottom-4 mt-4 pt-4">
+        <Button
+          size="full"
+          onClick={handlePreview}
+          disabled={loading || code.length !== 6}
+        >
+          {loading ? "Looking up..." : "Find Team"}
+        </Button>
+      </div>
     </div>
   );
 }

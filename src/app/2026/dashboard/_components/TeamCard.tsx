@@ -64,7 +64,7 @@ export default function TeamCard({
     <Card>
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
-          <div className="mb-1 flex items-center gap-2">
+          <div className="mb-1 flex min-w-0 items-center gap-2">
             {editing ? (
               <input
                 ref={inputRef}

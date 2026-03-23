@@ -627,13 +627,11 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={1.0}>
-                  <div className="sticky bottom-4 mt-4 pt-4">
-                    <Button type="submit" size="full">
-                      Continue
-                    </Button>
-                  </div>
-                </OnboardingField>
+                <div className="sticky bottom-4 mt-4 pt-4">
+                  <Button type="submit" size="full">
+                    Continue
+                  </Button>
+                </div>
               </form>
             </motion.div>
           )}
@@ -891,8 +889,6 @@ function DashboardSection() {
 
       <div className="mx-auto max-w-lg">
         <GlassPanel>
-          <div className="flex min-h-[50vh] flex-col">
-          <div className="flex-1 pb-4">
           <AnimatePresence mode="wait">
             <motion.div
               key={dashTab}
@@ -993,45 +989,41 @@ function DashboardSection() {
               )}
             </motion.div>
           </AnimatePresence>
-          </div>
-
-          {/* Bottom tab bar */}
-          <div className="sticky bottom-0 -mx-6 border-t border-white/10 bg-black/60 px-6 pb-6 pt-2 backdrop-blur-xl sm:-mx-8 sm:px-8 sm:pb-8">
-            <div className="flex justify-around">
-              {(["home", "team", "profile"] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setDashTab(t)}
-                  className={`flex flex-col items-center gap-1 rounded-lg px-6 py-2 transition-colors ${
-                    dashTab === t
-                      ? "text-rose-400"
-                      : "text-gray-500 hover:text-gray-300"
-                  }`}
-                >
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={dashTab === t ? 2.5 : 1.5}
-                  >
-                    {t === "home" && (
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" />
-                    )}
-                    {t === "team" && (
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                    )}
-                    {t === "profile" && (
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    )}
-                  </svg>
-                  <span className="font-main text-xs">{dashboardTabLabels[t]}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-          </div>
         </GlassPanel>
+
+        {/* Bottom tab bar — outside the glass panel */}
+        <div className="mt-4 flex justify-around rounded-xl border border-white/10 bg-white/5 p-1 backdrop-blur-xl">
+          {(["home", "team", "profile"] as const).map((t) => (
+            <button
+              key={t}
+              onClick={() => setDashTab(t)}
+              className={`flex flex-1 flex-col items-center gap-1 rounded-lg py-3 transition-colors ${
+                dashTab === t
+                  ? "text-rose-400"
+                  : "text-gray-500 hover:text-gray-300"
+              }`}
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={dashTab === t ? 2.5 : 1.5}
+              >
+                {t === "home" && (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z" />
+                )}
+                {t === "team" && (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                )}
+                {t === "profile" && (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                )}
+              </svg>
+              <span className="font-main text-xs">{dashboardTabLabels[t]}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

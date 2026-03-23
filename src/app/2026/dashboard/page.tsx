@@ -16,7 +16,7 @@ export default async function DashboardPage() {
   const browsable = team ? [] : await browseTeams();
 
   return (
-    <div className="flex min-h-screen flex-col items-center px-4 pt-12 pb-24">
+    <div className="flex min-h-screen flex-col items-center px-4 pt-12 pb-28">
       <div className="w-full max-w-lg">
         <GlassPanel>
           <DashboardContent profile={profile} team={team} browsableTeams={browsable} />
