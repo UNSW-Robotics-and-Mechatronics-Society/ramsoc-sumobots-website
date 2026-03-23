@@ -9,7 +9,7 @@ import type { TeamBrowseItem } from "@/app/_types/registration";
 
 export default function NoTeamState({ teams }: { teams: TeamBrowseItem[] }) {
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <Card className="text-center">
         <h3 className="mb-2">No Team Yet</h3>
         <p className="font-main mb-4 text-sm text-gray-400">
@@ -52,6 +52,6 @@ export default function NoTeamState({ teams }: { teams: TeamBrowseItem[] }) {
           </ul>
         </Card>
       )}
-    </>
+    </div>
   );
 }

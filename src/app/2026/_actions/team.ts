@@ -343,3 +343,116 @@ export async function getMyTeam(): Promise<TeamWithMembers | null> {
     members: members ?? [],
   } as TeamWithMembers;
 }
+
+export async function promoteMember(
+  teamMemberId: string,
+): Promise<{ success: boolean; error?: string }> {
+  const { userId } = await auth();
+  if (!userId) return { success: false, error: "Not authenticated" };
+
+  const profileId = await getProfileId(userId);
+  if (!profileId) return { success: false, error: "Profile not found" };
+
+  const supabase = getSupabaseSecretClient();
+
+  // Verify caller is captain of the same team
+  const { data: target } = await supabase
+    .from("team_members")
+    .select("id, team_id, role")
+    .eq("id", teamMemberId)
+    .single();
+
+  if (!target) return { success: false, error: "Member not found" };
+
+  const { data: callerMembership } = await supabase
+    .from("team_members")
+    .select("id, role")
+    .eq("team_id", target.team_id)
+    .eq("profile_id", profileId)
+    .single();
+
+  if (!callerMembership || callerMembership.role !== "captain") {
+    return { success: false, error: "Only the captain can promote members" };
+  }
+
+  // Demote current captain and promote target
+  const { error: demoteError } = await supabase
+    .from("team_members")
+    .update({ role: "member" })
+    .eq("id", callerMembership.id);
+
+  if (demoteError) {
+    console.error("Failed to demote captain:", demoteError);
+    return { success: false, error: "Failed to promote member" };
+  }
+
+  const { error: promoteError } = await supabase
+    .from("team_members")
+    .update({ role: "captain" })
+    .eq("id", teamMemberId);
+
+  if (promoteError) {
+    // Rollback
+    await supabase
+      .from("team_members")
+      .update({ role: "captain" })
+      .eq("id", callerMembership.id);
+    console.error("Failed to promote member:", promoteError);
+    return { success: false, error: "Failed to promote member" };
+  }
+
+  return { success: true };
+}
+
+export async function kickMember(
+  teamMemberId: string,
+): Promise<{ success: boolean; error?: string }> {
+  const { userId } = await auth();
+  if (!userId) return { success: false, error: "Not authenticated" };
+
+  const profileId = await getProfileId(userId);
+  if (!profileId) return { success: false, error: "Profile not found" };
+
+  const supabase = getSupabaseSecretClient();
+
+  // Verify target exists
+  const { data: target } = await supabase
+    .from("team_members")
+    .select("id, team_id, profile_id, role")
+    .eq("id", teamMemberId)
+    .single();
+
+  if (!target) return { success: false, error: "Member not found" };
+
+  if (target.profile_id === profileId) {
+    return { success: false, error: "You cannot kick yourself" };
+  }
+
+  if (target.role === "captain") {
+    return { success: false, error: "You cannot kick the captain" };
+  }
+
+  // Verify caller is captain of the same team
+  const { data: callerMembership } = await supabase
+    .from("team_members")
+    .select("id, role")
+    .eq("team_id", target.team_id)
+    .eq("profile_id", profileId)
+    .single();
+
+  if (!callerMembership || callerMembership.role !== "captain") {
+    return { success: false, error: "Only the captain can kick members" };
+  }
+
+  const { error } = await supabase
+    .from("team_members")
+    .delete()
+    .eq("id", teamMemberId);
+
+  if (error) {
+    console.error("Failed to kick member:", error);
+    return { success: false, error: "Failed to kick member" };
+  }
+
+  return { success: true };
+}

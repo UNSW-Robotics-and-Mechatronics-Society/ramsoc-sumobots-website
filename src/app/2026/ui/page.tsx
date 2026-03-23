@@ -15,6 +15,7 @@ import MemberList from "@/app/2026/dashboard/_components/MemberList";
 import JoinCodeDisplay from "@/app/2026/dashboard/_components/JoinCodeDisplay";
 import NoTeamState from "@/app/2026/dashboard/_components/NoTeamState";
 import LeaveTeamButton from "@/app/2026/dashboard/_components/LeaveTeamButton";
+import ProfileTab from "@/app/2026/dashboard/_components/ProfileTab";
 import AdminLoginForm from "@/app/2026/admin/_components/AdminLoginForm";
 import AdminShell from "@/app/2026/admin/_components/AdminShell";
 import TeamsTable from "@/app/2026/admin/_components/TeamsTable";
@@ -233,6 +234,7 @@ const sections = [
   "Onboarding",
   "Dashboard (Team)",
   "Dashboard (No Team)",
+  "Dashboard (Profile)",
   "Admin Login",
   "Admin Teams",
   "Admin Individuals",
@@ -280,6 +282,7 @@ export default function UIPreviewPage() {
             {active === "Onboarding" && <OnboardingSection />}
             {active === "Dashboard (Team)" && <DashboardTeamSection />}
             {active === "Dashboard (No Team)" && <DashboardNoTeamSection />}
+            {active === "Dashboard (Profile)" && <DashboardProfileSection />}
             {active === "Admin Login" && <AdminLoginSection />}
             {active === "Admin Teams" && <AdminTeamsSection />}
             {active === "Admin Individuals" && <AdminIndividualsSection />}
@@ -746,9 +749,47 @@ function OnboardingSection() {
 // ── Dashboard with Team ────────────────────────────────────
 
 function DashboardTeamSection() {
+  const [isCaptainView, setIsCaptainView] = useState(true);
+  const [memberCount, setMemberCount] = useState(4);
+
+  const visibleMembers = mockMembers.slice(0, memberCount);
+  const currentTeam: TeamWithMembers = {
+    ...mockTeam,
+    paid: false,
+    members: visibleMembers,
+  };
+
   return (
     <div>
       <SectionTitle>Dashboard — Has Team</SectionTitle>
+
+      {/* Toggles */}
+      <div className="mb-4 flex flex-wrap items-center gap-4">
+        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+          <input
+            type="checkbox"
+            checked={isCaptainView}
+            onChange={(e) => setIsCaptainView(e.target.checked)}
+            className="h-4 w-4 rounded accent-rose-600"
+          />
+          Captain view
+        </label>
+        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+          Members:
+          <select
+            value={memberCount}
+            onChange={(e) => setMemberCount(Number(e.target.value))}
+            className="rounded bg-white/10 px-2 py-1 text-sm text-white"
+          >
+            {[1, 2, 3, 4].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
       <div className="mx-auto max-w-lg">
         <GlassPanel>
           <FadeIn delay={0} direction="none">
@@ -759,13 +800,17 @@ function DashboardTeamSection() {
               <ProfileCard profile={mockProfile} />
             </FadeIn>
             <FadeIn delay={0.2}>
-              <TeamCard team={mockTeam} />
+              <TeamCard team={currentTeam} />
             </FadeIn>
             <FadeIn delay={0.3}>
-              <JoinCodeDisplay code={mockTeam.join_code} />
+              <JoinCodeDisplay code={currentTeam.join_code} />
             </FadeIn>
             <FadeIn delay={0.4}>
-              <MemberList members={mockTeam.members} />
+              <MemberList
+                members={visibleMembers}
+                isCaptain={isCaptainView}
+                currentProfileId="p1"
+              />
             </FadeIn>
             <FadeIn delay={0.5}>
               <LeaveTeamButton />
@@ -803,6 +848,30 @@ function DashboardNoTeamSection() {
               <NoTeamState teams={mockBrowseTeams} />
             </FadeIn>
           </div>
+        </GlassPanel>
+      </div>
+    </div>
+  );
+}
+
+// ── Dashboard Profile ─────────────────────────────────────
+
+function DashboardProfileSection() {
+  return (
+    <div>
+      <SectionTitle>Dashboard — Profile Tab</SectionTitle>
+      <div className="mx-auto max-w-lg">
+        <GlassPanel>
+          <FadeIn delay={0} direction="none">
+            <h1 className="mb-8 text-center text-3xl sm:text-4xl">Dashboard</h1>
+          </FadeIn>
+          <FadeIn delay={0.1}>
+            <ProfileTab
+              profile={mockProfile}
+              onLogout={() => alert("Would log out")}
+              onDeleteAccount={() => alert("Would delete account")}
+            />
+          </FadeIn>
         </GlassPanel>
       </div>
     </div>
