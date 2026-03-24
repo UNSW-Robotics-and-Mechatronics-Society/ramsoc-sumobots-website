@@ -1,0 +1,113 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createHmac } from "crypto";
+import { getSupabaseSecretClient } from "@/app/_utils/supabase";
+
+const WEBHOOK_SIGNATURE_KEY = process.env.SQUARE_WEBHOOK_SIGNATURE_KEY ?? "";
+const WEBHOOK_URL = process.env.SQUARE_WEBHOOK_URL ?? "";
+
+function isValidSignature(
+  body: string,
+  signatureHeader: string,
+  webhookUrl: string,
+  signatureKey: string,
+): boolean {
+  const combined = webhookUrl + body;
+  const expectedSignature = createHmac("sha256", signatureKey)
+    .update(combined)
+    .digest("base64");
+  return expectedSignature === signatureHeader;
+}
+
+export async function POST(request: NextRequest) {
+  const body = await request.text();
+  const signature = request.headers.get("x-square-hmacsha256-signature") ?? "";
+
+  if (
+    !WEBHOOK_SIGNATURE_KEY ||
+    !isValidSignature(body, signature, WEBHOOK_URL, WEBHOOK_SIGNATURE_KEY)
+  ) {
+    return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
+  }
+
+  const event = JSON.parse(body);
+
+  if (event.type !== "payment.completed") {
+    return NextResponse.json({ received: true });
+  }
+
+  const payment = event.data?.object?.payment;
+  if (!payment?.id) {
+    return NextResponse.json({ error: "No payment data" }, { status: 400 });
+  }
+
+  const supabase = getSupabaseSecretClient();
+
+  // Check if we already recorded this payment (from checkout flow)
+  const { data: existing } = await supabase
+    .from("payments")
+    .select("id")
+    .eq("square_payment_id", payment.id)
+    .maybeSingle();
+
+  if (existing) {
+    // Already recorded — just ensure team is marked paid
+    const { data: paymentRecord } = await supabase
+      .from("payments")
+      .select("team_id")
+      .eq("square_payment_id", payment.id)
+      .single();
+
+    if (paymentRecord) {
+      await supabase
+        .from("teams")
+        .update({ paid: true })
+        .eq("id", paymentRecord.team_id);
+    }
+
+    return NextResponse.json({ received: true, action: "ensured_paid" });
+  }
+
+  // Payment not recorded yet — extract team ID from the note field
+  // Note format: "Sumobots 2026 entry fee — TeamName (category)"
+  // We need to find the team by matching the Square payment in the note
+  // Since the note contains the team name, look up by that
+  const note: string = payment.note ?? "";
+  const noteMatch = note.match(/entry fee — (.+?) \((standard|open)\)$/);
+
+  if (!noteMatch) {
+    console.error("Webhook: could not parse team from note:", note);
+    return NextResponse.json({ received: true, action: "skipped_no_match" });
+  }
+
+  const teamName = noteMatch[1];
+  const { data: team } = await supabase
+    .from("teams")
+    .select("id")
+    .eq("name", teamName)
+    .eq("competition_year", 2026)
+    .maybeSingle();
+
+  if (!team) {
+    console.error("Webhook: team not found:", teamName);
+    return NextResponse.json({ received: true, action: "skipped_no_team" });
+  }
+
+  // Record the payment
+  const amountCents = Number(payment.amountMoney?.amount ?? 0);
+  await supabase.from("payments").insert({
+    team_id: team.id,
+    square_payment_id: payment.id,
+    amount_cents: amountCents,
+    currency: payment.amountMoney?.currency ?? "AUD",
+    status: payment.status,
+    source: "webhook",
+  });
+
+  // Mark team as paid
+  await supabase
+    .from("teams")
+    .update({ paid: true })
+    .eq("id", team.id);
+
+  return NextResponse.json({ received: true, action: "payment_recorded" });
+}

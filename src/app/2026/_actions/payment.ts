@@ -105,6 +105,16 @@ export async function processPayment(
     });
 
     if (response.payment?.status === "COMPLETED") {
+      // Record payment in history
+      await supabase.from("payments").insert({
+        team_id: team.id,
+        square_payment_id: response.payment.id,
+        amount_cents: amountCents,
+        currency: "AUD",
+        status: response.payment.status,
+        source: "checkout",
+      });
+
       // Mark team as paid
       const { error: updateError } = await supabase
         .from("teams")
