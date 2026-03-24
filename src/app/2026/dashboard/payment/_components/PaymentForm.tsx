@@ -167,8 +167,8 @@ export default function PaymentForm({
         );
         applePayRef.current = applePay;
         setApplePayAvailable(true);
-      } catch {
-        // Apple Pay not available on this device/browser
+      } catch (e) {
+        console.warn("[Square] Apple Pay not available:", e);
       }
 
       try {
@@ -183,8 +183,8 @@ export default function PaymentForm({
         );
         googlePayRef.current = googlePay;
         setGooglePayAvailable(true);
-      } catch {
-        // Google Pay not available on this device/browser
+      } catch (e) {
+        console.warn("[Square] Google Pay not available:", e);
       }
 
       setLoading(false);
