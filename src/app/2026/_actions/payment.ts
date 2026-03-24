@@ -94,13 +94,13 @@ export async function processPayment(
   try {
     const response = await square.payments.create({
       sourceId,
-      idempotencyKey: `team-${team.id}-${Date.now()}`,
+      idempotencyKey: crypto.randomUUID(),
       amountMoney: {
         amount: BigInt(amountCents),
         currency: "AUD",
       },
       locationId: process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID,
-      note: `Sumobots 2026 entry fee — ${team.name} (${team.category})`,
+      note: `Sumobots 2026 entry fee — ${team.name} (${team.category}) [team:${team.id}]`,
       buyerEmailAddress: profile.email,
     });
 
@@ -136,8 +136,10 @@ export async function processPayment(
       success: false,
       error: "Payment was not completed. Please try again.",
     };
-  } catch (err) {
-    console.error("Square payment error:", err);
-    return { success: false, error: "Payment failed. Please try again." };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : JSON.stringify(err);
+    console.error("Square payment error:", message, err);
+    return { success: false, error: `Payment failed: ${message}` };
   }
 }

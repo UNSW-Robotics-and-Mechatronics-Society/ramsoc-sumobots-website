@@ -31,12 +31,12 @@ export async function POST(request: NextRequest) {
 
   const event = JSON.parse(body);
 
-  if (event.type !== "payment.completed") {
+  if (event.type !== "payment.updated") {
     return NextResponse.json({ received: true });
   }
 
   const payment = event.data?.object?.payment;
-  if (!payment?.id) {
+  if (!payment?.id || payment.status !== "COMPLETED") {
     return NextResponse.json({ error: "No payment data" }, { status: 400 });
   }
 
@@ -68,27 +68,23 @@ export async function POST(request: NextRequest) {
   }
 
   // Payment not recorded yet — extract team ID from the note field
-  // Note format: "Sumobots 2026 entry fee — TeamName (category)"
-  // We need to find the team by matching the Square payment in the note
-  // Since the note contains the team name, look up by that
+  // Note format: "Sumobots 2026 entry fee — TeamName (category) [team:uuid]"
   const note: string = payment.note ?? "";
-  const noteMatch = note.match(/entry fee — (.+?) \((standard|open)\)$/);
+  const teamIdMatch = note.match(/\[team:([a-f0-9-]+)\]$/);
 
-  if (!noteMatch) {
-    console.error("Webhook: could not parse team from note:", note);
+  if (!teamIdMatch) {
+    console.error("Webhook: could not parse team ID from note:", note);
     return NextResponse.json({ received: true, action: "skipped_no_match" });
   }
 
-  const teamName = noteMatch[1];
   const { data: team } = await supabase
     .from("teams")
     .select("id")
-    .eq("name", teamName)
-    .eq("competition_year", 2026)
+    .eq("id", teamIdMatch[1])
     .maybeSingle();
 
   if (!team) {
-    console.error("Webhook: team not found:", teamName);
+    console.error("Webhook: team not found:", teamIdMatch[1]);
     return NextResponse.json({ received: true, action: "skipped_no_team" });
   }
 

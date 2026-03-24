@@ -2,13 +2,14 @@
 
 import { useState, useTransition, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { TeamWithMembers } from "@/app/_types/registration";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
 import { renameTeam } from "@/app/2026/_actions/team";
 import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
-import PaymentModal from "./PaymentModal";
+import Path from "@/app/path";
 
 const ENTRY_FEES: Record<string, number> = {
   standard: Number(process.env.NEXT_PUBLIC_STANDARD_TEAM_PRICE) || 0,
@@ -28,7 +29,6 @@ export default function TeamCard({
   const membersNeeded = minMembers - team.members.length;
   const priceCents = ENTRY_FEES[team.category] || 0;
 
-  const [paymentOpen, setPaymentOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(team.name);
   const [error, setError] = useState<string>();
@@ -141,24 +141,25 @@ export default function TeamCard({
           <p className="font-main mb-3 text-center text-sm text-gray-400">
             Team is not currently active. Pay the entry fee to activate your team.
           </p>
-          <Button
-            size="full"
-            disabled={!canActivate || !isCaptain}
-            className={canActivate && isCaptain ? "" : "cursor-not-allowed"}
-            onClick={() => setPaymentOpen(true)}
-          >
-            {canActivate && !isCaptain
-              ? "Only the captain can pay"
-              : priceCents > 0
-                ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
+          {canActivate && isCaptain ? (
+            <Link href={Path[2026].Payment}>
+              <Button size="full">
+                {priceCents > 0
+                  ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
+                  : "Pay Entry Fee"}
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              size="full"
+              disabled
+              className="cursor-not-allowed"
+            >
+              {!isCaptain
+                ? "Only the captain can pay"
                 : "Pay Entry Fee"}
-          </Button>
-          <PaymentModal
-            open={paymentOpen}
-            onClose={() => setPaymentOpen(false)}
-            priceCents={priceCents}
-            category={team.category}
-          />
+            </Button>
+          )}
           {needsMoreMembers && (
             <p className="font-main mt-2 text-center text-xs text-gray-500">
               Need {membersNeeded} more member{membersNeeded !== 1 ? "s" : ""} to activate (minimum {minMembers})
