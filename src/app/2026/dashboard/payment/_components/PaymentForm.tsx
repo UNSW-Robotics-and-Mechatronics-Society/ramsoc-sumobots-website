@@ -36,7 +36,7 @@ interface PaymentRequestConfig {
 }
 
 interface SquarePayments {
-  card: () => Promise<SquareCard>;
+  card: (options?: Record<string, unknown>) => Promise<SquareCard>;
   applePay: (req: PaymentRequestConfig) => Promise<SquareDigitalWallet>;
   googlePay: (req: PaymentRequestConfig) => Promise<SquareDigitalWallet>;
 }
@@ -118,7 +118,31 @@ export default function PaymentForm({
         process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID!,
       );
 
-      const card = await payments.card();
+      const card = await payments.card({
+        style: {
+          ".input-container": {
+            borderColor: "rgba(255,255,255,0.15)",
+            borderRadius: "8px",
+          },
+          ".input-container.is-focus": {
+            borderColor: "rgba(244,63,94,0.6)",
+          },
+          input: {
+            backgroundColor: "transparent",
+            color: "#ffffff",
+            fontSize: "14px",
+          },
+          "input::placeholder": {
+            color: "rgba(255,255,255,0.35)",
+          },
+          ".message-text": {
+            color: "rgba(248,113,113,1)",
+          },
+          ".message-icon": {
+            color: "rgba(248,113,113,1)",
+          },
+        },
+      });
       await card.attach("#square-card-container");
       cardRef.current = card;
 
@@ -358,14 +382,12 @@ export default function PaymentForm({
         <label className="font-main mb-2 block text-sm text-gray-300">
           Card details
         </label>
-        <div className="overflow-hidden rounded-xl bg-white p-4">
-          <div id="square-card-container" className="min-h-[90px]">
-            {loading && (
-              <div className="font-main flex h-[90px] items-center justify-center text-sm text-gray-400">
-                Loading payment form&hellip;
-              </div>
-            )}
-          </div>
+        <div id="square-card-container" className="min-h-[90px]">
+          {loading && (
+            <div className="font-main flex h-[90px] items-center justify-center text-sm text-gray-400">
+              Loading payment form&hellip;
+            </div>
+          )}
         </div>
       </div>
 
