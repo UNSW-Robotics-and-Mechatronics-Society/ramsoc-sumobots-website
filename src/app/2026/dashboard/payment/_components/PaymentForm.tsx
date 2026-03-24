@@ -83,6 +83,8 @@ export default function PaymentForm({
   const [success, setSuccess] = useState(false);
   const [applePayAvailable, setApplePayAvailable] = useState(false);
   const [googlePayAvailable, setGooglePayAvailable] = useState(false);
+  const [cardholderName, setCardholderName] = useState("");
+  const [postalCode, setPostalCode] = useState("");
   const cardRef = useRef<SquareCard | null>(null);
   const applePayRef = useRef<SquareDigitalWallet | null>(null);
   const googlePayRef = useRef<SquareDigitalWallet | null>(null);
@@ -224,6 +226,10 @@ export default function PaymentForm({
 
   async function handleCardPay() {
     if (!cardRef.current) return;
+    if (!cardholderName.trim()) {
+      setError("Please enter the cardholder name.");
+      return;
+    }
     setProcessing(true);
     setError(undefined);
     try {
@@ -357,17 +363,67 @@ export default function PaymentForm({
         </div>
       </div>
 
-      {/* Card form */}
-      <div>
-        <label className="font-main mb-2 block text-sm text-gray-300">
-          Card details
-        </label>
-        <div id="square-card-container" className="min-h-[90px]">
-          {loading && (
-            <div className="font-main flex h-[90px] items-center justify-center text-sm text-gray-400">
-              Loading payment form&hellip;
+      {/* Cardholder details */}
+      <div className="flex flex-col gap-4">
+        <div>
+          <label
+            htmlFor="cardholder-name"
+            className="font-main mb-2 block text-sm text-gray-300"
+          >
+            Cardholder name
+          </label>
+          <input
+            id="cardholder-name"
+            type="text"
+            autoComplete="cc-name"
+            placeholder="Name on card"
+            value={cardholderName}
+            onChange={(e) => setCardholderName(e.target.value)}
+            className="font-main w-full rounded-lg border border-white/15 bg-transparent px-3 py-2.5 text-sm text-white placeholder-white/35 outline-none transition-colors focus:border-rose-500/60"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div className="col-span-2">
+            <label className="font-main mb-2 block text-sm text-gray-300">
+              Card details
+            </label>
+            <div id="square-card-container" className="min-h-[90px]">
+              {loading && (
+                <div className="font-main flex h-[90px] items-center justify-center text-sm text-gray-400">
+                  Loading payment form&hellip;
+                </div>
+              )}
             </div>
-          )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="billing-postcode"
+              className="font-main mb-2 block text-sm text-gray-300"
+            >
+              Billing postcode
+            </label>
+            <input
+              id="billing-postcode"
+              type="text"
+              autoComplete="postal-code"
+              inputMode="numeric"
+              placeholder="2000"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+              className="font-main w-full rounded-lg border border-white/15 bg-transparent px-3 py-2.5 text-sm text-white placeholder-white/35 outline-none transition-colors focus:border-rose-500/60"
+            />
+          </div>
+
+          <div>
+            <label className="font-main mb-2 block text-sm text-gray-300">
+              Country
+            </label>
+            <div className="font-main flex h-[42px] items-center rounded-lg border border-white/15 bg-transparent px-3 text-sm text-gray-400">
+              Australia
+            </div>
+          </div>
         </div>
       </div>
 
