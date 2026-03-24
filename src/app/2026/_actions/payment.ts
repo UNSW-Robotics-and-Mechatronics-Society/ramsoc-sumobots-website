@@ -30,6 +30,7 @@ function getEntryFeeAmountCents(
 
 export async function processPayment(
   sourceId: string,
+  billing?: { cardholderName?: string; postalCode?: string },
 ): Promise<{ success: boolean; error?: string }> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Not authenticated" };
@@ -102,6 +103,10 @@ export async function processPayment(
       locationId: process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID,
       note: `Sumobots 2026 entry fee — ${team.name} (${team.category}) [team:${team.id}]`,
       buyerEmailAddress: profile.email,
+      billingAddress: {
+        postalCode: billing?.postalCode || undefined,
+        country: "AU",
+      },
     });
 
     if (response.payment?.status === "COMPLETED") {
@@ -113,6 +118,8 @@ export async function processPayment(
         currency: "AUD",
         status: response.payment.status,
         source: "checkout",
+        cardholder_name: billing?.cardholderName || null,
+        billing_postcode: billing?.postalCode || null,
       });
 
       // Mark team as paid

@@ -100,7 +100,10 @@ export default function PaymentForm({
         return;
       }
 
-      const response = await processPayment(result.token);
+      const response = await processPayment(result.token, {
+        cardholderName: cardholderName.trim(),
+        postalCode: postalCode.trim(),
+      });
 
       if (response.success) {
         setSuccess(true);
@@ -109,7 +112,7 @@ export default function PaymentForm({
       }
       setProcessing(false);
     },
-    [],
+    [cardholderName, postalCode],
   );
 
   const initPayments = useCallback(async () => {
