@@ -158,19 +158,33 @@ export default function PaymentForm({
       try {
         const applePay = await payments.applePay(paymentRequest);
         await applePay.attach("#apple-pay-container");
+        applePay.addEventListener(
+          "ontokenization",
+          async function onAppleToken() {
+            const result = await applePay.tokenize();
+            await handleTokenResult(result);
+          } as unknown as () => void,
+        );
         applePayRef.current = applePay;
         setApplePayAvailable(true);
       } catch {
-        // Apple Pay not available
+        // Apple Pay not available on this device/browser
       }
 
       try {
         const googlePay = await payments.googlePay(paymentRequest);
         await googlePay.attach("#google-pay-container");
+        googlePay.addEventListener(
+          "ontokenization",
+          async function onGoogleToken() {
+            const result = await googlePay.tokenize();
+            await handleTokenResult(result);
+          } as unknown as () => void,
+        );
         googlePayRef.current = googlePay;
         setGooglePayAvailable(true);
       } catch {
-        // Google Pay not available
+        // Google Pay not available on this device/browser
       }
 
       setLoading(false);
@@ -217,32 +231,6 @@ export default function PaymentForm({
       await handleTokenResult(result);
     } catch {
       setError("Something went wrong. Please try again.");
-      setProcessing(false);
-    }
-  }
-
-  async function handleApplePay() {
-    if (!applePayRef.current) return;
-    setProcessing(true);
-    setError(undefined);
-    try {
-      const result = await applePayRef.current.tokenize();
-      await handleTokenResult(result);
-    } catch {
-      setError("Apple Pay failed. Please try again.");
-      setProcessing(false);
-    }
-  }
-
-  async function handleGooglePay() {
-    if (!googlePayRef.current) return;
-    setProcessing(true);
-    setError(undefined);
-    try {
-      const result = await googlePayRef.current.tokenize();
-      await handleTokenResult(result);
-    } catch {
-      setError("Google Pay failed. Please try again.");
       setProcessing(false);
     }
   }
@@ -352,30 +340,22 @@ export default function PaymentForm({
         </div>
       </div>
 
-      {/* Digital wallet buttons */}
-      {(applePayAvailable || googlePayAvailable) && (
-        <div className="flex flex-col gap-2">
-          {applePayAvailable && (
-            <div
-              id="apple-pay-container"
-              onClick={handleApplePay}
-              className="cursor-pointer"
-            />
-          )}
-          {googlePayAvailable && (
-            <div
-              id="google-pay-container"
-              onClick={handleGooglePay}
-              className="cursor-pointer"
-            />
-          )}
-          <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
-            <div className="h-px flex-1 bg-white/10" />
-            or pay with card
-            <div className="h-px flex-1 bg-white/10" />
-          </div>
+      {/* Digital wallet buttons — containers must always be in the DOM for attach() */}
+      <div className={`flex flex-col gap-2 ${!applePayAvailable && !googlePayAvailable ? "hidden" : ""}`}>
+        <div
+          id="apple-pay-container"
+          className={applePayAvailable ? "" : "hidden"}
+        />
+        <div
+          id="google-pay-container"
+          className={googlePayAvailable ? "" : "hidden"}
+        />
+        <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
+          <div className="h-px flex-1 bg-white/10" />
+          or pay with card
+          <div className="h-px flex-1 bg-white/10" />
         </div>
-      )}
+      </div>
 
       {/* Card form */}
       <div>
