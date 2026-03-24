@@ -46,5 +46,7 @@ CREATE TABLE payments (
   currency TEXT NOT NULL DEFAULT 'AUD',
   status TEXT NOT NULL,
   source TEXT NOT NULL CHECK (source IN ('checkout', 'webhook')),
+  cardholder_name TEXT,
+  billing_postcode TEXT,
   created_at TIMESTAMPTZ DEFAULT now()
 );
