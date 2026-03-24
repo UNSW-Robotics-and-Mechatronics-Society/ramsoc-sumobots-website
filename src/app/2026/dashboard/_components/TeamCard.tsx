@@ -7,8 +7,14 @@ import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
 import { renameTeam } from "@/app/2026/_actions/team";
+import PaymentModal from "./PaymentModal";
 
 const MIN_MEMBERS_TO_ACTIVATE = 3;
+
+const ENTRY_FEES: Record<string, number> = {
+  standard: Number(process.env.NEXT_PUBLIC_STANDARD_TEAM_PRICE) || 0,
+  open: Number(process.env.NEXT_PUBLIC_OPEN_TEAM_PRICE) || 0,
+};
 
 export default function TeamCard({
   team,
@@ -20,7 +26,9 @@ export default function TeamCard({
   const canActivate = !team.paid && team.members.length >= MIN_MEMBERS_TO_ACTIVATE;
   const needsMoreMembers = !team.paid && team.members.length < MIN_MEMBERS_TO_ACTIVATE;
   const membersNeeded = MIN_MEMBERS_TO_ACTIVATE - team.members.length;
+  const priceCents = ENTRY_FEES[team.category] || 0;
 
+  const [paymentOpen, setPaymentOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(team.name);
   const [error, setError] = useState<string>();
@@ -135,11 +143,22 @@ export default function TeamCard({
           </p>
           <Button
             size="full"
-            disabled={!canActivate}
-            className={canActivate ? "" : "cursor-not-allowed"}
+            disabled={!canActivate || !isCaptain}
+            className={canActivate && isCaptain ? "" : "cursor-not-allowed"}
+            onClick={() => setPaymentOpen(true)}
           >
-            Pay Entry Fee
+            {canActivate && !isCaptain
+              ? "Only the captain can pay"
+              : priceCents > 0
+                ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
+                : "Pay Entry Fee"}
           </Button>
+          <PaymentModal
+            open={paymentOpen}
+            onClose={() => setPaymentOpen(false)}
+            priceCents={priceCents}
+            category={team.category}
+          />
           {needsMoreMembers && (
             <p className="font-main mt-2 text-center text-xs text-gray-500">
               Need {membersNeeded} more member{membersNeeded !== 1 ? "s" : ""} to activate (minimum {MIN_MEMBERS_TO_ACTIVATE})
