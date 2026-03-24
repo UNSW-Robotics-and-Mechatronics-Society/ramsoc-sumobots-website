@@ -16,6 +16,7 @@ import JoinCodeDisplay from "./JoinCodeDisplay";
 import NoTeamState from "./NoTeamState";
 import LeaveTeamButton from "./LeaveTeamButton";
 import ProfileTab from "./ProfileTab";
+import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
 
 type Tab = "home" | "team" | "profile";
 
@@ -138,7 +139,8 @@ export default function DashboardContent({
     ) ?? false;
 
   const hasTeam = !!team;
-  const hasEnoughMembers = (team?.members.length ?? 0) >= 3;
+  const minMembers = team ? MEMBER_LIMITS[team.category].min : 3;
+  const hasEnoughMembers = (team?.members.length ?? 0) >= minMembers;
   const isPaid = team?.paid ?? false;
 
   return (
@@ -174,7 +176,7 @@ export default function DashboardContent({
                     onClick={() => !hasTeam && setTab("team")}
                   />
                   <ActionItem
-                    label="Get at least 3 team members"
+                    label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
                     done={hasEnoughMembers}
                     onClick={() =>
                       hasTeam && !hasEnoughMembers && setTab("team")

@@ -3,6 +3,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { getSupabaseSecretClient } from "@/app/_utils/supabase";
 import { SquareClient, SquareEnvironment } from "square";
+import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
 
 function getSquareClient() {
   const environment =
@@ -72,8 +73,12 @@ export async function processPayment(
     .select("id", { count: "exact", head: true })
     .eq("team_id", team.id);
 
-  if ((count ?? 0) < 3) {
-    return { success: false, error: "Need at least 3 members to activate" };
+  const minMembers = MEMBER_LIMITS[team.category as keyof typeof MEMBER_LIMITS].min;
+  if ((count ?? 0) < minMembers) {
+    return {
+      success: false,
+      error: `Need at least ${minMembers} member${minMembers !== 1 ? "s" : ""} to activate`,
+    };
   }
 
   const amountCents = getEntryFeeAmountCents(
