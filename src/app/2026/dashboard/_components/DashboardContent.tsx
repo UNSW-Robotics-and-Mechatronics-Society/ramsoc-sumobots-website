@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import type {
   Profile,
@@ -131,6 +132,11 @@ export default function DashboardContent({
   browsableTeams: TeamBrowseItem[];
 }) {
   const [tab, setTab] = useState<Tab>("home");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isCaptain =
     team?.members.some(
@@ -245,7 +251,7 @@ export default function DashboardContent({
         </motion.div>
       </AnimatePresence>
 
-      <BottomTabBar tab={tab} setTab={setTab} />
+      {mounted && createPortal(<BottomTabBar tab={tab} setTab={setTab} />, document.body)}
     </>
   );
 }
