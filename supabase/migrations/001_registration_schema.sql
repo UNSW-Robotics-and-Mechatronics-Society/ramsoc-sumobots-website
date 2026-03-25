@@ -37,3 +37,16 @@ CREATE TABLE team_members (
   joined_at TIMESTAMPTZ DEFAULT now(),
   UNIQUE(team_id, profile_id)
 );
+
+CREATE TABLE payments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  team_id UUID REFERENCES teams(id) ON DELETE CASCADE NOT NULL,
+  square_payment_id TEXT UNIQUE NOT NULL,
+  amount_cents INT NOT NULL,
+  currency TEXT NOT NULL DEFAULT 'AUD',
+  status TEXT NOT NULL,
+  source TEXT NOT NULL CHECK (source IN ('checkout', 'webhook')),
+  cardholder_name TEXT,
+  billing_postcode TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);

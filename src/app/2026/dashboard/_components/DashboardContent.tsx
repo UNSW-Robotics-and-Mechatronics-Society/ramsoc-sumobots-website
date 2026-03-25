@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import type {
@@ -16,6 +16,7 @@ import JoinCodeDisplay from "./JoinCodeDisplay";
 import NoTeamState from "./NoTeamState";
 import LeaveTeamButton from "./LeaveTeamButton";
 import ProfileTab from "./ProfileTab";
+import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
 
 type Tab = "home" | "team" | "profile";
 
@@ -131,6 +132,11 @@ export default function DashboardContent({
   browsableTeams: TeamBrowseItem[];
 }) {
   const [tab, setTab] = useState<Tab>("home");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isCaptain =
     team?.members.some(
@@ -138,7 +144,8 @@ export default function DashboardContent({
     ) ?? false;
 
   const hasTeam = !!team;
-  const hasEnoughMembers = (team?.members.length ?? 0) >= 3;
+  const minMembers = team ? MEMBER_LIMITS[team.category].min : 3;
+  const hasEnoughMembers = (team?.members.length ?? 0) >= minMembers;
   const isPaid = team?.paid ?? false;
 
   return (
@@ -174,7 +181,7 @@ export default function DashboardContent({
                     onClick={() => !hasTeam && setTab("team")}
                   />
                   <ActionItem
-                    label="Get at least 3 team members"
+                    label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
                     done={hasEnoughMembers}
                     onClick={() =>
                       hasTeam && !hasEnoughMembers && setTab("team")
@@ -244,8 +251,7 @@ export default function DashboardContent({
         </motion.div>
       </AnimatePresence>
 
-      {typeof document !== "undefined" &&
-        createPortal(<BottomTabBar tab={tab} setTab={setTab} />, document.body)}
+      {mounted && createPortal(<BottomTabBar tab={tab} setTab={setTab} />, document.body)}
     </>
   );
 }

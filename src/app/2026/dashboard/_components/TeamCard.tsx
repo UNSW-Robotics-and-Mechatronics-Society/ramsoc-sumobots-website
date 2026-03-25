@@ -2,13 +2,19 @@
 
 import { useState, useTransition, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import type { TeamWithMembers } from "@/app/_types/registration";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
 import { renameTeam } from "@/app/2026/_actions/team";
+import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
+import Path from "@/app/path";
 
-const MIN_MEMBERS_TO_ACTIVATE = 3;
+const ENTRY_FEES: Record<string, number> = {
+  standard: Number(process.env.NEXT_PUBLIC_STANDARD_TEAM_PRICE) || 0,
+  open: Number(process.env.NEXT_PUBLIC_OPEN_TEAM_PRICE) || 0,
+};
 
 export default function TeamCard({
   team,
@@ -17,9 +23,11 @@ export default function TeamCard({
   team: TeamWithMembers;
   isCaptain?: boolean;
 }) {
-  const canActivate = !team.paid && team.members.length >= MIN_MEMBERS_TO_ACTIVATE;
-  const needsMoreMembers = !team.paid && team.members.length < MIN_MEMBERS_TO_ACTIVATE;
-  const membersNeeded = MIN_MEMBERS_TO_ACTIVATE - team.members.length;
+  const minMembers = MEMBER_LIMITS[team.category].min;
+  const canActivate = !team.paid && team.members.length >= minMembers;
+  const needsMoreMembers = !team.paid && team.members.length < minMembers;
+  const membersNeeded = minMembers - team.members.length;
+  const priceCents = ENTRY_FEES[team.category] || 0;
 
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(team.name);
@@ -133,16 +141,28 @@ export default function TeamCard({
           <p className="font-main mb-3 text-center text-sm text-gray-400">
             Team is not currently active. Pay the entry fee to activate your team.
           </p>
-          <Button
-            size="full"
-            disabled={!canActivate}
-            className={canActivate ? "" : "cursor-not-allowed"}
-          >
-            Pay Entry Fee
-          </Button>
+          {canActivate && isCaptain ? (
+            <Link href={Path[2026].Payment}>
+              <Button size="full">
+                {priceCents > 0
+                  ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
+                  : "Pay Entry Fee"}
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              size="full"
+              disabled
+              className="cursor-not-allowed"
+            >
+              {!isCaptain
+                ? "Only the captain can pay"
+                : "Pay Entry Fee"}
+            </Button>
+          )}
           {needsMoreMembers && (
             <p className="font-main mt-2 text-center text-xs text-gray-500">
-              Need {membersNeeded} more member{membersNeeded !== 1 ? "s" : ""} to activate (minimum {MIN_MEMBERS_TO_ACTIVATE})
+              Need {membersNeeded} more member{membersNeeded !== 1 ? "s" : ""} to activate (minimum {minMembers})
             </p>
           )}
         </div>

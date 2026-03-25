@@ -14,10 +14,7 @@ function generateJoinCode(): string {
     .join("");
 }
 
-const MEMBER_LIMITS = {
-  standard: { min: 3, max: 6 },
-  open: { min: 1, max: 6 },
-} as const;
+import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
 
 async function getProfileId(userId: string) {
   const supabase = getSupabaseSecretClient();

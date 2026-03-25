@@ -57,3 +57,14 @@ export type AdminTeamRow = Team & {
   member_count: number;
   member_names: string[];
 };
+
+export type Payment = {
+  id: string;
+  team_id: string;
+  square_payment_id: string;
+  amount_cents: number;
+  currency: string;
+  status: string;
+  source: "checkout" | "webhook";
+  created_at: string;
+};
