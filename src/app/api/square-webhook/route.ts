@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ received: true, action: "skipped_no_team" });
   }
 
-  // Record the payment
+  // Record the payment with full Square response
   const amountCents = Number(payment.amountMoney?.amount ?? 0);
   await supabase.from("payments").insert({
     team_id: team.id,
@@ -104,6 +104,7 @@ export async function POST(request: NextRequest) {
     currency: payment.amountMoney?.currency ?? "AUD",
     status: payment.status,
     source: "webhook",
+    square_response: payment,
   });
 
   // Mark team as paid

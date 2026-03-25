@@ -5,7 +5,6 @@ import { getSupabaseSecretClient } from "@/app/_utils/supabase";
 import { SquareClient, SquareEnvironment } from "square";
 import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
 import { logError } from "@/app/_utils/errorLog";
-import { sendPaymentConfirmation } from "@/app/_utils/email";
 
 function getSquareClient() {
   const environment =
@@ -17,6 +16,15 @@ function getSquareClient() {
     token: process.env.SQUARE_ACCESS_TOKEN,
     environment,
   });
+}
+
+/** Convert BigInt values to numbers so the object is JSON-serializable. */
+function toJsonSafe(obj: unknown): unknown {
+  return JSON.parse(
+    JSON.stringify(obj, (_key, value) =>
+      typeof value === "bigint" ? Number(value) : value,
+    ),
+  );
 }
 
 function getEntryFeeAmountCents(
@@ -112,7 +120,7 @@ export async function processPayment(
     });
 
     if (response.payment?.status === "COMPLETED") {
-      // Record payment in history
+      // Record payment in history with full Square response
       await supabase.from("payments").insert({
         team_id: team.id,
         square_payment_id: response.payment.id,
@@ -122,6 +130,7 @@ export async function processPayment(
         source: "checkout",
         cardholder_name: billing?.cardholderName || null,
         billing_postcode: billing?.postalCode || null,
+        square_response: toJsonSafe(response.payment),
       });
 
       // Mark team as paid
@@ -141,15 +150,6 @@ export async function processPayment(
           error: "Payment processed but failed to activate team. Please contact an admin.",
         };
       }
-
-      // Send confirmation email (fire-and-forget)
-      sendPaymentConfirmation({
-        toEmail: profile.email,
-        teamName: team.name,
-        category: team.category,
-        amountCents,
-        squarePaymentId: response.payment.id!,
-      });
 
       return { success: true };
     }

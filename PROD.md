@@ -47,14 +47,6 @@ Quick reference for swapping sandbox/dev to production Square & Clerk (and every
 - [ ] Confirm `admin_session` cookie auth for `/2026/admin/*` routes is acceptable for prod (see `src/middleware.ts`)
 - [ ] Set a strong `ADMIN_PASSWORD`
 
-## Resend (Confirmation Emails)
-
-- [ ] Sign up at [resend.com](https://resend.com) and get an API key
-- [ ] Verify your sending domain (`sumobots.ramsocunsw.org`) in Resend dashboard
-- [ ] Set `RESEND_API_KEY` env var
-- [ ] Optionally set `RESEND_FROM_ADDRESS` (defaults to `Sumobots <noreply@sumobots.ramsocunsw.org>`)
-- [ ] Also enable Square's built-in receipts in Square Dashboard > Settings > Receipts
-
 ## Error Logging
 
 - [ ] Run migration `002_error_logs.sql` on the production database
