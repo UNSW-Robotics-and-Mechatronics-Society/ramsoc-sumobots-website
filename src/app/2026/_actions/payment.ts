@@ -4,6 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import { getSupabaseSecretClient } from "@/app/_utils/supabase";
 import { SquareClient, SquareEnvironment } from "square";
 import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
+import { logError } from "@/app/_utils/errorLog";
+import { sendPaymentConfirmation } from "@/app/_utils/email";
 
 function getSquareClient() {
   const environment =
@@ -129,16 +131,34 @@ export async function processPayment(
         .eq("id", team.id);
 
       if (updateError) {
-        console.error("Payment succeeded but failed to update team:", updateError);
+        await logError("payment", "Payment succeeded but failed to update team", {
+          teamId: team.id,
+          squarePaymentId: response.payment.id,
+          error: updateError.message,
+        });
         return {
           success: false,
           error: "Payment processed but failed to activate team. Please contact an admin.",
         };
       }
 
+      // Send confirmation email (fire-and-forget)
+      sendPaymentConfirmation({
+        toEmail: profile.email,
+        teamName: team.name,
+        category: team.category,
+        amountCents,
+        squarePaymentId: response.payment.id!,
+      });
+
       return { success: true };
     }
 
+    await logError("payment", "Payment not completed", {
+      teamId: team.id,
+      userId,
+      paymentStatus: response.payment?.status,
+    });
     return {
       success: false,
       error: "Payment was not completed. Please try again.",
@@ -146,7 +166,14 @@ export async function processPayment(
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : JSON.stringify(err);
-    console.error("Square payment error:", message, err);
-    return { success: false, error: `Payment failed: ${message}` };
+    await logError("payment", "Square payment error", {
+      teamId: team.id,
+      userId,
+      error: message,
+    });
+    return {
+      success: false,
+      error: "Sorry, payments aren't working at this time. Please try again later.",
+    };
   }
 }

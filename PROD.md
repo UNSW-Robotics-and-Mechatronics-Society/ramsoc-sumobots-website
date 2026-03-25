@@ -17,8 +17,8 @@ Quick reference for swapping sandbox/dev to production Square & Clerk (and every
   - Copy the new **Signature Key** to `SQUARE_WEBHOOK_SIGNATURE_KEY`
   - Set `SQUARE_WEBHOOK_URL` to the production URL above (must match exactly for HMAC validation)
 - [ ] Confirm entry fee amounts are correct:
-  - `NEXT_PUBLIC_STANDARD_TEAM_PRICE` (currently 60000 = $600.00 — is that right?)
-  - `NEXT_PUBLIC_OPEN_TEAM_PRICE` (currently 10000 = $100.00)
+  - `NEXT_PUBLIC_STANDARD_TEAM_PRICE` = 10000 ($100.00)
+  - `NEXT_PUBLIC_OPEN_TEAM_PRICE` = 6000 ($60.00)
 
 ## Clerk
 
@@ -46,6 +46,19 @@ Quick reference for swapping sandbox/dev to production Square & Clerk (and every
 - [ ] Enable RLS policies on all tables (`profiles`, `teams`, `team_members`, `payments`) — none are defined in the migration yet
 - [ ] Confirm `admin_session` cookie auth for `/2026/admin/*` routes is acceptable for prod (see `src/middleware.ts`)
 - [ ] Set a strong `ADMIN_PASSWORD`
+
+## Resend (Confirmation Emails)
+
+- [ ] Sign up at [resend.com](https://resend.com) and get an API key
+- [ ] Verify your sending domain (`sumobots.ramsocunsw.org`) in Resend dashboard
+- [ ] Set `RESEND_API_KEY` env var
+- [ ] Optionally set `RESEND_FROM_ADDRESS` (defaults to `Sumobots <noreply@sumobots.ramsocunsw.org>`)
+- [ ] Also enable Square's built-in receipts in Square Dashboard > Settings > Receipts
+
+## Error Logging
+
+- [ ] Run migration `002_error_logs.sql` on the production database
+- [ ] Periodically check the `error_logs` table for payment/webhook failures
 
 ## Cloudflare / Deployment
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createHmac } from "crypto";
 import { getSupabaseSecretClient } from "@/app/_utils/supabase";
+import { logError } from "@/app/_utils/errorLog";
 
 const WEBHOOK_SIGNATURE_KEY = process.env.SQUARE_WEBHOOK_SIGNATURE_KEY ?? "";
 const WEBHOOK_URL = process.env.SQUARE_WEBHOOK_URL ?? "";
@@ -73,7 +74,10 @@ export async function POST(request: NextRequest) {
   const teamIdMatch = note.match(/\[team:([a-f0-9-]+)\]$/);
 
   if (!teamIdMatch) {
-    console.error("Webhook: could not parse team ID from note:", note);
+    await logError("webhook", "Could not parse team ID from payment note", {
+      note,
+      squarePaymentId: payment.id,
+    });
     return NextResponse.json({ received: true, action: "skipped_no_match" });
   }
 
@@ -84,7 +88,10 @@ export async function POST(request: NextRequest) {
     .maybeSingle();
 
   if (!team) {
-    console.error("Webhook: team not found:", teamIdMatch[1]);
+    await logError("webhook", "Team not found for payment", {
+      teamId: teamIdMatch[1],
+      squarePaymentId: payment.id,
+    });
     return NextResponse.json({ received: true, action: "skipped_no_team" });
   }
 
