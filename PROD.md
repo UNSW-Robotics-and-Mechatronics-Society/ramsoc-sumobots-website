@@ -33,23 +33,26 @@ Quick reference for swapping sandbox/dev to production Square & Clerk (and every
 
 - [ ] `NEXT_PUBLIC_SUPABASE_URL` — confirm using production project URL
 - [ ] `SUPABASE_SECRET_KEY` — confirm using production service-role key
-- [ ] Run the migration on the production database:
+- [ ] Run all migrations on the production database (in order):
   ```sql
-  -- If starting fresh:
-  -- Run the full 001_registration_schema.sql
-
-  -- If tables already exist, just add the new columns:
-  ALTER TABLE payments
-    ADD COLUMN cardholder_name TEXT,
-    ADD COLUMN billing_postcode TEXT;
+  -- 001_registration_schema.sql  (profiles, teams, team_members, payments)
+  -- 002_error_logs.sql            (error_logs table)
+  -- 003_payments_square_response.sql (square_response JSONB column)
   ```
 - [ ] Enable RLS policies on all tables (`profiles`, `teams`, `team_members`, `payments`) — none are defined in the migration yet
 - [ ] Confirm `admin_session` cookie auth for `/2026/admin/*` routes is acceptable for prod (see `src/middleware.ts`)
 - [ ] Set a strong `ADMIN_PASSWORD`
 
+## Apple Pay (Web)
+
+- [ ] Domain verification file is served at `/.well-known/apple-developer-merchantid-domain-association`
+- [ ] Register `sumobots.ramsocunsw.org` in Square Dashboard > Apple Pay settings
+- [ ] Verify the domain is confirmed (green checkmark in Square Dashboard)
+
 ## Error Logging
 
 - [ ] Run migration `002_error_logs.sql` on the production database
+- [ ] Run migration `003_payments_square_response.sql` on the production database
 - [ ] Periodically check the `error_logs` table for payment/webhook failures
 
 ## Cloudflare / Deployment
