@@ -28,6 +28,7 @@ import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
 import GlassPanel from "@/app/2026/_components/ui/GlassPanel";
 import FadeIn from "@/app/2026/_components/ui/FadeIn";
+import PaymentForm from "@/app/2026/dashboard/payment/_components/PaymentForm";
 
 // ── Mock Data ──────────────────────────────────────────────
 
@@ -239,6 +240,7 @@ const sections = [
   "Primitives",
   "Onboarding",
   "Dashboard",
+  "Payment",
   "Admin Login",
   "Admin Teams",
   "Admin Individuals",
@@ -252,9 +254,9 @@ export default function UIPreviewPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Nav */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-white/5 backdrop-blur-xl">
+      <div className="sticky top-0 z-50 border-b border-border bg-secondary/50 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center gap-4 overflow-x-auto px-4 py-3">
-          <span className="shrink-0 text-sm font-semibold text-rose-400">
+          <span className="shrink-0 text-sm font-semibold text-primary">
             UI Preview
           </span>
           {sections.map((s) => (
@@ -263,8 +265,8 @@ export default function UIPreviewPage() {
               onClick={() => setActive(s)}
               className={`font-main shrink-0 rounded-md px-3 py-1.5 text-sm transition-colors ${
                 active === s
-                  ? "bg-white/10 text-white"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-accent text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {s}
@@ -285,6 +287,7 @@ export default function UIPreviewPage() {
             {active === "Primitives" && <PrimitivesSection />}
             {active === "Onboarding" && <OnboardingSection />}
             {active === "Dashboard" && <DashboardSection />}
+            {active === "Payment" && <PaymentSection />}
             {active === "Admin Login" && <AdminLoginSection />}
             {active === "Admin Teams" && <AdminTeamsSection />}
             {active === "Admin Individuals" && <AdminIndividualsSection />}
@@ -297,7 +300,7 @@ export default function UIPreviewPage() {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mb-6 border-b border-white/10 pb-2 text-lg">{children}</h2>
+    <h2 className="mb-6 border-b border-border pb-2 text-lg">{children}</h2>
   );
 }
 
@@ -310,7 +313,7 @@ function SubSection({
 }) {
   return (
     <div className="mb-8">
-      <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
+      <h3 className="font-main mb-3 text-sm font-medium text-muted-foreground">
         {title}
       </h3>
       {children}
@@ -379,7 +382,7 @@ function PrimitivesSection() {
         <SubSection title="Card">
           <div className="max-w-sm">
             <Card>
-              <p className="font-main text-sm text-gray-300">
+              <p className="font-main text-sm text-muted-foreground">
                 A basic card container with border and subtle background.
               </p>
             </Card>
@@ -391,7 +394,7 @@ function PrimitivesSection() {
         <SubSection title="Glass Panel with Ambient Glow">
           <div className="max-w-sm">
             <GlassPanel>
-              <p className="font-main text-sm text-gray-300">
+              <p className="font-main text-sm text-muted-foreground">
                 A glassmorphism panel with animated ambient light gradient drifting behind it.
               </p>
             </GlassPanel>
@@ -489,7 +492,7 @@ function OnboardingSection() {
               className="flex flex-col items-center py-4 text-center"
             >
               <motion.p
-                className="font-main mb-2 text-sm tracking-widest text-rose-400 uppercase"
+                className="font-main mb-2 text-sm tracking-widest text-primary uppercase"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -505,7 +508,7 @@ function OnboardingSection() {
                 Sumobots 2026
               </motion.h1>
               <motion.p
-                className="font-main mb-10 max-w-xs text-sm text-gray-400"
+                className="font-main mb-10 max-w-xs text-sm text-muted-foreground"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
@@ -547,12 +550,12 @@ function OnboardingSection() {
 
                 <OnboardingField delay={0.2}>
                   <div className="flex items-center gap-3">
-                    <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
+                    <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-muted-foreground">
                       <input
                         type="checkbox"
                         checked={isUnsw}
                         onChange={(e) => setIsUnsw(e.target.checked)}
-                        className="h-5 w-5 rounded accent-rose-600"
+                        className="h-5 w-5 rounded accent-primary"
                       />
                       I am a UNSW student
                     </label>
@@ -657,30 +660,30 @@ function OnboardingSection() {
               {/* Mock TeamStep */}
               {teamMode === "choose" && (
                 <div className="flex flex-col gap-4">
-                  <p className="font-main text-center text-gray-400">
+                  <p className="font-main text-center text-muted-foreground">
                     Create a new team or join an existing one with a code
                   </p>
                   <motion.button
                     type="button"
                     onClick={() => setTeamMode("create")}
-                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Create a Team</span>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-muted-foreground">
                       Start a new team and invite others
                     </span>
                   </motion.button>
                   <motion.button
                     type="button"
                     onClick={() => setTeamMode("join")}
-                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Join a Team</span>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-muted-foreground">
                       Enter a join code from your captain
                     </span>
                   </motion.button>
@@ -692,7 +695,7 @@ function OnboardingSection() {
                   <button
                     type="button"
                     onClick={() => setTeamMode("choose")}
-                    className="font-main mb-4 text-sm text-gray-400 hover:text-white"
+                    className="font-main mb-4 text-sm text-muted-foreground hover:text-foreground"
                   >
                     &larr; Back
                   </button>
@@ -713,7 +716,7 @@ function OnboardingSection() {
                       required
                       defaultValue="standard"
                     />
-                    <p className="font-main text-xs text-gray-500">
+                    <p className="font-main text-xs text-muted-foreground">
                       <b>Standard:</b> UNSW students only, 3–6 members.{" "}
                       <b>Open:</b> Any university, 1–6 members.
                     </p>
@@ -730,12 +733,12 @@ function OnboardingSection() {
                 <div className="flex flex-col items-center gap-6 text-center">
                   <div>
                     <h3 className="mb-2">Team Created!</h3>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">
                       Share this code with your teammates
                     </p>
                   </div>
                   <div
-                    className="cursor-pointer rounded-xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-sm transition-colors hover:border-rose-500"
+                    className="cursor-pointer rounded-xl border border-border bg-secondary px-8 py-6 transition-colors hover:border-primary"
                     onClick={() => navigator.clipboard.writeText(createdCode)}
                     title="Click to copy"
                   >
@@ -743,7 +746,7 @@ function OnboardingSection() {
                       {createdCode}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500">Tap the code to copy</p>
+                  <p className="text-xs text-muted-foreground">Tap the code to copy</p>
                   <Button
                     size="full"
                     onClick={() =>
@@ -760,7 +763,7 @@ function OnboardingSection() {
                   <button
                     type="button"
                     onClick={() => setTeamMode("choose")}
-                    className="font-main mb-4 text-sm text-gray-400 hover:text-white"
+                    className="font-main mb-4 text-sm text-muted-foreground hover:text-foreground"
                   >
                     &larr; Back
                   </button>
@@ -793,11 +796,11 @@ function OnboardingSection() {
 
               {teamMode === "join" && showJoinPreview && (
                 <div className="flex flex-col gap-5">
-                  <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5">
+                  <div className="rounded-xl border border-border bg-secondary backdrop-blur-sm p-5">
                     <h3 className="mb-2">Sumo Slammers</h3>
                     <div className="flex items-center gap-2">
                       <Badge variant="info">Standard</Badge>
-                      <span className="font-main text-sm text-gray-400">
+                      <span className="font-main text-sm text-muted-foreground">
                         4 members
                       </span>
                     </div>
@@ -863,30 +866,30 @@ function DashboardSection() {
 
       {/* Test toggles */}
       <div className="mb-4 flex flex-wrap items-center gap-4">
-        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+        <label className="font-main flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={hasTeamToggle}
             onChange={(e) => setHasTeamToggle(e.target.checked)}
-            className="h-4 w-4 rounded accent-rose-600"
+            className="h-4 w-4 rounded accent-primary"
           />
           Has team
         </label>
-        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+        <label className="font-main flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={isCaptainView}
             onChange={(e) => setIsCaptainView(e.target.checked)}
-            className="h-4 w-4 rounded accent-rose-600"
+            className="h-4 w-4 rounded accent-primary"
           />
           Captain view
         </label>
-        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+        <label className="font-main flex items-center gap-2 text-sm text-muted-foreground">
           Members:
           <select
             value={memberCount}
             onChange={(e) => setMemberCount(Number(e.target.value))}
-            className="rounded bg-white/10 px-2 py-1 text-sm text-white"
+            className="rounded bg-accent px-2 py-1 text-sm text-white"
           >
             {[1, 2, 3, 4].map((n) => (
               <option key={n} value={n}>
@@ -912,7 +915,7 @@ function DashboardSection() {
                 <div className="flex flex-col gap-5">
                   <Card>
                     <h3 className="mb-1">Welcome, Alice</h3>
-                    <p className="font-main text-sm text-gray-400">
+                    <p className="font-main text-sm text-muted-foreground">
                       {hasTeamToggle && currentTeam.paid
                         ? "You're all set for the competition!"
                         : "Here's what you need to do to get ready."}
@@ -921,20 +924,20 @@ function DashboardSection() {
                   <Card>
                     <h3 className="mb-3 text-base">Action Items</h3>
                     <div className="flex flex-col gap-2">
-                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-white/5 text-gray-500 line-through" : "bg-white/5 text-white"}`}>
-                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-white/20"}`}>
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
                           {hasTeamToggle ? "\u2713" : ""}
                         </span>
                         Create or join a team
                       </div>
-                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasEnoughMembers ? "bg-white/5 text-gray-500 line-through" : "bg-white/5 text-white"}`}>
-                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasEnoughMembers ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-white/20"}`}>
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasEnoughMembers ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasEnoughMembers ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
                           {hasEnoughMembers ? "\u2713" : ""}
                         </span>
                         Get at least 3 team members
                       </div>
-                      <div className="font-main flex items-center gap-3 rounded-lg bg-white/5 px-4 py-3 text-sm text-white">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/20 text-xs" />
+                      <div className="font-main flex items-center gap-3 rounded-lg bg-secondary px-4 py-3 text-sm text-white">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-xs" />
                         Pay the entry fee to activate your team
                       </div>
                     </div>
@@ -943,17 +946,17 @@ function DashboardSection() {
                     <Card>
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-main text-xs text-gray-500">Your team</p>
+                          <p className="font-main text-xs text-muted-foreground">Your team</p>
                           <h3 className="text-base">{currentTeam.name}</h3>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="warning">Not Active</Badge>
-                          <span className="font-main text-sm text-gray-400">{visibleMembers.length}/6</span>
+                          <span className="font-main text-sm text-muted-foreground">{visibleMembers.length}/6</span>
                         </div>
                       </div>
                       <button
                         onClick={() => setDashTab("team")}
-                        className="font-main mt-3 text-sm text-rose-400 transition-colors hover:text-rose-300"
+                        className="font-main mt-3 text-sm text-primary transition-colors hover:text-primary/80"
                       >
                         View team details &rarr;
                       </button>
@@ -976,8 +979,8 @@ function DashboardSection() {
                       />
                       <LeaveTeamButton />
 
-                      <div className="mt-2 border-t border-white/10 pt-4">
-                        <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
+                      <div className="mt-2 border-t border-border pt-4">
+                        <h3 className="font-main mb-3 text-sm font-medium text-muted-foreground">
                           Paid variant
                         </h3>
                         <TeamCard team={mockPaidTeam} />
@@ -1002,15 +1005,15 @@ function DashboardSection() {
         </GlassPanel>
 
         {/* Bottom tab bar — outside the glass panel */}
-        <div className="mt-4 flex justify-around rounded-xl border border-white/10 bg-white/5 p-1 backdrop-blur-xl">
+        <div className="mt-4 flex justify-around rounded-xl border border-border bg-secondary p-1 backdrop-blur-xl">
           {(["home", "team", "profile"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setDashTab(t)}
               className={`flex flex-1 flex-col items-center gap-1 rounded-lg py-3 transition-colors ${
                 dashTab === t
-                  ? "text-rose-400"
-                  : "text-gray-500 hover:text-gray-300"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-muted-foreground"
               }`}
             >
               <svg
@@ -1034,6 +1037,26 @@ function DashboardSection() {
             </button>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Payment ───────────────────────────────────────────────
+
+function PaymentSection() {
+  return (
+    <div>
+      <SectionTitle>Payment</SectionTitle>
+      <div className="mx-auto max-w-lg">
+        <GlassPanel>
+          <PaymentForm
+            teamName="Sumo Slammers"
+            category="standard"
+            memberCount={4}
+            priceCents={5000}
+          />
+        </GlassPanel>
       </div>
     </div>
   );
