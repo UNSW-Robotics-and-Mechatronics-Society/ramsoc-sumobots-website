@@ -2,7 +2,6 @@
 
 import { useState, useTransition, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import type { TeamWithMembers } from "@/app/_types/registration";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
@@ -33,6 +32,7 @@ export default function TeamCard({
   const [name, setName] = useState(team.name);
   const [error, setError] = useState<string>();
   const [isPending, startTransition] = useTransition();
+  const [navigating, setNavigating] = useState(false);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -142,13 +142,21 @@ export default function TeamCard({
             Team is not currently active. Pay the entry fee to activate your team.
           </p>
           {canActivate && isCaptain ? (
-            <Link href={Path[2026].Payment}>
-              <Button size="full">
-                {priceCents > 0
-                  ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
-                  : "Pay Entry Fee"}
+              <Button
+                size="full"
+                loading={navigating}
+                disabled={navigating}
+                onClick={() => {
+                  setNavigating(true);
+                  router.push(Path[2026].Payment);
+                }}
+              >
+                {navigating
+                  ? "Checking out..."
+                  : priceCents > 0
+                    ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
+                    : "Pay Entry Fee"}
               </Button>
-            </Link>
           ) : (
             <Button
               size="full"
