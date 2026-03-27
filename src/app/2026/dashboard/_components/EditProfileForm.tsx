@@ -17,8 +17,8 @@ const YEAR_OPTIONS = [
 ];
 
 const DEGREE_STAGE_OPTIONS = [
-  { value: "Pre-penultimate", label: "Pre-penultimate (third-last year or earlier)" },
-  { value: "Penultimate", label: "Penultimate (second-last year)" },
+  { value: "Pre-penultimate", label: "Pre-penultimate (3rd-last year or earlier)" },
+  { value: "Penultimate", label: "Penultimate (2nd-last year)" },
   { value: "Final Year", label: "Final year" },
 ];
 
@@ -48,6 +48,52 @@ const GENDER_OPTIONS = [
   { value: "other", label: "Other" },
   { value: "prefer-not-to-say", label: "Prefer not to say" },
 ];
+
+function CheckboxGroup({
+  label,
+  options,
+  selected,
+  onChange,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+}) {
+  function toggle(value: string) {
+    if (selected.includes(value)) {
+      onChange(selected.filter((v) => v !== value));
+    } else {
+      onChange([...selected, value]);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="font-main text-sm text-gray-300">{label}</span>
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+              selected.includes(opt.value)
+                ? "border-rose-500 bg-rose-500/10 text-white"
+                : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(opt.value)}
+              onChange={() => toggle(opt.value)}
+              className="h-4 w-4 rounded accent-rose-600"
+            />
+            {opt.label}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function RadioGroup({
   label,
@@ -106,6 +152,9 @@ export default function EditProfileForm({
   const [degreeStage, setDegreeStage] = useState(profile.degree_stage || "");
   const [undergradPostgrad, setUndergradPostgrad] = useState(profile.undergrad_postgrad || "");
   const [domesticIntl, setDomesticIntl] = useState(profile.domestic_international || "");
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>(
+    profile.faculty ? profile.faculty.split(", ").filter(Boolean) : [],
+  );
   const [gender, setGender] = useState(profile.gender);
   const [genderOther, setGenderOther] = useState(profile.gender_other || "");
   const [isRamsocMember, setIsRamsocMember] = useState(profile.is_ramsoc_member ?? false);
@@ -129,7 +178,7 @@ export default function EditProfileForm({
       domestic_international: domesticIntl,
       degree: (form.get("degree") as string) || "",
       majors: (form.get("majors") as string) || "",
-      faculty: (form.get("faculty") as string) || "",
+      faculty: selectedFaculties.join(", "),
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
       is_ramsoc_member: isRamsocMember,
@@ -199,12 +248,13 @@ export default function EditProfileForm({
         onChange={(e) => setYearOfStudy(e.target.value)}
       />
 
-      <RadioGroup
+      <Select
         label="Degree Stage"
         name="degree_stage"
         options={DEGREE_STAGE_OPTIONS}
+        placeholder="Select degree stage"
         value={degreeStage}
-        onChange={setDegreeStage}
+        onChange={(e) => setDegreeStage(e.target.value)}
       />
 
       <RadioGroup
@@ -238,13 +288,11 @@ export default function EditProfileForm({
         defaultValue={profile.majors}
       />
 
-      <Select
+      <CheckboxGroup
         label="Faculty"
-        name="faculty"
         options={FACULTY_OPTIONS}
-        placeholder="Select faculty"
-        required
-        defaultValue={profile.faculty}
+        selected={selectedFaculties}
+        onChange={setSelectedFaculties}
       />
 
       <RadioGroup

@@ -16,8 +16,8 @@ const YEAR_OPTIONS = [
 ];
 
 const DEGREE_STAGE_OPTIONS = [
-  { value: "Pre-penultimate", label: "Pre-penultimate (third-last year or earlier)" },
-  { value: "Penultimate", label: "Penultimate (second-last year)" },
+  { value: "Pre-penultimate", label: "Pre-penultimate (3rd-last year or earlier)" },
+  { value: "Penultimate", label: "Penultimate (2nd-last year)" },
   { value: "Final Year", label: "Final year" },
 ];
 
@@ -111,6 +111,59 @@ function RadioGroup({
   );
 }
 
+function CheckboxGroup({
+  label,
+  options,
+  selected,
+  onChange,
+  error,
+  required,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  error?: string;
+  required?: boolean;
+}) {
+  function toggle(value: string) {
+    if (selected.includes(value)) {
+      onChange(selected.filter((v) => v !== value));
+    } else {
+      onChange([...selected, value]);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="font-main text-sm text-gray-300">
+        {label}{required && <span className="text-rose-400"> *</span>}
+      </span>
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+              selected.includes(opt.value)
+                ? "border-rose-500 bg-rose-500/10 text-white"
+                : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(opt.value)}
+              onChange={() => toggle(opt.value)}
+              className="h-4 w-4 rounded accent-rose-600"
+            />
+            {opt.label}
+          </label>
+        ))}
+      </div>
+      {error && <p className="text-xs text-red-400">{error}</p>}
+    </div>
+  );
+}
+
 function YesNoToggle({
   label,
   value,
@@ -146,6 +199,7 @@ export default function StudentDetailsForm({
   const [degreeStage, setDegreeStage] = useState("");
   const [undergradPostgrad, setUndergradPostgrad] = useState("");
   const [domesticIntl, setDomesticIntl] = useState("");
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
   const [gender, setGender] = useState("");
   const [genderOther, setGenderOther] = useState("");
   const [isRamsocMember, setIsRamsocMember] = useState(false);
@@ -195,8 +249,7 @@ export default function StudentDetailsForm({
             else delete next.degree;
             break;
           case "faculty":
-            if (!value) next.faculty = "Faculty is required";
-            else delete next.faculty;
+            // Faculty validation handled via CheckboxGroup
             break;
           case "gender":
             if (!value) next.gender = "Gender is required";
@@ -254,8 +307,7 @@ export default function StudentDetailsForm({
     const degree = (form.get("degree") as string) || "";
     if (!degree.trim()) errors.degree = "Degree is required";
 
-    const faculty = (form.get("faculty") as string) || "";
-    if (!faculty) errors.faculty = "Faculty is required";
+    if (selectedFaculties.length === 0) errors.faculty = "Select at least one faculty";
 
     if (!gender) errors.gender = "Gender is required";
     if (gender === "other" && !genderOther.trim())
@@ -303,7 +355,7 @@ export default function StudentDetailsForm({
       domestic_international: domesticIntl,
       degree: (form.get("degree") as string) || "",
       majors: (form.get("majors") as string) || "",
-      faculty: (form.get("faculty") as string) || "",
+      faculty: selectedFaculties.join(", "),
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
       is_ramsoc_member: isRamsocMember,
@@ -390,18 +442,19 @@ export default function StudentDetailsForm({
       </Field>
 
       <Field delay={0.3}>
-        <RadioGroup
+        <Select
           label="Degree Stage"
           name="degree_stage"
           options={DEGREE_STAGE_OPTIONS}
+          placeholder="Select degree stage"
+          required
           value={degreeStage}
-          onChange={(val) => {
-            setDegreeStage(val);
+          onChange={(e) => {
+            setDegreeStage(e.target.value);
             markTouched("degree_stage");
-            validateField("degree_stage", val);
+            validateField("degree_stage", e.target.value);
           }}
           error={touched.degree_stage ? fieldErrors.degree_stage : undefined}
-          required
         />
       </Field>
 
@@ -458,20 +511,22 @@ export default function StudentDetailsForm({
       </Field>
 
       <Field delay={0.55}>
-        <Select
+        <CheckboxGroup
           label="Faculty"
-          name="faculty"
           options={FACULTY_OPTIONS}
-          placeholder="Select faculty"
-          required
-          defaultValue=""
-          onBlur={handleBlur}
-          onChange={(e) => {
-            handleChange(e);
+          selected={selectedFaculties}
+          onChange={(vals) => {
+            setSelectedFaculties(vals);
             markTouched("faculty");
-            validateField("faculty", e.target.value);
+            setFieldErrors((prev) => {
+              const next = { ...prev };
+              if (vals.length === 0) next.faculty = "Select at least one faculty";
+              else delete next.faculty;
+              return next;
+            });
           }}
           error={touched.faculty ? fieldErrors.faculty : undefined}
+          required
         />
       </Field>
 
