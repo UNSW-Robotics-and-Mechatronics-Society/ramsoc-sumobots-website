@@ -2,6 +2,10 @@ import { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "@/app/styles.css";
 import { SUMOBOTS_SITE_URL } from "@/app/constants";
+import { Geist } from "next/font/google";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -44,7 +48,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className={cn("font-sans", geist.variable)}>
         <body>
           <main>{children}</main>
         </body>
