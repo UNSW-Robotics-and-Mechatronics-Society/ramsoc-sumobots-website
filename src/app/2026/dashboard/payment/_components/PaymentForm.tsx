@@ -99,6 +99,7 @@ export default function PaymentForm({
   const [success, setSuccess] = useState(false);
   const [cardholderName, setCardholderName] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
   const cardRef = useRef<SquareCard | null>(null);
   const applePayRef = useRef<SquareDigitalWallet | null>(null);
   const googlePayRef = useRef<SquareDigitalWallet | null>(null);
@@ -177,12 +178,11 @@ export default function PaymentForm({
       };
 
       try {
+        // Apple Pay does NOT use .attach() — the SDK just validates availability.
+        // Tokenize must be called immediately in the button click handler.
         const applePay = await payments.applePay(paymentRequest);
-        await applePay.attach("#apple-pay-container");
-        applePay.addEventListener("ontokenization", (event) => {
-          handleTokenResult(event.detail.tokenResult);
-        });
         applePayRef.current = applePay;
+        setApplePayAvailable(true);
       } catch (e) {
         console.warn("[Square] Apple Pay not available:", e);
       }
@@ -389,11 +389,34 @@ export default function PaymentForm({
 
       {/* Digital wallet buttons — all always rendered, SDK decides availability */}
       <div className="flex flex-col gap-3">
-        {/* Apple Pay */}
-        <div
-          id="apple-pay-container"
-          className="min-h-[48px] [&_button]:!rounded-lg"
-        />
+        {/* Apple Pay — tokenize() must be called immediately in click handler */}
+        {applePayAvailable && (
+          <button
+            id="apple-pay-button"
+            type="button"
+            onClick={async () => {
+              if (!applePayRef.current || processing) return;
+              setProcessing(true);
+              setError(undefined);
+              try {
+                const result = await applePayRef.current.tokenize();
+                await handleTokenResult(result);
+              } catch {
+                setError("Apple Pay payment failed. Please try again.");
+                setProcessing(false);
+              }
+            }}
+            disabled={processing}
+            style={{
+              WebkitAppearance: "-apple-pay-button" as never,
+              appearance: "-apple-pay-button" as never,
+              width: "100%",
+              height: "48px",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          />
+        )}
 
         {/* Google Pay */}
         <div
