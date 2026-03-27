@@ -181,6 +181,9 @@ export default function PaymentForm({
       try {
         const googlePay = await payments.googlePay(paymentRequest);
         await googlePay.attach("#google-pay-container");
+        googlePay.addEventListener("ontokenization", (event) => {
+          handleTokenResult(event.detail.tokenResult);
+        });
         googlePayRef.current = googlePay;
         setGooglePayAvailable(true);
       } catch (e) {
@@ -193,6 +196,9 @@ export default function PaymentForm({
           buttonColor: "black",
           buttonType: "buy_now_with_afterpay",
         });
+        afterpay.addEventListener("ontokenization", (event) => {
+          handleTokenResult(event.detail.tokenResult);
+        });
         afterpayRef.current = afterpay;
         setAfterpayAvailable(true);
       } catch (e) {
@@ -204,7 +210,7 @@ export default function PaymentForm({
       setError("Failed to load payment form. Please refresh and try again.");
       setLoading(false);
     }
-  }, [priceCents, category]);
+  }, [priceCents, category, handleTokenResult]);
 
   useEffect(() => {
     const existingScript = document.querySelector(
@@ -374,62 +380,43 @@ export default function PaymentForm({
         </div>
       </div>
 
-      {/*
-        Digital wallet buttons — containers MUST always be in the DOM for
-        Square SDK attach(). We use overflow-hidden + h-0 instead of
-        display:none so the SDK can still render its iframes.
-      */}
-      <div
-        className={
-          applePayAvailable || googlePayAvailable || afterpayAvailable
-            ? "flex flex-col gap-3"
-            : "pointer-events-none h-0 overflow-hidden"
-        }
-      >
-        {/* Apple Pay — uses a native <button> styled via CSS, no attach() */}
-        <button
-          id="apple-pay-button"
-          type="button"
-          onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
-          disabled={processing}
-          className={applePayAvailable ? "" : "hidden"}
-          style={{
-            WebkitAppearance: "-apple-pay-button" as never,
-            appearance: "-apple-pay-button" as never,
-            width: "100%",
-            height: "48px",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
-        />
+      {/* Digital wallet buttons — always in the DOM so Square SDK can attach */}
+      <div className="flex flex-col gap-3">
+        {/* Apple Pay — native <button> styled via CSS, no attach() needed */}
+        {applePayAvailable && (
+          <button
+            id="apple-pay-button"
+            type="button"
+            onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
+            disabled={processing}
+            style={{
+              WebkitAppearance: "-apple-pay-button" as never,
+              appearance: "-apple-pay-button" as never,
+              width: "100%",
+              height: "48px",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          />
+        )}
 
         {/* Google Pay — SDK renders its button via attach() */}
         <div
           id="google-pay-container"
-          className={
-            googlePayAvailable
-              ? "min-h-[48px] [&_button]:!rounded-lg"
-              : "pointer-events-none h-0 overflow-hidden opacity-0"
-          }
+          className="min-h-[48px] [&_button]:!rounded-lg"
         />
 
         {/* Afterpay — SDK renders its button via attach() */}
         <div
           id="afterpay-container"
-          className={
-            afterpayAvailable
-              ? "min-h-[48px] [&_button]:!rounded-lg"
-              : "pointer-events-none h-0 overflow-hidden opacity-0"
-          }
+          className="min-h-[48px] [&_button]:!rounded-lg"
         />
 
-        {(applePayAvailable || googlePayAvailable || afterpayAvailable) && (
-          <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
-            <div className="h-px flex-1 bg-white/10" />
-            or pay with card
-            <div className="h-px flex-1 bg-white/10" />
-          </div>
-        )}
+        <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
+          <div className="h-px flex-1 bg-white/10" />
+          or pay with card
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
       </div>
 
       {/* Cardholder details */}
