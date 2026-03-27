@@ -46,9 +46,6 @@ interface SquarePayments {
   paymentRequest: (config: PaymentRequestConfig) => SquarePaymentRequest;
   applePay: (req: SquarePaymentRequest) => Promise<SquareDigitalWallet>;
   googlePay: (req: SquarePaymentRequest) => Promise<SquareDigitalWallet>;
-  afterpayClearpay: (
-    req: SquarePaymentRequest,
-  ) => Promise<SquareDigitalWallet>;
 }
 
 interface SquareGlobal {
@@ -108,7 +105,6 @@ export default function PaymentForm({
   const cardRef = useRef<SquareCard | null>(null);
   const applePayRef = useRef<SquareDigitalWallet | null>(null);
   const googlePayRef = useRef<SquareDigitalWallet | null>(null);
-  const afterpayRef = useRef<SquareDigitalWallet | null>(null);
   const cardholderNameRef = useRef(cardholderName);
   const postalCodeRef = useRef(postalCode);
   const router = useRouter();
@@ -209,20 +205,6 @@ export default function PaymentForm({
         console.warn("[Square] Google Pay not available:", e);
       }
 
-      try {
-        const afterpay = await payments.afterpayClearpay(paymentRequest);
-        await afterpay.attach("#afterpay-container", {
-          buttonColor: "black",
-          buttonType: "buy_now_with_afterpay",
-        });
-        afterpay.addEventListener("ontokenization", (event) => {
-          handleTokenResult(event.detail.tokenResult);
-        });
-        afterpayRef.current = afterpay;
-      } catch (e) {
-        console.warn("[Square] Afterpay not available:", e);
-      }
-
       setLoading(false);
     } catch {
       setError("Failed to load payment form. Please refresh and try again.");
@@ -255,8 +237,6 @@ export default function PaymentForm({
       applePayRef.current = null;
       googlePayRef.current?.destroy();
       googlePayRef.current = null;
-      afterpayRef.current?.destroy();
-      afterpayRef.current = null;
     };
   }, [initPayments]);
 
@@ -432,13 +412,7 @@ export default function PaymentForm({
         {/* Google Pay */}
         <div
           id="google-pay-container"
-          className="min-h-[48px] [&_button]:!rounded-lg"
-        />
-
-        {/* Afterpay */}
-        <div
-          id="afterpay-container"
-          className="min-h-[48px] [&_button]:!rounded-lg"
+          className="min-h-[48px] [&_button]:!rounded-lg [&_button]:!border-0 [&_button]:!outline-none [&_button]:!w-full [&_button]:!h-[48px]"
         />
 
         <div className="font-main my-1 flex items-center gap-3 text-xs text-muted-foreground">
