@@ -26,9 +26,9 @@ interface Resource {
 export const internalResources: Resource[] = [
   {
     image: "/thumbnails/sumobots_rulebook.png",
-    title: "Official Rule Book",
+    title: "Coming Soon: 2026 Rule Book",
     description: "Read the official 2026 SUMOBOTS Rule Book.",
-    url: SUMOBOTS_RULEBOOK_URL,
+    url: ""
   },
   {
     image: "/thumbnails/info_pack.jpg",
@@ -36,27 +36,7 @@ export const internalResources: Resource[] = [
     description: "Read up on our general information about SUMOBOTS.",
     url: SUMOBOTS_INFO_PACK_URL,
   },
-  {
-    image: "/thumbnails/intro_workshop_slide.png",
-    title: "Introductory Workshop Slides",
-    description:
-      "Introduction to SUMOBOTS: Overview of competition rules, robot design, and team expectations.",
-    url: INTRO_WORKSHOP_SLIDES_URL,
-  },
-  {
-    image: "/thumbnails/wk2_workshop_slide.png",
-    title: "Week 2 Workshop Slides",
-    description:
-      "Workshop on Arduino Basics: Setting up the Arduino IDE, understanding basic programming concepts, and writing your first program.",
-    url: W2_WORKSHOP_SLIDES_URL,
-  },
-  {
-    image: "/thumbnails/wk3_workshop_slide.png",
-    title: "Week 3 Workshop Slides",
-    description:
-      "Workshop on CAD and 3D Printing: Introduction to CAD and laser cutting software, designing robot parts, and preparing for 3D printing.",
-    url: W3_WORKSHOP_SLIDES_URL,
-  },
+
 ];
 
 export const internalVideoResources: Resource[] = [

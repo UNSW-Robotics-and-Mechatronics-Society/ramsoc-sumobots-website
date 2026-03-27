@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import "@/app/styles.css";
 import { SUMOBOTS_SITE_URL } from "@/app/constants";
 
@@ -35,10 +36,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <main>{children}</main>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <main>{children}</main>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

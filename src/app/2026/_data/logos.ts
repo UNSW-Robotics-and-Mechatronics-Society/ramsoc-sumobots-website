@@ -48,6 +48,13 @@ const logos = {
     href: "https://www.engineersaustralia.org.au/",
     bg_color: "white",
   },
+  yokogawa: {
+    label: "yokogawa logo",
+    name: "Yokogawa",
+    image_url: "/icon.png",
+    href: "https://www.yokogawa.com/au/",
+    bg_color: "white",
+  },
 };
 
 export default logos;

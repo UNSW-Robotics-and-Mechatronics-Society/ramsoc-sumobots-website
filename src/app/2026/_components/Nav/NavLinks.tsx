@@ -5,6 +5,7 @@ import MenuToggler from "./MenuToggler";
 import { AnimatePresence, motion, useCycle, Variants } from "framer-motion";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 type NavLinkProps = NavItem & {
   className?: string;
@@ -130,12 +131,12 @@ const NavLink = ({
     );
   }
   return (
-    <motion.button
-      className={`${variantClass} flex items-center justify-between px-4 py-2 text-start hover:underline ${className || ""}`}
+    <motion.div
+      className={`${variantClass} flex items-center justify-between text-start hover:underline ${className || ""}`}
       variants={{ open: { opacity: 1 }, closed: { opacity: 0 } }}
       onClick={onClick}
     >
-      <Link href={href || ""} aria-label={label}>
+      <Link href={href || ""} aria-label={label} className="flex w-full items-center px-4 py-2">
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -157,7 +158,7 @@ const NavLink = ({
           ))}
         </motion.span>
       </Link>
-    </motion.button>
+    </motion.div>
   );
 };
 
@@ -197,6 +198,13 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
 
   const isMobile = useIsMobile();
   const [isOpen, toggleOpen] = useCycle(false, true);
+  const { isSignedIn } = useAuth();
+
+  const items = navItems.map((item) =>
+    item.name === "Register" && isSignedIn
+      ? { ...item, name: "Dashboard", label: "Go to your dashboard" }
+      : item,
+  );
 
   return (
     <>
@@ -211,7 +219,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
             className="z-50 p-4"
           />
         ) : (
-          navItems.map((navLink) => <NavLink key={navLink.name} {...navLink} />)
+          items.map((navLink) => <NavLink key={navLink.name} {...navLink} />)
         )}
         <AnimatePresence>
           {isOpen && (
@@ -223,7 +231,7 @@ const NavLinks = ({ orientation = "horizontal", className }: NavLinksProps) => {
               animate="open"
               exit="closed"
             >
-              {navItems.map((navLink) => (
+              {items.map((navLink) => (
                 <NavLink
                   key={navLink.name}
                   {...navLink}

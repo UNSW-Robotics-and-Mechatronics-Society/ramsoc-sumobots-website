@@ -49,7 +49,7 @@ export default function Navbar({
     <motion.nav
       className={cn(
         "fixed top-0 left-0 z-50 flex h-20 w-full items-center justify-between pl-4 transition-colors ease-out lg:pr-4",
-        !isTitleVisible ? "bg-black/50" : "bg-primary-transparent",
+        "bg-black/95",
       )}
       initial={{ y: 0 }}
       animate={{
