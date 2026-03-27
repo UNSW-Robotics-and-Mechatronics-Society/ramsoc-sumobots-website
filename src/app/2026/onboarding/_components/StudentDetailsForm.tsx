@@ -81,17 +81,17 @@ function RadioGroup({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="font-main text-sm text-gray-300">
-        {label}{required && <span className="text-rose-400"> *</span>}
+      <span className="font-main text-sm text-muted-foreground">
+        {label}{required && <span className="text-destructive"> *</span>}
       </span>
       <div className="flex flex-wrap gap-2">
         {options.map((opt) => (
           <label
             key={opt.value}
-            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
               value === opt.value
-                ? "border-rose-500 bg-rose-500/10 text-white"
-                : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
             }`}
           >
             <input
@@ -100,13 +100,13 @@ function RadioGroup({
               value={opt.value}
               checked={value === opt.value}
               onChange={() => onChange(opt.value)}
-              className="h-4 w-4 accent-rose-600"
+              className="h-4 w-4 accent-primary"
             />
             {opt.label}
           </label>
         ))}
       </div>
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 }
@@ -136,30 +136,30 @@ function CheckboxGroup({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="font-main text-sm text-gray-300">
-        {label}{required && <span className="text-rose-400"> *</span>}
+      <span className="font-main text-sm text-muted-foreground">
+        {label}{required && <span className="text-destructive"> *</span>}
       </span>
       <div className="grid grid-cols-2 gap-2">
         {options.map((opt) => (
           <label
             key={opt.value}
-            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
               selected.includes(opt.value)
-                ? "border-rose-500 bg-rose-500/10 text-white"
-                : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
             }`}
           >
             <input
               type="checkbox"
               checked={selected.includes(opt.value)}
               onChange={() => toggle(opt.value)}
-              className="h-4 w-4 rounded accent-rose-600"
+              className="h-4 w-4 rounded accent-primary"
             />
             {opt.label}
           </label>
         ))}
       </div>
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 }
@@ -174,12 +174,16 @@ function YesNoToggle({
   onChange: (value: boolean) => void;
 }) {
   return (
-    <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-gray-300 transition-colors hover:border-white/20">
+    <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+      value
+        ? "border-primary bg-primary/10 text-foreground"
+        : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
+    }`}>
       <input
         type="checkbox"
         checked={value}
         onChange={(e) => onChange(e.target.checked)}
-        className="h-5 w-5 rounded accent-rose-600"
+        className="h-5 w-5 rounded accent-primary"
       />
       {label}
     </label>
@@ -249,7 +253,6 @@ export default function StudentDetailsForm({
             else delete next.degree;
             break;
           case "faculty":
-            // Faculty validation handled via CheckboxGroup
             break;
           case "gender":
             if (!value) next.gender = "Gender is required";
@@ -388,12 +391,16 @@ export default function StudentDetailsForm({
 
       <Field delay={0.15}>
         <div className="flex items-center gap-3">
-          <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
+          <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+            isUnsw
+              ? "border-primary bg-primary/10 text-foreground"
+              : "border-border bg-secondary text-muted-foreground hover:border-primary/30"
+          }`}>
             <input
               type="checkbox"
               checked={isUnsw}
               onChange={(e) => setIsUnsw(e.target.checked)}
-              className="h-5 w-5 rounded accent-rose-600"
+              className="h-5 w-5 rounded accent-primary"
             />
             I am a UNSW student
           </label>
@@ -578,7 +585,7 @@ export default function StudentDetailsForm({
 
       <Field delay={0.65}>
         <div className="flex flex-col gap-2">
-          <span className="font-main text-sm text-gray-300">Memberships</span>
+          <span className="font-main text-sm text-muted-foreground">Memberships</span>
           <YesNoToggle
             label="I am a RAMSoc member"
             value={isRamsocMember}
@@ -607,7 +614,7 @@ export default function StudentDetailsForm({
       </Field>
 
       {error && (
-        <p className="text-sm text-red-400">{error}</p>
+        <p className="text-sm text-destructive">{error}</p>
       )}
 
       <div className="sticky bottom-4 mt-4 pt-4">

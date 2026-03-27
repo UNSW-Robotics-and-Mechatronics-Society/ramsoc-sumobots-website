@@ -5,14 +5,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { forwardRef } from "react";
 
 const buttonVariants = cva(
-  "font-main inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50",
+  "font-main inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg text-sm font-medium transition-all outline-none select-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0",
   {
     variants: {
       variant: {
-        primary: "bg-rose-600 text-white hover:bg-rose-700",
+        primary: "bg-primary text-primary-foreground hover:bg-primary/90 active:translate-y-px",
         secondary:
-          "border border-white/10 bg-white/5 text-white backdrop-blur-sm hover:bg-white/10",
-        ghost: "text-gray-300 hover:bg-gray-800 hover:text-white",
+          "border border-border bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
       },
       size: {
         default: "px-5 py-2.5",
