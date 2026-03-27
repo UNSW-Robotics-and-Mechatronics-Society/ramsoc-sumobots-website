@@ -87,9 +87,6 @@ export default function PaymentForm({
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState(false);
-  const [applePayAvailable, setApplePayAvailable] = useState(false);
-  const [googlePayAvailable, setGooglePayAvailable] = useState(false);
-  const [afterpayAvailable, setAfterpayAvailable] = useState(false);
   const [cardholderName, setCardholderName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const cardRef = useRef<SquareCard | null>(null);
@@ -170,10 +167,7 @@ export default function PaymentForm({
 
       try {
         const applePay = await payments.applePay(paymentRequest);
-        // Apple Pay does NOT use attach() — it binds to a <button> element
-        // with id="apple-pay-button" automatically via CSS styling
         applePayRef.current = applePay;
-        setApplePayAvailable(true);
       } catch (e) {
         console.warn("[Square] Apple Pay not available:", e);
       }
@@ -185,7 +179,6 @@ export default function PaymentForm({
           handleTokenResult(event.detail.tokenResult);
         });
         googlePayRef.current = googlePay;
-        setGooglePayAvailable(true);
       } catch (e) {
         console.warn("[Square] Google Pay not available:", e);
       }
@@ -200,7 +193,6 @@ export default function PaymentForm({
           handleTokenResult(event.detail.tokenResult);
         });
         afterpayRef.current = afterpay;
-        setAfterpayAvailable(true);
       } catch (e) {
         console.warn("[Square] Afterpay not available:", e);
       }
@@ -380,33 +372,31 @@ export default function PaymentForm({
         </div>
       </div>
 
-      {/* Digital wallet buttons — always in the DOM so Square SDK can attach */}
+      {/* Digital wallet buttons — all always rendered, SDK decides availability */}
       <div className="flex flex-col gap-3">
-        {/* Apple Pay — native <button> styled via CSS, no attach() needed */}
-        {applePayAvailable && (
-          <button
-            id="apple-pay-button"
-            type="button"
-            onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
-            disabled={processing}
-            style={{
-              WebkitAppearance: "-apple-pay-button" as never,
-              appearance: "-apple-pay-button" as never,
-              width: "100%",
-              height: "48px",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
-          />
-        )}
+        {/* Apple Pay */}
+        <button
+          id="apple-pay-button"
+          type="button"
+          onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
+          disabled={processing}
+          style={{
+            WebkitAppearance: "-apple-pay-button" as never,
+            appearance: "-apple-pay-button" as never,
+            width: "100%",
+            height: "48px",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        />
 
-        {/* Google Pay — SDK renders its button via attach() */}
+        {/* Google Pay */}
         <div
           id="google-pay-container"
           className="min-h-[48px] [&_button]:!rounded-lg"
         />
 
-        {/* Afterpay — SDK renders its button via attach() */}
+        {/* Afterpay */}
         <div
           id="afterpay-container"
           className="min-h-[48px] [&_button]:!rounded-lg"
@@ -496,7 +486,32 @@ export default function PaymentForm({
         onClick={handleCardPay}
         disabled={loading || processing}
       >
-        {processing ? "Processing…" : `Pay ${formatPrice(priceCents)}`}
+        {processing ? (
+          <span className="inline-flex items-center gap-2">
+            <svg
+              className="h-4 w-4 animate-spin"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
+            </svg>
+            Processing payment&hellip;
+          </span>
+        ) : (
+          `Pay ${formatPrice(priceCents)}`
+        )}
       </Button>
 
       {/* Trust footer */}
