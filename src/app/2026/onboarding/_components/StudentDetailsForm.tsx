@@ -13,10 +13,22 @@ const YEAR_OPTIONS = [
   { value: "3rd Year", label: "3rd Year" },
   { value: "4th Year", label: "4th Year" },
   { value: "5th Year+", label: "5th Year+" },
+];
+
+const DEGREE_STAGE_OPTIONS = [
+  { value: "Pre-penultimate", label: "Pre-penultimate (third-last year or earlier)" },
+  { value: "Penultimate", label: "Penultimate (second-last year)" },
+  { value: "Final Year", label: "Final year" },
+];
+
+const UNDERGRAD_POSTGRAD_OPTIONS = [
+  { value: "Undergraduate", label: "Undergraduate" },
   { value: "Postgraduate", label: "Postgraduate" },
-  { value: "Penultimate", label: "Penultimate" },
-  { value: "Pre-penultimate", label: "Pre-penultimate" },
-  { value: "Final Year", label: "Final Year" },
+];
+
+const DOMESTIC_INTL_OPTIONS = [
+  { value: "Domestic", label: "Domestic" },
+  { value: "International", label: "International" },
 ];
 
 const FACULTY_OPTIONS = [
@@ -26,15 +38,14 @@ const FACULTY_OPTIONS = [
   { value: "Law & Justice", label: "Law & Justice" },
   { value: "Medicine & Health", label: "Medicine & Health" },
   { value: "Science", label: "Science" },
-  { value: "Other", label: "Other" },
 ];
 
 const GENDER_OPTIONS = [
-  { value: "male", label: "Male" },
   { value: "female", label: "Female" },
+  { value: "male", label: "Male" },
   { value: "non-binary", label: "Non-binary" },
-  { value: "prefer-not-to-say", label: "Prefer not to say" },
   { value: "other", label: "Other" },
+  { value: "prefer-not-to-say", label: "Prefer not to say" },
 ];
 
 type FieldErrors = Record<string, string>;
@@ -51,45 +62,45 @@ function Field({ delay, children }: { delay: number; children: React.ReactNode }
   );
 }
 
-function CheckboxGroup({
+function RadioGroup({
   label,
+  name,
   options,
-  selected,
+  value,
   onChange,
   error,
+  required,
 }: {
   label: string;
+  name: string;
   options: { value: string; label: string }[];
-  selected: string[];
-  onChange: (selected: string[]) => void;
+  value: string;
+  onChange: (value: string) => void;
   error?: string;
+  required?: boolean;
 }) {
-  function toggle(value: string) {
-    if (selected.includes(value)) {
-      onChange(selected.filter((v) => v !== value));
-    } else {
-      onChange([...selected, value]);
-    }
-  }
-
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="font-main text-sm text-gray-300">{label} <span className="text-rose-400">*</span></span>
-      <div className="grid grid-cols-2 gap-2">
+      <span className="font-main text-sm text-gray-300">
+        {label}{required && <span className="text-rose-400"> *</span>}
+      </span>
+      <div className="flex flex-wrap gap-2">
         {options.map((opt) => (
           <label
             key={opt.value}
             className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
-              selected.includes(opt.value)
+              value === opt.value
                 ? "border-rose-500 bg-rose-500/10 text-white"
                 : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
             }`}
           >
             <input
-              type="checkbox"
-              checked={selected.includes(opt.value)}
-              onChange={() => toggle(opt.value)}
-              className="h-4 w-4 rounded accent-rose-600"
+              type="radio"
+              name={name}
+              value={opt.value}
+              checked={value === opt.value}
+              onChange={() => onChange(opt.value)}
+              className="h-4 w-4 accent-rose-600"
             />
             {opt.label}
           </label>
@@ -97,6 +108,28 @@ function CheckboxGroup({
       </div>
       {error && <p className="text-xs text-red-400">{error}</p>}
     </div>
+  );
+}
+
+function YesNoToggle({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-gray-300 transition-colors hover:border-white/20">
+      <input
+        type="checkbox"
+        checked={value}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-5 w-5 rounded accent-rose-600"
+      />
+      {label}
+    </label>
   );
 }
 
@@ -109,9 +142,14 @@ export default function StudentDetailsForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-  const [selectedYears, setSelectedYears] = useState<string[]>([]);
+  const [yearOfStudy, setYearOfStudy] = useState("");
+  const [degreeStage, setDegreeStage] = useState("");
+  const [undergradPostgrad, setUndergradPostgrad] = useState("");
+  const [domesticIntl, setDomesticIntl] = useState("");
   const [gender, setGender] = useState("");
   const [genderOther, setGenderOther] = useState("");
+  const [isRamsocMember, setIsRamsocMember] = useState(false);
+  const [isArcMember, setIsArcMember] = useState(false);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const markTouched = useCallback((field: string) => {
@@ -136,12 +174,25 @@ export default function StudentDetailsForm({
             if (!value.trim()) next.university = "University is required";
             else delete next.university;
             break;
+          case "year_of_study":
+            if (!value) next.year_of_study = "Year of study is required";
+            else delete next.year_of_study;
+            break;
+          case "degree_stage":
+            if (!value) next.degree_stage = "Degree stage is required";
+            else delete next.degree_stage;
+            break;
+          case "undergrad_postgrad":
+            if (!value) next.undergrad_postgrad = "This field is required";
+            else delete next.undergrad_postgrad;
+            break;
+          case "domestic_international":
+            if (!value) next.domestic_international = "This field is required";
+            else delete next.domestic_international;
+            break;
           case "degree":
             if (!value.trim()) next.degree = "Degree is required";
             else delete next.degree;
-            break;
-          case "majors":
-            delete next.majors;
             break;
           case "faculty":
             if (!value) next.faculty = "Faculty is required";
@@ -195,7 +246,10 @@ export default function StudentDetailsForm({
       if (!uni.trim()) errors.university = "University is required";
     }
 
-    if (selectedYears.length === 0) errors.year_of_study = "Select at least one";
+    if (!yearOfStudy) errors.year_of_study = "Year of study is required";
+    if (!degreeStage) errors.degree_stage = "Degree stage is required";
+    if (!undergradPostgrad) errors.undergrad_postgrad = "This field is required";
+    if (!domesticIntl) errors.domestic_international = "This field is required";
 
     const degree = (form.get("degree") as string) || "";
     if (!degree.trim()) errors.degree = "Degree is required";
@@ -211,17 +265,19 @@ export default function StudentDetailsForm({
     if (!phone.trim()) errors.phone = "Phone number is required";
 
     setFieldErrors(errors);
-    // Mark all as touched
     setTouched({
       full_name: true,
       zid: true,
       university: true,
+      year_of_study: true,
+      degree_stage: true,
+      undergrad_postgrad: true,
+      domestic_international: true,
       degree: true,
       faculty: true,
       gender: true,
       gender_other: true,
       phone: true,
-      year_of_study: true,
     });
 
     return Object.keys(errors).length === 0;
@@ -241,12 +297,17 @@ export default function StudentDetailsForm({
       is_unsw: isUnsw,
       university: isUnsw ? "UNSW" : (form.get("university") as string),
       zid: isUnsw ? (form.get("zid") as string) : "",
-      year_of_study: selectedYears.join(", "),
+      year_of_study: yearOfStudy,
+      degree_stage: degreeStage,
+      undergrad_postgrad: undergradPostgrad,
+      domestic_international: domesticIntl,
       degree: (form.get("degree") as string) || "",
       majors: (form.get("majors") as string) || "",
       faculty: (form.get("faculty") as string) || "",
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
+      is_ramsoc_member: isRamsocMember,
+      is_arc_member: isArcMember,
       phone: (form.get("phone") as string) || "",
     });
 
@@ -312,26 +373,71 @@ export default function StudentDetailsForm({
       </Field>
 
       <Field delay={0.25}>
-        <CheckboxGroup
+        <Select
           label="Year of Study"
+          name="year_of_study"
           options={YEAR_OPTIONS}
-          selected={selectedYears}
-          onChange={(vals) => {
-            setSelectedYears(vals);
-            if (touched.year_of_study) {
-              setFieldErrors((prev) => {
-                const next = { ...prev };
-                if (vals.length === 0) next.year_of_study = "Select at least one";
-                else delete next.year_of_study;
-                return next;
-              });
-            }
+          placeholder="Select year"
+          required
+          value={yearOfStudy}
+          onChange={(e) => {
+            setYearOfStudy(e.target.value);
+            markTouched("year_of_study");
+            validateField("year_of_study", e.target.value);
           }}
           error={touched.year_of_study ? fieldErrors.year_of_study : undefined}
         />
       </Field>
 
       <Field delay={0.3}>
+        <RadioGroup
+          label="Degree Stage"
+          name="degree_stage"
+          options={DEGREE_STAGE_OPTIONS}
+          value={degreeStage}
+          onChange={(val) => {
+            setDegreeStage(val);
+            markTouched("degree_stage");
+            validateField("degree_stage", val);
+          }}
+          error={touched.degree_stage ? fieldErrors.degree_stage : undefined}
+          required
+        />
+      </Field>
+
+      <Field delay={0.35}>
+        <RadioGroup
+          label="Undergraduate or Postgraduate"
+          name="undergrad_postgrad"
+          options={UNDERGRAD_POSTGRAD_OPTIONS}
+          value={undergradPostgrad}
+          onChange={(val) => {
+            setUndergradPostgrad(val);
+            markTouched("undergrad_postgrad");
+            validateField("undergrad_postgrad", val);
+          }}
+          error={touched.undergrad_postgrad ? fieldErrors.undergrad_postgrad : undefined}
+          required
+        />
+      </Field>
+
+      <Field delay={0.4}>
+        <RadioGroup
+          label="Domestic or International"
+          name="domestic_international"
+          options={DOMESTIC_INTL_OPTIONS}
+          value={domesticIntl}
+          onChange={(val) => {
+            setDomesticIntl(val);
+            markTouched("domestic_international");
+            validateField("domestic_international", val);
+          }}
+          error={touched.domestic_international ? fieldErrors.domestic_international : undefined}
+          required
+        />
+      </Field>
+
+      <Field delay={0.45}>
         <Input
           label="Degree"
           name="degree"
@@ -343,7 +449,7 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.35}>
+      <Field delay={0.5}>
         <Input
           label="Majors (if applicable)"
           name="majors"
@@ -351,7 +457,7 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.4}>
+      <Field delay={0.55}>
         <Select
           label="Faculty"
           name="faculty"
@@ -369,19 +475,17 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.45}>
-        <Select
+      <Field delay={0.6}>
+        <RadioGroup
           label="Gender"
           name="gender"
           options={GENDER_OPTIONS}
-          placeholder="Select gender"
-          required
           value={gender}
-          onChange={(e) => {
-            setGender(e.target.value);
+          onChange={(val) => {
+            setGender(val);
             markTouched("gender");
-            validateField("gender", e.target.value);
-            if (e.target.value !== "other") {
+            validateField("gender", val);
+            if (val !== "other") {
               setGenderOther("");
               setFieldErrors((prev) => {
                 const next = { ...prev };
@@ -391,6 +495,7 @@ export default function StudentDetailsForm({
             }
           }}
           error={touched.gender ? fieldErrors.gender : undefined}
+          required
         />
       </Field>
 
@@ -416,7 +521,23 @@ export default function StudentDetailsForm({
         </Field>
       )}
 
-      <Field delay={0.5}>
+      <Field delay={0.65}>
+        <div className="flex flex-col gap-2">
+          <span className="font-main text-sm text-gray-300">Memberships</span>
+          <YesNoToggle
+            label="I am a RAMSoc member"
+            value={isRamsocMember}
+            onChange={setIsRamsocMember}
+          />
+          <YesNoToggle
+            label="I am an Arc member"
+            value={isArcMember}
+            onChange={setIsArcMember}
+          />
+        </div>
+      </Field>
+
+      <Field delay={0.7}>
         <Input
           label="Phone Number"
           name="phone"

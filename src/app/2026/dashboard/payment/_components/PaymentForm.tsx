@@ -65,8 +65,18 @@ const SQUARE_SDK_URL =
     ? "https://web.squarecdn.com/v1/square.js"
     : "https://sandbox.web.squarecdn.com/v1/square.js";
 
+const SQUARE_FEE_RATE = 0.022; // 2.2%
+
 function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
+}
+
+function calculateProcessingFee(baseCents: number): number {
+  return Math.ceil(baseCents * SQUARE_FEE_RATE);
+}
+
+function calculateTotal(baseCents: number): number {
+  return baseCents + calculateProcessingFee(baseCents);
 }
 
 /* ------------------------------------------------------------------ */
@@ -156,17 +166,22 @@ export default function PaymentForm({
       await card.attach("#square-card-container");
       cardRef.current = card;
 
+      const totalCents = calculateTotal(priceCents);
       const paymentRequest: PaymentRequestConfig = {
         countryCode: "AU",
         currencyCode: "AUD",
         total: {
-          amount: (priceCents / 100).toFixed(2),
+          amount: (totalCents / 100).toFixed(2),
           label: `Sumobots ${category} entry fee`,
         },
       };
 
       try {
         const applePay = await payments.applePay(paymentRequest);
+        await applePay.attach("#apple-pay-container");
+        applePay.addEventListener("ontokenization", (event) => {
+          handleTokenResult(event.detail.tokenResult);
+        });
         applePayRef.current = applePay;
       } catch (e) {
         console.warn("[Square] Apple Pay not available:", e);
@@ -359,13 +374,13 @@ export default function PaymentForm({
               <span>{formatPrice(priceCents)}</span>
             </div>
             <div className="flex justify-between text-gray-400">
-              <span>Processing fee</span>
-              <span>$0.00</span>
+              <span>Processing fee (2.2%)</span>
+              <span>{formatPrice(calculateProcessingFee(priceCents))}</span>
             </div>
             <div className="flex items-baseline justify-between border-t border-white/10 pt-2">
               <span className="text-gray-300">Total</span>
               <span className="font-display text-2xl text-white">
-                {formatPrice(priceCents)}
+                {formatPrice(calculateTotal(priceCents))}
               </span>
             </div>
           </div>
@@ -375,19 +390,9 @@ export default function PaymentForm({
       {/* Digital wallet buttons — all always rendered, SDK decides availability */}
       <div className="flex flex-col gap-3">
         {/* Apple Pay */}
-        <button
-          id="apple-pay-button"
-          type="button"
-          onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
-          disabled={processing}
-          style={{
-            WebkitAppearance: "-apple-pay-button" as never,
-            appearance: "-apple-pay-button" as never,
-            width: "100%",
-            height: "48px",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
+        <div
+          id="apple-pay-container"
+          className="min-h-[48px] [&_button]:!rounded-lg"
         />
 
         {/* Google Pay */}
@@ -510,7 +515,7 @@ export default function PaymentForm({
             Processing payment&hellip;
           </span>
         ) : (
-          `Pay ${formatPrice(priceCents)}`
+          `Pay ${formatPrice(calculateTotal(priceCents))}`
         )}
       </Button>
 

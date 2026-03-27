@@ -14,10 +14,22 @@ const YEAR_OPTIONS = [
   { value: "3rd Year", label: "3rd Year" },
   { value: "4th Year", label: "4th Year" },
   { value: "5th Year+", label: "5th Year+" },
+];
+
+const DEGREE_STAGE_OPTIONS = [
+  { value: "Pre-penultimate", label: "Pre-penultimate (third-last year or earlier)" },
+  { value: "Penultimate", label: "Penultimate (second-last year)" },
+  { value: "Final Year", label: "Final year" },
+];
+
+const UNDERGRAD_POSTGRAD_OPTIONS = [
+  { value: "Undergraduate", label: "Undergraduate" },
   { value: "Postgraduate", label: "Postgraduate" },
-  { value: "Penultimate", label: "Penultimate" },
-  { value: "Pre-penultimate", label: "Pre-penultimate" },
-  { value: "Final Year", label: "Final Year" },
+];
+
+const DOMESTIC_INTL_OPTIONS = [
+  { value: "Domestic", label: "Domestic" },
+  { value: "International", label: "International" },
 ];
 
 const FACULTY_OPTIONS = [
@@ -27,54 +39,49 @@ const FACULTY_OPTIONS = [
   { value: "Law & Justice", label: "Law & Justice" },
   { value: "Medicine & Health", label: "Medicine & Health" },
   { value: "Science", label: "Science" },
-  { value: "Other", label: "Other" },
 ];
 
 const GENDER_OPTIONS = [
-  { value: "male", label: "Male" },
   { value: "female", label: "Female" },
+  { value: "male", label: "Male" },
   { value: "non-binary", label: "Non-binary" },
-  { value: "prefer-not-to-say", label: "Prefer not to say" },
   { value: "other", label: "Other" },
+  { value: "prefer-not-to-say", label: "Prefer not to say" },
 ];
 
-function CheckboxGroup({
+function RadioGroup({
   label,
+  name,
   options,
-  selected,
+  value,
   onChange,
 }: {
   label: string;
+  name: string;
   options: { value: string; label: string }[];
-  selected: string[];
-  onChange: (selected: string[]) => void;
+  value: string;
+  onChange: (value: string) => void;
 }) {
-  function toggle(value: string) {
-    if (selected.includes(value)) {
-      onChange(selected.filter((v) => v !== value));
-    } else {
-      onChange([...selected, value]);
-    }
-  }
-
   return (
     <div className="flex flex-col gap-1.5">
       <span className="font-main text-sm text-gray-300">{label}</span>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="flex flex-wrap gap-2">
         {options.map((opt) => (
           <label
             key={opt.value}
             className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
-              selected.includes(opt.value)
+              value === opt.value
                 ? "border-rose-500 bg-rose-500/10 text-white"
                 : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
             }`}
           >
             <input
-              type="checkbox"
-              checked={selected.includes(opt.value)}
-              onChange={() => toggle(opt.value)}
-              className="h-4 w-4 rounded accent-rose-600"
+              type="radio"
+              name={name}
+              value={opt.value}
+              checked={value === opt.value}
+              onChange={() => onChange(opt.value)}
+              className="h-4 w-4 accent-rose-600"
             />
             {opt.label}
           </label>
@@ -95,11 +102,14 @@ export default function EditProfileForm({
   const [isUnsw, setIsUnsw] = useState(profile.is_unsw);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedYears, setSelectedYears] = useState<string[]>(
-    profile.year_of_study ? profile.year_of_study.split(", ").filter(Boolean) : [],
-  );
+  const [yearOfStudy, setYearOfStudy] = useState(profile.year_of_study || "");
+  const [degreeStage, setDegreeStage] = useState(profile.degree_stage || "");
+  const [undergradPostgrad, setUndergradPostgrad] = useState(profile.undergrad_postgrad || "");
+  const [domesticIntl, setDomesticIntl] = useState(profile.domestic_international || "");
   const [gender, setGender] = useState(profile.gender);
   const [genderOther, setGenderOther] = useState(profile.gender_other || "");
+  const [isRamsocMember, setIsRamsocMember] = useState(profile.is_ramsoc_member ?? false);
+  const [isArcMember, setIsArcMember] = useState(profile.is_arc_member ?? false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -113,12 +123,17 @@ export default function EditProfileForm({
       is_unsw: isUnsw,
       university: isUnsw ? "UNSW" : (form.get("university") as string),
       zid: isUnsw ? (form.get("zid") as string) : "",
-      year_of_study: selectedYears.join(", "),
+      year_of_study: yearOfStudy,
+      degree_stage: degreeStage,
+      undergrad_postgrad: undergradPostgrad,
+      domestic_international: domesticIntl,
       degree: (form.get("degree") as string) || "",
       majors: (form.get("majors") as string) || "",
       faculty: (form.get("faculty") as string) || "",
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
+      is_ramsoc_member: isRamsocMember,
+      is_arc_member: isArcMember,
       phone: (form.get("phone") as string) || "",
     });
 
@@ -174,11 +189,38 @@ export default function EditProfileForm({
         />
       )}
 
-      <CheckboxGroup
+      <Select
         label="Year of Study"
+        name="year_of_study"
         options={YEAR_OPTIONS}
-        selected={selectedYears}
-        onChange={setSelectedYears}
+        placeholder="Select year"
+        required
+        value={yearOfStudy}
+        onChange={(e) => setYearOfStudy(e.target.value)}
+      />
+
+      <RadioGroup
+        label="Degree Stage"
+        name="degree_stage"
+        options={DEGREE_STAGE_OPTIONS}
+        value={degreeStage}
+        onChange={setDegreeStage}
+      />
+
+      <RadioGroup
+        label="Undergraduate or Postgraduate"
+        name="undergrad_postgrad"
+        options={UNDERGRAD_POSTGRAD_OPTIONS}
+        value={undergradPostgrad}
+        onChange={setUndergradPostgrad}
+      />
+
+      <RadioGroup
+        label="Domestic or International"
+        name="domestic_international"
+        options={DOMESTIC_INTL_OPTIONS}
+        value={domesticIntl}
+        onChange={setDomesticIntl}
       />
 
       <Input
@@ -205,16 +247,14 @@ export default function EditProfileForm({
         defaultValue={profile.faculty}
       />
 
-      <Select
+      <RadioGroup
         label="Gender"
         name="gender"
         options={GENDER_OPTIONS}
-        placeholder="Select gender"
-        required
         value={gender}
-        onChange={(e) => {
-          setGender(e.target.value);
-          if (e.target.value !== "other") setGenderOther("");
+        onChange={(val) => {
+          setGender(val);
+          if (val !== "other") setGenderOther("");
         }}
       />
 
@@ -227,6 +267,28 @@ export default function EditProfileForm({
           onChange={(e) => setGenderOther(e.target.value)}
         />
       )}
+
+      <div className="flex flex-col gap-2">
+        <span className="font-main text-sm text-gray-300">Memberships</span>
+        <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-gray-300 transition-colors hover:border-white/20">
+          <input
+            type="checkbox"
+            checked={isRamsocMember}
+            onChange={(e) => setIsRamsocMember(e.target.checked)}
+            className="h-5 w-5 rounded accent-rose-600"
+          />
+          I am a RAMSoc member
+        </label>
+        <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-gray-300 transition-colors hover:border-white/20">
+          <input
+            type="checkbox"
+            checked={isArcMember}
+            onChange={(e) => setIsArcMember(e.target.checked)}
+            className="h-5 w-5 rounded accent-rose-600"
+          />
+          I am an Arc member
+        </label>
+      </div>
 
       <Input
         label="Phone Number"

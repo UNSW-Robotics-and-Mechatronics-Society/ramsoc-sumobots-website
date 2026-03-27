@@ -29,11 +29,16 @@ type CreateProfileInput = {
   university: string;
   zid: string;
   year_of_study: string;
+  degree_stage: string;
+  undergrad_postgrad: string;
+  domestic_international: string;
   degree: string;
   majors: string;
   faculty: string;
   gender: string;
   gender_other: string;
+  is_ramsoc_member: boolean;
+  is_arc_member: boolean;
   phone: string;
 };
 
@@ -62,6 +67,18 @@ export async function createProfile(
 
   if (!input.year_of_study) {
     return { success: false, error: "Year of study is required" };
+  }
+
+  if (!input.degree_stage) {
+    return { success: false, error: "Degree stage is required" };
+  }
+
+  if (!input.undergrad_postgrad) {
+    return { success: false, error: "Please select undergraduate or postgraduate" };
+  }
+
+  if (!input.domestic_international) {
+    return { success: false, error: "Please select domestic or international" };
   }
 
   if (!input.degree.trim()) {
@@ -105,11 +122,16 @@ export async function createProfile(
     university: input.is_unsw ? "UNSW" : input.university.trim(),
     zid: input.is_unsw ? input.zid.trim() : "",
     year_of_study: input.year_of_study,
+    degree_stage: input.degree_stage,
+    undergrad_postgrad: input.undergrad_postgrad,
+    domestic_international: input.domestic_international,
     degree: input.degree.trim(),
     majors: input.majors.trim(),
     faculty: input.faculty.trim(),
     gender: input.gender,
     gender_other: input.gender === "other" ? input.gender_other.trim() : "",
+    is_ramsoc_member: input.is_ramsoc_member,
+    is_arc_member: input.is_arc_member,
     phone: input.phone.trim(),
     onboarded: false,
   });
@@ -128,11 +150,16 @@ type UpdateProfileInput = {
   university: string;
   zid: string;
   year_of_study: string;
+  degree_stage: string;
+  undergrad_postgrad: string;
+  domestic_international: string;
   degree: string;
   majors: string;
   faculty: string;
   gender: string;
   gender_other: string;
+  is_ramsoc_member: boolean;
+  is_arc_member: boolean;
   phone: string;
 };
 
@@ -164,11 +191,16 @@ export async function updateProfile(
       university: input.is_unsw ? "UNSW" : input.university.trim(),
       zid: input.is_unsw ? input.zid.trim() : "",
       year_of_study: input.year_of_study,
+      degree_stage: input.degree_stage,
+      undergrad_postgrad: input.undergrad_postgrad,
+      domestic_international: input.domestic_international,
       degree: input.degree.trim(),
       majors: input.majors.trim(),
       faculty: input.faculty.trim(),
       gender: input.gender,
       gender_other: input.gender === "other" ? input.gender_other.trim() : "",
+      is_ramsoc_member: input.is_ramsoc_member,
+      is_arc_member: input.is_arc_member,
       phone: input.phone.trim(),
       updated_at: new Date().toISOString(),
     })

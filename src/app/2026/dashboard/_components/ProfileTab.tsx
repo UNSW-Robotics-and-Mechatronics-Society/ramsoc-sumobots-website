@@ -94,10 +94,10 @@ export default function ProfileTab({
           <ProfileRow label="Degree" value={profile.degree} />
           <ProfileRow label="Majors" value={profile.majors} />
           <ProfileRow label="Faculty" value={profile.faculty} />
-          <ProfileRow
-            label="Year"
-            value={profile.year_of_study || ""}
-          />
+          <ProfileRow label="Year" value={profile.year_of_study || ""} />
+          <ProfileRow label="Degree Stage" value={profile.degree_stage || ""} />
+          <ProfileRow label="Level" value={profile.undergrad_postgrad || ""} />
+          <ProfileRow label="Student Type" value={profile.domestic_international || ""} />
           <ProfileRow
             label="Gender"
             value={
@@ -106,6 +106,8 @@ export default function ProfileTab({
                 : (GENDER_LABELS[profile.gender] ?? profile.gender)
             }
           />
+          <ProfileRow label="RAMSoc" value={profile.is_ramsoc_member ? "Yes" : "No"} />
+          <ProfileRow label="Arc" value={profile.is_arc_member ? "Yes" : "No"} />
           <ProfileRow label="Phone" value={profile.phone} />
         </div>
       </Card>

@@ -7,11 +7,16 @@ export type Profile = {
   university: string;
   zid: string;
   year_of_study: string;
+  degree_stage: string;
+  undergrad_postgrad: string;
+  domestic_international: string;
   degree: string;
   majors: string;
   faculty: string;
   gender: string;
   gender_other: string;
+  is_ramsoc_member: boolean;
+  is_arc_member: boolean;
   phone: string;
   onboarded: boolean;
   created_at: string;

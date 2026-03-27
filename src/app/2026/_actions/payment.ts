@@ -92,12 +92,16 @@ export async function processPayment(
     };
   }
 
-  const amountCents = getEntryFeeAmountCents(
+  const baseCents = getEntryFeeAmountCents(
     team.category as "standard" | "open",
   );
-  if (!amountCents) {
+  if (!baseCents) {
     return { success: false, error: "Entry fee not configured" };
   }
+
+  // Add 2.2% Square processing fee on top
+  const processingFeeCents = Math.ceil(baseCents * 0.022);
+  const amountCents = baseCents + processingFeeCents;
 
   // Process payment with Square
   const square = getSquareClient();
