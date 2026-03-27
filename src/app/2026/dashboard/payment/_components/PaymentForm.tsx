@@ -65,8 +65,19 @@ const SQUARE_SDK_URL =
     ? "https://web.squarecdn.com/v1/square.js"
     : "https://sandbox.web.squarecdn.com/v1/square.js";
 
+const SQUARE_FEE_RATE = 0.022; // 2.2%
+
 function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
+}
+
+function calculateTotal(baseCents: number): number {
+  // total * (1 - 0.022) = base  →  total = base / 0.978
+  return Math.ceil(baseCents / (1 - SQUARE_FEE_RATE));
+}
+
+function calculateProcessingFee(baseCents: number): number {
+  return calculateTotal(baseCents) - baseCents;
 }
 
 /* ------------------------------------------------------------------ */
@@ -89,6 +100,7 @@ export default function PaymentForm({
   const [success, setSuccess] = useState(false);
   const [cardholderName, setCardholderName] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [applePayAvailable, setApplePayAvailable] = useState(false);
   const cardRef = useRef<SquareCard | null>(null);
   const applePayRef = useRef<SquareDigitalWallet | null>(null);
   const googlePayRef = useRef<SquareDigitalWallet | null>(null);
@@ -156,18 +168,22 @@ export default function PaymentForm({
       await card.attach("#square-card-container");
       cardRef.current = card;
 
+      const totalCents = calculateTotal(priceCents);
       const paymentRequest: PaymentRequestConfig = {
         countryCode: "AU",
         currencyCode: "AUD",
         total: {
-          amount: (priceCents / 100).toFixed(2),
+          amount: (totalCents / 100).toFixed(2),
           label: `Sumobots ${category} entry fee`,
         },
       };
 
       try {
+        // Apple Pay does NOT use .attach() — the SDK just validates availability.
+        // Tokenize must be called immediately in the button click handler.
         const applePay = await payments.applePay(paymentRequest);
         applePayRef.current = applePay;
+        setApplePayAvailable(true);
       } catch (e) {
         console.warn("[Square] Apple Pay not available:", e);
       }
@@ -287,7 +303,7 @@ export default function PaymentForm({
         </div>
         <div>
           <h2 className="font-display text-2xl text-white">Payment Successful</h2>
-          <p className="font-main mt-2 text-gray-400">
+          <p className="font-main mt-2 text-muted-foreground">
             {teamName} is now registered and active. Good luck!
           </p>
         </div>
@@ -303,7 +319,7 @@ export default function PaymentForm({
       {/* Back link */}
       <Link
         href={Path[2026].Dashboard}
-        className="font-main inline-flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-white"
+        className="font-main inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <svg
           className="h-4 w-4"
@@ -324,14 +340,14 @@ export default function PaymentForm({
       {/* Title */}
       <div>
         <h2 className="font-display text-2xl text-white">Pay Entry Fee</h2>
-        <p className="font-main mt-1 text-sm text-gray-400">
+        <p className="font-main mt-1 text-sm text-muted-foreground">
           RAMSoc Sumobots 2026
         </p>
       </div>
 
       {/* Order summary */}
-      <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-        <h3 className="font-display mb-4 text-sm uppercase tracking-wider text-gray-400">
+      <div className="rounded-xl border border-border bg-secondary p-5">
+        <h3 className="font-display mb-4 text-sm uppercase tracking-wider text-muted-foreground">
           Order Summary
         </h3>
         <div className="font-main text-sm">
@@ -342,7 +358,7 @@ export default function PaymentForm({
                 1 &times; {category === "standard" ? "Standard" : "Open"} Team
                 Registration
               </p>
-              <p className="mt-0.5 truncate text-xs text-gray-500">
+              <p className="mt-0.5 truncate text-xs text-muted-foreground">
                 {teamName} &middot; {memberCount} member
                 {memberCount !== 1 ? "s" : ""}
               </p>
@@ -353,19 +369,19 @@ export default function PaymentForm({
           </div>
 
           {/* Totals */}
-          <div className="mt-4 space-y-1.5 border-t border-white/10 pt-3">
-            <div className="flex justify-between text-gray-400">
+          <div className="mt-4 space-y-1.5 border-t border-border pt-3">
+            <div className="flex justify-between text-muted-foreground">
               <span>Subtotal</span>
               <span>{formatPrice(priceCents)}</span>
             </div>
-            <div className="flex justify-between text-gray-400">
-              <span>Processing fee</span>
-              <span>$0.00</span>
+            <div className="flex justify-between text-muted-foreground">
+              <span>Processing fee (2.2%)</span>
+              <span>{formatPrice(calculateProcessingFee(priceCents))}</span>
             </div>
-            <div className="flex items-baseline justify-between border-t border-white/10 pt-2">
-              <span className="text-gray-300">Total</span>
+            <div className="flex items-baseline justify-between border-t border-border pt-2">
+              <span className="text-muted-foreground">Total</span>
               <span className="font-display text-2xl text-white">
-                {formatPrice(priceCents)}
+                {formatPrice(calculateTotal(priceCents))}
               </span>
             </div>
           </div>
@@ -374,21 +390,34 @@ export default function PaymentForm({
 
       {/* Digital wallet buttons — all always rendered, SDK decides availability */}
       <div className="flex flex-col gap-3">
-        {/* Apple Pay */}
-        <button
-          id="apple-pay-button"
-          type="button"
-          onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
-          disabled={processing}
-          style={{
-            WebkitAppearance: "-apple-pay-button" as never,
-            appearance: "-apple-pay-button" as never,
-            width: "100%",
-            height: "48px",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
-        />
+        {/* Apple Pay — tokenize() must be called immediately in click handler */}
+        {applePayAvailable && (
+          <button
+            id="apple-pay-button"
+            type="button"
+            onClick={async () => {
+              if (!applePayRef.current || processing) return;
+              setProcessing(true);
+              setError(undefined);
+              try {
+                const result = await applePayRef.current.tokenize();
+                await handleTokenResult(result);
+              } catch {
+                setError("Apple Pay payment failed. Please try again.");
+                setProcessing(false);
+              }
+            }}
+            disabled={processing}
+            style={{
+              WebkitAppearance: "-apple-pay-button" as never,
+              appearance: "-apple-pay-button" as never,
+              width: "100%",
+              height: "48px",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          />
+        )}
 
         {/* Google Pay */}
         <div
@@ -402,10 +431,10 @@ export default function PaymentForm({
           className="min-h-[48px] [&_button]:!rounded-lg"
         />
 
-        <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
-          <div className="h-px flex-1 bg-white/10" />
+        <div className="font-main my-1 flex items-center gap-3 text-xs text-muted-foreground">
+          <div className="h-px flex-1 bg-border" />
           or pay with card
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-border" />
         </div>
       </div>
 
@@ -414,7 +443,7 @@ export default function PaymentForm({
         <div>
           <label
             htmlFor="cardholder-name"
-            className="font-main mb-2 block text-sm text-gray-300"
+            className="font-main mb-2 block text-sm text-muted-foreground"
           >
             Cardholder name
           </label>
@@ -425,7 +454,7 @@ export default function PaymentForm({
             placeholder="Name on card"
             value={cardholderName}
             onChange={(e) => setCardholderName(e.target.value)}
-            className="font-main w-full rounded-lg border border-white/15 bg-transparent px-3 py-2.5 text-sm text-white placeholder-white/35 outline-none transition-colors focus:border-rose-500/60"
+            className="font-main w-full rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
           />
         </div>
 
@@ -436,7 +465,7 @@ export default function PaymentForm({
             </label>
             <div id="square-card-container" className="min-h-[90px]">
               {loading && (
-                <div className="font-main flex h-[90px] items-center justify-center text-sm text-gray-400">
+                <div className="font-main flex h-[90px] items-center justify-center text-sm text-muted-foreground">
                   Loading payment form&hellip;
                 </div>
               )}
@@ -446,7 +475,7 @@ export default function PaymentForm({
           <div>
             <label
               htmlFor="billing-postcode"
-              className="font-main mb-2 block text-sm text-gray-300"
+              className="font-main mb-2 block text-sm text-muted-foreground"
             >
               Billing postcode
             </label>
@@ -458,7 +487,7 @@ export default function PaymentForm({
               placeholder="2000"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
-              className="font-main w-full rounded-lg border border-white/15 bg-transparent px-3 py-2.5 text-sm text-white placeholder-white/35 outline-none transition-colors focus:border-rose-500/60"
+              className="font-main w-full rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           </div>
 
@@ -466,7 +495,7 @@ export default function PaymentForm({
             <label className="font-main mb-2 block text-sm text-gray-300">
               Country
             </label>
-            <div className="font-main flex h-[42px] items-center rounded-lg border border-white/15 bg-transparent px-3 text-sm text-gray-400">
+            <div className="font-main flex h-[42px] items-center rounded-lg border border-input bg-transparent px-3 text-sm text-muted-foreground">
               Australia
             </div>
           </div>
@@ -475,7 +504,7 @@ export default function PaymentForm({
 
       {/* Error */}
       {error && (
-        <p className="font-main rounded-lg bg-red-500/10 px-3 py-2.5 text-sm text-red-400">
+        <p className="font-main rounded-lg bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
           {error}
         </p>
       )}
@@ -510,12 +539,12 @@ export default function PaymentForm({
             Processing payment&hellip;
           </span>
         ) : (
-          `Pay ${formatPrice(priceCents)}`
+          `Pay ${formatPrice(calculateTotal(priceCents))}`
         )}
       </Button>
 
       {/* Trust footer */}
-      <div className="font-main flex items-center justify-center gap-2 text-xs text-gray-500">
+      <div className="font-main flex items-center justify-center gap-2 text-xs text-muted-foreground">
         <svg
           className="h-3.5 w-3.5"
           fill="none"

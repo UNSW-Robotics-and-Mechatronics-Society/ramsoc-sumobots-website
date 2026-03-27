@@ -99,7 +99,7 @@ export default function JoinTeamForm({
             >
               Cancel
             </Button>
-            <Button size="full" onClick={handleJoin} disabled={loading}>
+            <Button size="full" onClick={handleJoin} disabled={loading} loading={loading}>
               {loading ? "Joining..." : "Join Team"}
             </Button>
           </div>
@@ -129,6 +129,7 @@ export default function JoinTeamForm({
           size="full"
           onClick={handlePreview}
           disabled={loading || code.length !== 6}
+          loading={loading}
         >
           {loading ? "Looking up..." : "Find Team"}
         </Button>

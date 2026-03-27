@@ -39,11 +39,17 @@ const mockProfile: Profile = {
   is_unsw: true,
   university: "UNSW",
   zid: "z5555555",
-  year_of_study: 3,
+  year_of_study: "3rd Year",
+  degree_stage: "Penultimate",
+  undergrad_postgrad: "Undergraduate",
+  domestic_international: "Domestic",
   degree: "Computer Science",
+  majors: "Artificial Intelligence",
   faculty: "Engineering",
-  gender: "Female",
-  dietary_requirements: "None",
+  gender: "female",
+  gender_other: "",
+  is_ramsoc_member: true,
+  is_arc_member: true,
   phone: "0400000000",
   onboarded: true,
   created_at: "2026-01-15T00:00:00Z",
@@ -233,6 +239,7 @@ const sections = [
   "Primitives",
   "Onboarding",
   "Dashboard",
+  "Payment",
   "Admin Login",
   "Admin Teams",
   "Admin Individuals",
@@ -246,9 +253,9 @@ export default function UIPreviewPage() {
   return (
     <div className="min-h-screen bg-black">
       {/* Nav */}
-      <div className="sticky top-0 z-50 border-b border-white/10 bg-white/5 backdrop-blur-xl">
+      <div className="sticky top-0 z-50 border-b border-border bg-secondary/50 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center gap-4 overflow-x-auto px-4 py-3">
-          <span className="shrink-0 text-sm font-semibold text-rose-400">
+          <span className="shrink-0 text-sm font-semibold text-primary">
             UI Preview
           </span>
           {sections.map((s) => (
@@ -257,8 +264,8 @@ export default function UIPreviewPage() {
               onClick={() => setActive(s)}
               className={`font-main shrink-0 rounded-md px-3 py-1.5 text-sm transition-colors ${
                 active === s
-                  ? "bg-white/10 text-white"
-                  : "text-gray-400 hover:text-white"
+                  ? "bg-accent text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {s}
@@ -279,6 +286,7 @@ export default function UIPreviewPage() {
             {active === "Primitives" && <PrimitivesSection />}
             {active === "Onboarding" && <OnboardingSection />}
             {active === "Dashboard" && <DashboardSection />}
+            {active === "Payment" && <PaymentSection />}
             {active === "Admin Login" && <AdminLoginSection />}
             {active === "Admin Teams" && <AdminTeamsSection />}
             {active === "Admin Individuals" && <AdminIndividualsSection />}
@@ -291,7 +299,7 @@ export default function UIPreviewPage() {
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mb-6 border-b border-white/10 pb-2 text-lg">{children}</h2>
+    <h2 className="mb-6 border-b border-border pb-2 text-lg">{children}</h2>
   );
 }
 
@@ -304,7 +312,7 @@ function SubSection({
 }) {
   return (
     <div className="mb-8">
-      <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
+      <h3 className="font-main mb-3 text-sm font-medium text-muted-foreground">
         {title}
       </h3>
       {children}
@@ -373,7 +381,7 @@ function PrimitivesSection() {
         <SubSection title="Card">
           <div className="max-w-sm">
             <Card>
-              <p className="font-main text-sm text-gray-300">
+              <p className="font-main text-sm text-muted-foreground">
                 A basic card container with border and subtle background.
               </p>
             </Card>
@@ -385,7 +393,7 @@ function PrimitivesSection() {
         <SubSection title="Glass Panel with Ambient Glow">
           <div className="max-w-sm">
             <GlassPanel>
-              <p className="font-main text-sm text-gray-300">
+              <p className="font-main text-sm text-muted-foreground">
                 A glassmorphism panel with animated ambient light gradient drifting behind it.
               </p>
             </GlassPanel>
@@ -399,20 +407,44 @@ function PrimitivesSection() {
 // ── Onboarding ─────────────────────────────────────────────
 
 const YEAR_OPTIONS = [
-  { value: "1", label: "1st Year" },
-  { value: "2", label: "2nd Year" },
-  { value: "3", label: "3rd Year" },
-  { value: "4", label: "4th Year" },
-  { value: "5", label: "5th Year+" },
-  { value: "0", label: "Postgraduate" },
+  { value: "1st Year", label: "1st Year" },
+  { value: "2nd Year", label: "2nd Year" },
+  { value: "3rd Year", label: "3rd Year" },
+  { value: "4th Year", label: "4th Year" },
+  { value: "5th Year+", label: "5th Year+" },
+];
+
+const DEGREE_STAGE_OPTIONS = [
+  { value: "Pre-penultimate", label: "Pre-penultimate (3rd-last year or earlier)" },
+  { value: "Penultimate", label: "Penultimate (2nd-last year)" },
+  { value: "Final Year", label: "Final year" },
+];
+
+const UNDERGRAD_POSTGRAD_OPTIONS = [
+  { value: "Undergraduate", label: "Undergraduate" },
+  { value: "Postgraduate", label: "Postgraduate" },
+];
+
+const DOMESTIC_INTL_OPTIONS = [
+  { value: "Domestic", label: "Domestic" },
+  { value: "International", label: "International" },
+];
+
+const FACULTY_OPTIONS = [
+  { value: "Arts, Design & Architecture", label: "Arts, Design & Architecture" },
+  { value: "Business", label: "Business" },
+  { value: "Engineering", label: "Engineering" },
+  { value: "Law & Justice", label: "Law & Justice" },
+  { value: "Medicine & Health", label: "Medicine & Health" },
+  { value: "Science", label: "Science" },
 ];
 
 const GENDER_OPTIONS = [
-  { value: "", label: "Prefer not to say" },
-  { value: "male", label: "Male" },
   { value: "female", label: "Female" },
+  { value: "male", label: "Male" },
   { value: "non-binary", label: "Non-binary" },
   { value: "other", label: "Other" },
+  { value: "prefer-not-to-say", label: "Prefer not to say" },
 ];
 
 const CATEGORY_OPTIONS = [
@@ -432,6 +464,128 @@ function OnboardingField({ delay, children }: { delay: number; children: React.R
   );
 }
 
+function MockRadioGroup({
+  label,
+  name,
+  options,
+  value,
+  onChange,
+  required,
+}: {
+  label: string;
+  name: string;
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (value: string) => void;
+  required?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="font-main text-sm text-muted-foreground">
+        {label}{required && <span className="text-destructive"> *</span>}
+      </span>
+      <div className="flex flex-wrap gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+              value === opt.value
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
+            }`}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={opt.value}
+              checked={value === opt.value}
+              onChange={() => onChange(opt.value)}
+              className="h-4 w-4 accent-primary"
+            />
+            {opt.label}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MockCheckboxGroup({
+  label,
+  options,
+  selected,
+  onChange,
+  required,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+  required?: boolean;
+}) {
+  function toggle(value: string) {
+    if (selected.includes(value)) {
+      onChange(selected.filter((v) => v !== value));
+    } else {
+      onChange([...selected, value]);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="font-main text-sm text-muted-foreground">
+        {label}{required && <span className="text-destructive"> *</span>}
+      </span>
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+              selected.includes(opt.value)
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(opt.value)}
+              onChange={() => toggle(opt.value)}
+              className="h-4 w-4 rounded accent-primary"
+            />
+            {opt.label}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MockYesNoToggle({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+      value
+        ? "border-primary bg-primary/10 text-foreground"
+        : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
+    }`}>
+      <input
+        type="checkbox"
+        checked={value}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-5 w-5 rounded accent-primary"
+      />
+      {label}
+    </label>
+  );
+}
+
 function OnboardingSection() {
   const [step, setStep] = useState(0);
   const [teamMode, setTeamMode] = useState<"choose" | "create" | "join">(
@@ -441,6 +595,13 @@ function OnboardingSection() {
   const [joinCode, setJoinCode] = useState("");
   const [createdCode, setCreatedCode] = useState<string | null>(null);
   const [showJoinPreview, setShowJoinPreview] = useState(false);
+  const [undergradPostgrad, setUndergradPostgrad] = useState("Undergraduate");
+  const [domesticIntl, setDomesticIntl] = useState("Domestic");
+  const [selectedFaculties, setSelectedFaculties] = useState<string[]>(["Engineering"]);
+  const [gender, setGender] = useState("female");
+  const [genderOther, setGenderOther] = useState("");
+  const [isRamsocMember, setIsRamsocMember] = useState(true);
+  const [isArcMember, setIsArcMember] = useState(true);
 
   function handleProfileSubmit(e: FormEvent) {
     e.preventDefault();
@@ -483,7 +644,7 @@ function OnboardingSection() {
               className="flex flex-col items-center py-4 text-center"
             >
               <motion.p
-                className="font-main mb-2 text-sm tracking-widest text-rose-400 uppercase"
+                className="font-main mb-2 text-sm tracking-widest text-primary uppercase"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -499,7 +660,7 @@ function OnboardingSection() {
                 Sumobots 2026
               </motion.h1>
               <motion.p
-                className="font-main mb-10 max-w-xs text-sm text-gray-400"
+                className="font-main mb-10 max-w-xs text-sm text-muted-foreground"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
@@ -527,7 +688,7 @@ function OnboardingSection() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              {/* Mock StudentDetailsForm */}
+              {/* Mock StudentDetailsForm — mirrors real onboarding fields */}
               <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4">
                 <OnboardingField delay={0.1}>
                   <Input
@@ -539,21 +700,25 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.2}>
+                <OnboardingField delay={0.15}>
                   <div className="flex items-center gap-3">
-                    <label className="font-main flex min-h-[44px] cursor-pointer items-center gap-2 text-sm text-gray-300">
+                    <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+                      isUnsw
+                        ? "border-primary bg-primary/10 text-foreground"
+                        : "border-border bg-secondary text-muted-foreground hover:border-primary/30"
+                    }`}>
                       <input
                         type="checkbox"
                         checked={isUnsw}
                         onChange={(e) => setIsUnsw(e.target.checked)}
-                        className="h-5 w-5 rounded accent-rose-600"
+                        className="h-5 w-5 rounded accent-primary"
                       />
                       I am a UNSW student
                     </label>
                   </div>
                 </OnboardingField>
 
-                <OnboardingField delay={0.3}>
+                <OnboardingField delay={0.2}>
                   {isUnsw ? (
                     <Input
                       label="zID"
@@ -572,56 +737,127 @@ function OnboardingSection() {
                   )}
                 </OnboardingField>
 
-                <OnboardingField delay={0.4}>
+                <OnboardingField delay={0.25}>
                   <Select
                     label="Year of Study"
                     name="year_of_study"
                     options={YEAR_OPTIONS}
                     placeholder="Select year"
-                    defaultValue="3"
+                    required
+                    defaultValue="3rd Year"
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.5}>
+                <OnboardingField delay={0.3}>
+                  <Select
+                    label="Degree Stage"
+                    name="degree_stage"
+                    options={DEGREE_STAGE_OPTIONS}
+                    placeholder="Select degree stage"
+                    required
+                    defaultValue="Penultimate"
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.35}>
+                  <MockRadioGroup
+                    label="Undergraduate or Postgraduate"
+                    name="undergrad_postgrad"
+                    options={UNDERGRAD_POSTGRAD_OPTIONS}
+                    value={undergradPostgrad}
+                    onChange={setUndergradPostgrad}
+                    required
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.4}>
+                  <MockRadioGroup
+                    label="Domestic or International"
+                    name="domestic_international"
+                    options={DOMESTIC_INTL_OPTIONS}
+                    value={domesticIntl}
+                    onChange={setDomesticIntl}
+                    required
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.45}>
                   <Input
                     label="Degree"
                     name="degree"
+                    required
                     placeholder="e.g. B.Eng (Mechatronics)"
                     defaultValue="Computer Science"
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.6}>
+                <OnboardingField delay={0.5}>
                   <Input
-                    label="Faculty"
-                    name="faculty"
-                    placeholder="e.g. Engineering"
-                    defaultValue="Engineering"
+                    label="Majors (if applicable)"
+                    name="majors"
+                    placeholder="e.g. Mechanical Engineering"
+                    defaultValue="Artificial Intelligence"
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.7}>
-                  <Select
+                <OnboardingField delay={0.55}>
+                  <MockCheckboxGroup
+                    label="Faculty"
+                    options={FACULTY_OPTIONS}
+                    selected={selectedFaculties}
+                    onChange={setSelectedFaculties}
+                    required
+                  />
+                </OnboardingField>
+
+                <OnboardingField delay={0.6}>
+                  <MockRadioGroup
                     label="Gender"
                     name="gender"
                     options={GENDER_OPTIONS}
-                    defaultValue=""
+                    value={gender}
+                    onChange={(val) => {
+                      setGender(val);
+                      if (val !== "other") setGenderOther("");
+                    }}
+                    required
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.8}>
-                  <Input
-                    label="Dietary Requirements"
-                    name="dietary_requirements"
-                    placeholder="e.g. Vegetarian, Halal"
-                  />
+                {gender === "other" && (
+                  <OnboardingField delay={0}>
+                    <Input
+                      label="Please specify"
+                      name="gender_other"
+                      required
+                      value={genderOther}
+                      onChange={(e) => setGenderOther(e.target.value)}
+                    />
+                  </OnboardingField>
+                )}
+
+                <OnboardingField delay={0.65}>
+                  <div className="flex flex-col gap-2">
+                    <span className="font-main text-sm text-muted-foreground">Memberships</span>
+                    <MockYesNoToggle
+                      label="I am a RAMSoc member"
+                      value={isRamsocMember}
+                      onChange={setIsRamsocMember}
+                    />
+                    <MockYesNoToggle
+                      label="I am an Arc member"
+                      value={isArcMember}
+                      onChange={setIsArcMember}
+                    />
+                  </div>
                 </OnboardingField>
 
-                <OnboardingField delay={0.9}>
+                <OnboardingField delay={0.7}>
                   <Input
                     label="Phone Number"
                     name="phone"
                     type="tel"
+                    required
                     autoComplete="tel"
                     placeholder="04XX XXX XXX"
                   />
@@ -647,30 +883,30 @@ function OnboardingSection() {
               {/* Mock TeamStep */}
               {teamMode === "choose" && (
                 <div className="flex flex-col gap-4">
-                  <p className="font-main text-center text-gray-400">
+                  <p className="font-main text-center text-muted-foreground">
                     Create a new team or join an existing one with a code
                   </p>
                   <motion.button
                     type="button"
                     onClick={() => setTeamMode("create")}
-                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Create a Team</span>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-muted-foreground">
                       Start a new team and invite others
                     </span>
                   </motion.button>
                   <motion.button
                     type="button"
                     onClick={() => setTeamMode("join")}
-                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 text-white transition-colors hover:border-rose-500 hover:bg-white/10"
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
                   >
                     <span className="font-display text-lg">Join a Team</span>
-                    <span className="text-sm text-gray-400">
+                    <span className="text-sm text-muted-foreground">
                       Enter a join code from your captain
                     </span>
                   </motion.button>
@@ -682,7 +918,7 @@ function OnboardingSection() {
                   <button
                     type="button"
                     onClick={() => setTeamMode("choose")}
-                    className="font-main mb-4 text-sm text-gray-400 hover:text-white"
+                    className="font-main mb-4 text-sm text-muted-foreground hover:text-foreground"
                   >
                     &larr; Back
                   </button>
@@ -703,7 +939,7 @@ function OnboardingSection() {
                       required
                       defaultValue="standard"
                     />
-                    <p className="font-main text-xs text-gray-500">
+                    <p className="font-main text-xs text-muted-foreground">
                       <b>Standard:</b> UNSW students only, 3–6 members.{" "}
                       <b>Open:</b> Any university, 1–6 members.
                     </p>
@@ -720,12 +956,12 @@ function OnboardingSection() {
                 <div className="flex flex-col items-center gap-6 text-center">
                   <div>
                     <h3 className="mb-2">Team Created!</h3>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">
                       Share this code with your teammates
                     </p>
                   </div>
                   <div
-                    className="cursor-pointer rounded-xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-sm transition-colors hover:border-rose-500"
+                    className="cursor-pointer rounded-xl border border-border bg-secondary px-8 py-6 transition-colors hover:border-primary"
                     onClick={() => navigator.clipboard.writeText(createdCode)}
                     title="Click to copy"
                   >
@@ -733,7 +969,7 @@ function OnboardingSection() {
                       {createdCode}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500">Tap the code to copy</p>
+                  <p className="text-xs text-muted-foreground">Tap the code to copy</p>
                   <Button
                     size="full"
                     onClick={() =>
@@ -750,7 +986,7 @@ function OnboardingSection() {
                   <button
                     type="button"
                     onClick={() => setTeamMode("choose")}
-                    className="font-main mb-4 text-sm text-gray-400 hover:text-white"
+                    className="font-main mb-4 text-sm text-muted-foreground hover:text-foreground"
                   >
                     &larr; Back
                   </button>
@@ -783,11 +1019,11 @@ function OnboardingSection() {
 
               {teamMode === "join" && showJoinPreview && (
                 <div className="flex flex-col gap-5">
-                  <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-5">
+                  <div className="rounded-xl border border-border bg-secondary backdrop-blur-sm p-5">
                     <h3 className="mb-2">Sumo Slammers</h3>
                     <div className="flex items-center gap-2">
                       <Badge variant="info">Standard</Badge>
-                      <span className="font-main text-sm text-gray-400">
+                      <span className="font-main text-sm text-muted-foreground">
                         4 members
                       </span>
                     </div>
@@ -853,30 +1089,30 @@ function DashboardSection() {
 
       {/* Test toggles */}
       <div className="mb-4 flex flex-wrap items-center gap-4">
-        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+        <label className="font-main flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={hasTeamToggle}
             onChange={(e) => setHasTeamToggle(e.target.checked)}
-            className="h-4 w-4 rounded accent-rose-600"
+            className="h-4 w-4 rounded accent-primary"
           />
           Has team
         </label>
-        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+        <label className="font-main flex items-center gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={isCaptainView}
             onChange={(e) => setIsCaptainView(e.target.checked)}
-            className="h-4 w-4 rounded accent-rose-600"
+            className="h-4 w-4 rounded accent-primary"
           />
           Captain view
         </label>
-        <label className="font-main flex items-center gap-2 text-sm text-gray-300">
+        <label className="font-main flex items-center gap-2 text-sm text-muted-foreground">
           Members:
           <select
             value={memberCount}
             onChange={(e) => setMemberCount(Number(e.target.value))}
-            className="rounded bg-white/10 px-2 py-1 text-sm text-white"
+            className="rounded bg-accent px-2 py-1 text-sm text-white"
           >
             {[1, 2, 3, 4].map((n) => (
               <option key={n} value={n}>
@@ -902,7 +1138,7 @@ function DashboardSection() {
                 <div className="flex flex-col gap-5">
                   <Card>
                     <h3 className="mb-1">Welcome, Alice</h3>
-                    <p className="font-main text-sm text-gray-400">
+                    <p className="font-main text-sm text-muted-foreground">
                       {hasTeamToggle && currentTeam.paid
                         ? "You're all set for the competition!"
                         : "Here's what you need to do to get ready."}
@@ -911,20 +1147,20 @@ function DashboardSection() {
                   <Card>
                     <h3 className="mb-3 text-base">Action Items</h3>
                     <div className="flex flex-col gap-2">
-                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-white/5 text-gray-500 line-through" : "bg-white/5 text-white"}`}>
-                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-white/20"}`}>
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
                           {hasTeamToggle ? "\u2713" : ""}
                         </span>
                         Create or join a team
                       </div>
-                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasEnoughMembers ? "bg-white/5 text-gray-500 line-through" : "bg-white/5 text-white"}`}>
-                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasEnoughMembers ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-white/20"}`}>
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasEnoughMembers ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasEnoughMembers ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
                           {hasEnoughMembers ? "\u2713" : ""}
                         </span>
                         Get at least 3 team members
                       </div>
-                      <div className="font-main flex items-center gap-3 rounded-lg bg-white/5 px-4 py-3 text-sm text-white">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/20 text-xs" />
+                      <div className="font-main flex items-center gap-3 rounded-lg bg-secondary px-4 py-3 text-sm text-white">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-xs" />
                         Pay the entry fee to activate your team
                       </div>
                     </div>
@@ -933,17 +1169,17 @@ function DashboardSection() {
                     <Card>
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-main text-xs text-gray-500">Your team</p>
+                          <p className="font-main text-xs text-muted-foreground">Your team</p>
                           <h3 className="text-base">{currentTeam.name}</h3>
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge variant="warning">Not Active</Badge>
-                          <span className="font-main text-sm text-gray-400">{visibleMembers.length}/6</span>
+                          <span className="font-main text-sm text-muted-foreground">{visibleMembers.length}/6</span>
                         </div>
                       </div>
                       <button
                         onClick={() => setDashTab("team")}
-                        className="font-main mt-3 text-sm text-rose-400 transition-colors hover:text-rose-300"
+                        className="font-main mt-3 text-sm text-primary transition-colors hover:text-primary/80"
                       >
                         View team details &rarr;
                       </button>
@@ -966,8 +1202,8 @@ function DashboardSection() {
                       />
                       <LeaveTeamButton />
 
-                      <div className="mt-2 border-t border-white/10 pt-4">
-                        <h3 className="font-main mb-3 text-sm font-medium text-gray-400">
+                      <div className="mt-2 border-t border-border pt-4">
+                        <h3 className="font-main mb-3 text-sm font-medium text-muted-foreground">
                           Paid variant
                         </h3>
                         <TeamCard team={mockPaidTeam} />
@@ -992,15 +1228,15 @@ function DashboardSection() {
         </GlassPanel>
 
         {/* Bottom tab bar — outside the glass panel */}
-        <div className="mt-4 flex justify-around rounded-xl border border-white/10 bg-white/5 p-1 backdrop-blur-xl">
+        <div className="mt-4 flex justify-around rounded-xl border border-border bg-secondary p-1 backdrop-blur-xl">
           {(["home", "team", "profile"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setDashTab(t)}
               className={`flex flex-1 flex-col items-center gap-1 rounded-lg py-3 transition-colors ${
                 dashTab === t
-                  ? "text-rose-400"
-                  : "text-gray-500 hover:text-gray-300"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-muted-foreground"
               }`}
             >
               <svg
@@ -1024,6 +1260,148 @@ function DashboardSection() {
             </button>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Payment ───────────────────────────────────────────────
+
+function PaymentSection() {
+  const baseCents = 5000;
+  const totalCents = Math.ceil(baseCents / (1 - 0.022));
+  const feeCents = totalCents - baseCents;
+  const fmt = (c: number) => `$${(c / 100).toFixed(2)}`;
+
+  return (
+    <div>
+      <SectionTitle>Payment</SectionTitle>
+      <div className="mx-auto max-w-lg">
+        <GlassPanel>
+          <div className="flex flex-col gap-6">
+            {/* Back link */}
+            <button className="font-main inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to dashboard
+            </button>
+
+            {/* Title */}
+            <div>
+              <h2 className="font-display text-2xl text-white">Pay Entry Fee</h2>
+              <p className="font-main mt-1 text-sm text-muted-foreground">RAMSoc Sumobots 2026</p>
+            </div>
+
+            {/* Order summary */}
+            <div className="rounded-xl border border-border bg-secondary p-5">
+              <h3 className="font-display mb-4 text-sm uppercase tracking-wider text-muted-foreground">Order Summary</h3>
+              <div className="font-main text-sm">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white">1 &times; Standard Team Registration</p>
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">Sumo Slammers &middot; 4 members</p>
+                  </div>
+                  <span className="shrink-0 text-white">{fmt(baseCents)}</span>
+                </div>
+                <div className="mt-4 space-y-1.5 border-t border-border pt-3">
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Subtotal</span>
+                    <span>{fmt(baseCents)}</span>
+                  </div>
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Processing fee (2.2%)</span>
+                    <span>{fmt(feeCents)}</span>
+                  </div>
+                  <div className="flex items-baseline justify-between border-t border-border pt-2">
+                    <span className="text-muted-foreground">Total</span>
+                    <span className="font-display text-2xl text-white">{fmt(totalCents)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Digital wallet buttons (static mocks) */}
+            <div className="flex flex-col gap-3">
+              <button className="flex h-12 w-full items-center justify-center rounded-lg bg-black border border-border text-white text-sm font-medium">
+                <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                </svg>
+                Apple Pay
+              </button>
+              <button className="flex h-12 w-full items-center justify-center rounded-lg bg-white text-black text-sm font-medium">
+                <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                Google Pay
+              </button>
+              <button className="flex h-12 w-full items-center justify-center rounded-lg bg-[#b2fce4] text-black text-sm font-medium">
+                Afterpay
+              </button>
+
+              <div className="font-main my-1 flex items-center gap-3 text-xs text-muted-foreground">
+                <div className="h-px flex-1 bg-border" />
+                or pay with card
+                <div className="h-px flex-1 bg-border" />
+              </div>
+            </div>
+
+            {/* Card details (static mock) */}
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="font-main mb-2 block text-sm text-muted-foreground">Cardholder name</label>
+                <input
+                  type="text"
+                  placeholder="Name on card"
+                  defaultValue="Alice Zhang"
+                  className="font-main w-full rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-2">
+                  <label className="font-main mb-2 block text-sm text-muted-foreground">Card details</label>
+                  <div className="flex h-[90px] items-center justify-center rounded-lg border border-input text-sm text-muted-foreground">
+                    Square card widget renders here
+                  </div>
+                </div>
+
+                <div>
+                  <label className="font-main mb-2 block text-sm text-muted-foreground">Billing postcode</label>
+                  <input
+                    type="text"
+                    placeholder="2000"
+                    defaultValue="2052"
+                    className="font-main w-full rounded-lg border border-input bg-transparent px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none transition-colors focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                  />
+                </div>
+
+                <div>
+                  <label className="font-main mb-2 block text-sm text-muted-foreground">Country</label>
+                  <div className="font-main flex h-[42px] items-center rounded-lg border border-input bg-transparent px-3 text-sm text-muted-foreground">
+                    Australia
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Pay button */}
+            <Button size="full">
+              Pay {fmt(totalCents)}
+            </Button>
+
+            {/* Trust footer */}
+            <div className="font-main flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Secured by Square
+            </div>
+          </div>
+        </GlassPanel>
       </div>
     </div>
   );

@@ -7,19 +7,11 @@ import Card from "@/app/2026/_components/ui/Card";
 import { Button } from "@/app/2026/_components/ui/Button";
 import EditProfileForm from "./EditProfileForm";
 
-const YEAR_LABELS: Record<number, string> = {
-  1: "1st Year",
-  2: "2nd Year",
-  3: "3rd Year",
-  4: "4th Year",
-  5: "5th Year+",
-  0: "Postgraduate",
-};
-
 const GENDER_LABELS: Record<string, string> = {
   male: "Male",
   female: "Female",
   "non-binary": "Non-binary",
+  "prefer-not-to-say": "Prefer not to say",
   other: "Other",
 };
 
@@ -100,20 +92,22 @@ export default function ProfileTab({
             }
           />
           <ProfileRow label="Degree" value={profile.degree} />
+          <ProfileRow label="Majors" value={profile.majors} />
           <ProfileRow label="Faculty" value={profile.faculty} />
-          <ProfileRow
-            label="Year"
-            value={
-              profile.year_of_study !== null
-                ? (YEAR_LABELS[profile.year_of_study] ?? "")
-                : ""
-            }
-          />
+          <ProfileRow label="Year" value={profile.year_of_study || ""} />
+          <ProfileRow label="Degree Stage" value={profile.degree_stage || ""} />
+          <ProfileRow label="Level" value={profile.undergrad_postgrad || ""} />
+          <ProfileRow label="Student Type" value={profile.domestic_international || ""} />
           <ProfileRow
             label="Gender"
-            value={GENDER_LABELS[profile.gender] ?? profile.gender}
+            value={
+              profile.gender === "other" && profile.gender_other
+                ? profile.gender_other
+                : (GENDER_LABELS[profile.gender] ?? profile.gender)
+            }
           />
-          <ProfileRow label="Dietary" value={profile.dietary_requirements} />
+          <ProfileRow label="RAMSoc" value={profile.is_ramsoc_member ? "Yes" : "No"} />
+          <ProfileRow label="Arc" value={profile.is_arc_member ? "Yes" : "No"} />
           <ProfileRow label="Phone" value={profile.phone} />
         </div>
       </Card>

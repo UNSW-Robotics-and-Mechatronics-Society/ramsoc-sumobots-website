@@ -92,12 +92,16 @@ export async function processPayment(
     };
   }
 
-  const amountCents = getEntryFeeAmountCents(
+  const baseCents = getEntryFeeAmountCents(
     team.category as "standard" | "open",
   );
-  if (!amountCents) {
+  if (!baseCents) {
     return { success: false, error: "Entry fee not configured" };
   }
+
+  // Calculate total so that after Square's 2.2% cut, we net the full base amount.
+  // total * (1 - 0.022) = base  →  total = base / 0.978
+  const amountCents = Math.ceil(baseCents / (1 - 0.022));
 
   // Process payment with Square
   const square = getSquareClient();

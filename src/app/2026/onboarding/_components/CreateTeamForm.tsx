@@ -136,7 +136,7 @@ export default function CreateTeamForm({
       {error && <p className="text-sm text-red-400">{error}</p>}
 
       <div className="sticky bottom-4 mt-4 pt-4">
-        <Button type="submit" size="full" disabled={loading}>
+        <Button type="submit" size="full" disabled={loading} loading={loading}>
           {loading ? "Creating..." : "Create Team"}
         </Button>
       </div>
