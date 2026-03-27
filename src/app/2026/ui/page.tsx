@@ -39,11 +39,12 @@ const mockProfile: Profile = {
   is_unsw: true,
   university: "UNSW",
   zid: "z5555555",
-  year_of_study: 3,
+  year_of_study: "3rd Year, Penultimate",
   degree: "Computer Science",
+  majors: "Artificial Intelligence",
   faculty: "Engineering",
-  gender: "Female",
-  dietary_requirements: "None",
+  gender: "female",
+  gender_other: "",
   phone: "0400000000",
   onboarded: true,
   created_at: "2026-01-15T00:00:00Z",
@@ -592,10 +593,14 @@ function OnboardingSection() {
                 </OnboardingField>
 
                 <OnboardingField delay={0.6}>
-                  <Input
+                  <Select
                     label="Faculty"
                     name="faculty"
-                    placeholder="e.g. Engineering"
+                    options={[
+                      { value: "Engineering", label: "Engineering" },
+                      { value: "Science", label: "Science" },
+                      { value: "Business", label: "Business" },
+                    ]}
                     defaultValue="Engineering"
                   />
                 </OnboardingField>
@@ -611,9 +616,9 @@ function OnboardingSection() {
 
                 <OnboardingField delay={0.8}>
                   <Input
-                    label="Dietary Requirements"
-                    name="dietary_requirements"
-                    placeholder="e.g. Vegetarian, Halal"
+                    label="Majors (if applicable)"
+                    name="majors"
+                    placeholder="e.g. Mechanical Engineering"
                   />
                 </OnboardingField>
 

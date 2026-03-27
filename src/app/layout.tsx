@@ -1,7 +1,14 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "@/app/styles.css";
 import { SUMOBOTS_SITE_URL } from "@/app/constants";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SUMOBOTS_SITE_URL),

@@ -6,6 +6,28 @@ import type { TeamWithMembers, TeamBrowseItem } from "@/app/_types/registration"
 
 const JOIN_CODE_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no O/0/I/1
 
+// Basic profanity word list for team name censorship
+const BLOCKED_WORDS = [
+  "fuck", "shit", "ass", "bitch", "dick", "cock", "pussy", "cunt",
+  "damn", "bastard", "slut", "whore", "nigger", "nigga", "faggot",
+  "retard", "rape", "nazi", "hitler", "penis", "vagina", "porn",
+  "sex", "hentai", "cum", "dildo", "anal", "anus",
+];
+
+function containsProfanity(name: string): boolean {
+  const lower = name.toLowerCase().replace(/[^a-z]/g, " ");
+  const words = lower.split(/\s+/);
+  for (const word of words) {
+    if (BLOCKED_WORDS.includes(word)) return true;
+  }
+  // Also check substrings for common evasion (e.g. "teamfuck")
+  const stripped = lower.replace(/\s+/g, "");
+  for (const blocked of BLOCKED_WORDS) {
+    if (stripped.includes(blocked)) return true;
+  }
+  return false;
+}
+
 function generateJoinCode(): string {
   const array = new Uint8Array(6);
   crypto.getRandomValues(array);
@@ -35,6 +57,10 @@ export async function createTeam(input: {
 
   if (!input.name.trim()) {
     return { success: false, error: "Team name is required" };
+  }
+
+  if (containsProfanity(input.name)) {
+    return { success: false, error: "Team name contains inappropriate language. Please choose another name." };
   }
 
   if (!["standard", "open"].includes(input.category)) {
@@ -409,6 +435,10 @@ export async function renameTeam(
 
   const trimmed = newName.trim();
   if (!trimmed) return { success: false, error: "Team name is required" };
+
+  if (containsProfanity(trimmed)) {
+    return { success: false, error: "Team name contains inappropriate language. Please choose another name." };
+  }
 
   const profileId = await getProfileId(userId);
   if (!profileId) return { success: false, error: "Profile not found" };

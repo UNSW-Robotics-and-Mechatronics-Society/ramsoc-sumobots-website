@@ -28,11 +28,12 @@ type CreateProfileInput = {
   is_unsw: boolean;
   university: string;
   zid: string;
-  year_of_study: number | null;
+  year_of_study: string;
   degree: string;
+  majors: string;
   faculty: string;
   gender: string;
-  dietary_requirements: string;
+  gender_other: string;
   phone: string;
 };
 
@@ -59,6 +60,30 @@ export async function createProfile(
     return { success: false, error: "University is required" };
   }
 
+  if (!input.year_of_study) {
+    return { success: false, error: "Year of study is required" };
+  }
+
+  if (!input.degree.trim()) {
+    return { success: false, error: "Degree is required" };
+  }
+
+  if (!input.faculty.trim()) {
+    return { success: false, error: "Faculty is required" };
+  }
+
+  if (!input.gender) {
+    return { success: false, error: "Gender is required" };
+  }
+
+  if (input.gender === "other" && !input.gender_other.trim()) {
+    return { success: false, error: "Please specify your gender" };
+  }
+
+  if (!input.phone.trim()) {
+    return { success: false, error: "Phone number is required" };
+  }
+
   const supabase = getSupabaseSecretClient();
 
   // Check if profile already exists
@@ -81,9 +106,10 @@ export async function createProfile(
     zid: input.is_unsw ? input.zid.trim() : "",
     year_of_study: input.year_of_study,
     degree: input.degree.trim(),
+    majors: input.majors.trim(),
     faculty: input.faculty.trim(),
     gender: input.gender,
-    dietary_requirements: input.dietary_requirements.trim(),
+    gender_other: input.gender === "other" ? input.gender_other.trim() : "",
     phone: input.phone.trim(),
     onboarded: false,
   });
@@ -101,11 +127,12 @@ type UpdateProfileInput = {
   is_unsw: boolean;
   university: string;
   zid: string;
-  year_of_study: number | null;
+  year_of_study: string;
   degree: string;
+  majors: string;
   faculty: string;
   gender: string;
-  dietary_requirements: string;
+  gender_other: string;
   phone: string;
 };
 
@@ -138,9 +165,10 @@ export async function updateProfile(
       zid: input.is_unsw ? input.zid.trim() : "",
       year_of_study: input.year_of_study,
       degree: input.degree.trim(),
+      majors: input.majors.trim(),
       faculty: input.faculty.trim(),
       gender: input.gender,
-      dietary_requirements: input.dietary_requirements.trim(),
+      gender_other: input.gender === "other" ? input.gender_other.trim() : "",
       phone: input.phone.trim(),
       updated_at: new Date().toISOString(),
     })

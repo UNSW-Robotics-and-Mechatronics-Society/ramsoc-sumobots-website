@@ -9,21 +9,80 @@ import { Button } from "@/app/2026/_components/ui/Button";
 import type { Profile } from "@/app/_types/registration";
 
 const YEAR_OPTIONS = [
-  { value: "1", label: "1st Year" },
-  { value: "2", label: "2nd Year" },
-  { value: "3", label: "3rd Year" },
-  { value: "4", label: "4th Year" },
-  { value: "5", label: "5th Year+" },
-  { value: "0", label: "Postgraduate" },
+  { value: "1st Year", label: "1st Year" },
+  { value: "2nd Year", label: "2nd Year" },
+  { value: "3rd Year", label: "3rd Year" },
+  { value: "4th Year", label: "4th Year" },
+  { value: "5th Year+", label: "5th Year+" },
+  { value: "Postgraduate", label: "Postgraduate" },
+  { value: "Penultimate", label: "Penultimate" },
+  { value: "Pre-penultimate", label: "Pre-penultimate" },
+  { value: "Final Year", label: "Final Year" },
+];
+
+const FACULTY_OPTIONS = [
+  { value: "Arts, Design & Architecture", label: "Arts, Design & Architecture" },
+  { value: "Business", label: "Business" },
+  { value: "Engineering", label: "Engineering" },
+  { value: "Law & Justice", label: "Law & Justice" },
+  { value: "Medicine & Health", label: "Medicine & Health" },
+  { value: "Science", label: "Science" },
+  { value: "Other", label: "Other" },
 ];
 
 const GENDER_OPTIONS = [
-  { value: "", label: "Prefer not to say" },
   { value: "male", label: "Male" },
   { value: "female", label: "Female" },
   { value: "non-binary", label: "Non-binary" },
+  { value: "prefer-not-to-say", label: "Prefer not to say" },
   { value: "other", label: "Other" },
 ];
+
+function CheckboxGroup({
+  label,
+  options,
+  selected,
+  onChange,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
+}) {
+  function toggle(value: string) {
+    if (selected.includes(value)) {
+      onChange(selected.filter((v) => v !== value));
+    } else {
+      onChange([...selected, value]);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <span className="font-main text-sm text-gray-300">{label}</span>
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((opt) => (
+          <label
+            key={opt.value}
+            className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+              selected.includes(opt.value)
+                ? "border-rose-500 bg-rose-500/10 text-white"
+                : "border-white/10 bg-white/5 text-gray-300 hover:border-white/20"
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(opt.value)}
+              onChange={() => toggle(opt.value)}
+              className="h-4 w-4 rounded accent-rose-600"
+            />
+            {opt.label}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function EditProfileForm({
   profile,
@@ -36,6 +95,11 @@ export default function EditProfileForm({
   const [isUnsw, setIsUnsw] = useState(profile.is_unsw);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedYears, setSelectedYears] = useState<string[]>(
+    profile.year_of_study ? profile.year_of_study.split(", ").filter(Boolean) : [],
+  );
+  const [gender, setGender] = useState(profile.gender);
+  const [genderOther, setGenderOther] = useState(profile.gender_other || "");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,14 +113,12 @@ export default function EditProfileForm({
       is_unsw: isUnsw,
       university: isUnsw ? "UNSW" : (form.get("university") as string),
       zid: isUnsw ? (form.get("zid") as string) : "",
-      year_of_study: form.get("year_of_study")
-        ? Number(form.get("year_of_study"))
-        : null,
+      year_of_study: selectedYears.join(", "),
       degree: (form.get("degree") as string) || "",
+      majors: (form.get("majors") as string) || "",
       faculty: (form.get("faculty") as string) || "",
-      gender: (form.get("gender") as string) || "",
-      dietary_requirements:
-        (form.get("dietary_requirements") as string) || "",
+      gender: gender,
+      gender_other: gender === "other" ? genderOther : "",
       phone: (form.get("phone") as string) || "",
     });
 
@@ -112,25 +174,34 @@ export default function EditProfileForm({
         />
       )}
 
-      <Select
+      <CheckboxGroup
         label="Year of Study"
-        name="year_of_study"
         options={YEAR_OPTIONS}
-        placeholder="Select year"
-        defaultValue={profile.year_of_study?.toString() ?? ""}
+        selected={selectedYears}
+        onChange={setSelectedYears}
       />
 
       <Input
         label="Degree"
         name="degree"
+        required
         placeholder="e.g. B.Eng (Mechatronics)"
         defaultValue={profile.degree}
       />
 
       <Input
+        label="Majors (if applicable)"
+        name="majors"
+        placeholder="e.g. Mechanical Engineering"
+        defaultValue={profile.majors}
+      />
+
+      <Select
         label="Faculty"
         name="faculty"
-        placeholder="e.g. Engineering"
+        options={FACULTY_OPTIONS}
+        placeholder="Select faculty"
+        required
         defaultValue={profile.faculty}
       />
 
@@ -138,15 +209,24 @@ export default function EditProfileForm({
         label="Gender"
         name="gender"
         options={GENDER_OPTIONS}
-        defaultValue={profile.gender}
+        placeholder="Select gender"
+        required
+        value={gender}
+        onChange={(e) => {
+          setGender(e.target.value);
+          if (e.target.value !== "other") setGenderOther("");
+        }}
       />
 
-      <Input
-        label="Dietary Requirements"
-        name="dietary_requirements"
-        placeholder="e.g. Vegetarian, Halal"
-        defaultValue={profile.dietary_requirements}
-      />
+      {gender === "other" && (
+        <Input
+          label="Please specify"
+          name="gender_other"
+          required
+          value={genderOther}
+          onChange={(e) => setGenderOther(e.target.value)}
+        />
+      )}
 
       <Input
         label="Phone Number"
@@ -169,7 +249,7 @@ export default function EditProfileForm({
         >
           Cancel
         </Button>
-        <Button type="submit" size="full" disabled={loading}>
+        <Button type="submit" size="full" disabled={loading} loading={loading}>
           {loading ? "Saving..." : "Save Changes"}
         </Button>
       </div>

@@ -6,11 +6,12 @@ export type Profile = {
   is_unsw: boolean;
   university: string;
   zid: string;
-  year_of_study: number | null;
+  year_of_study: string;
   degree: string;
+  majors: string;
   faculty: string;
   gender: string;
-  dietary_requirements: string;
+  gender_other: string;
   phone: string;
   onboarded: boolean;
   created_at: string;
