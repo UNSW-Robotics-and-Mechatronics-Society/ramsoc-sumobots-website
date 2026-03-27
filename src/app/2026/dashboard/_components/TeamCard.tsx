@@ -145,7 +145,7 @@ export default function TeamCard({
             <Link href={Path[2026].Payment}>
               <Button size="full">
                 {priceCents > 0
-                  ? `Pay $${((priceCents + Math.ceil(priceCents * 0.022)) / 100).toFixed(2)} Entry Fee`
+                  ? `Pay $${(priceCents / 100).toFixed(2)} Entry Fee`
                   : "Pay Entry Fee"}
               </Button>
             </Link>

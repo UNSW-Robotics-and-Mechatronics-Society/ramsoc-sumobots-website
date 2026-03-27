@@ -1269,8 +1269,8 @@ function DashboardSection() {
 
 function PaymentSection() {
   const baseCents = 5000;
-  const feeCents = Math.ceil(baseCents * 0.022);
-  const totalCents = baseCents + feeCents;
+  const totalCents = Math.ceil(baseCents / (1 - 0.022));
+  const feeCents = totalCents - baseCents;
   const fmt = (c: number) => `$${(c / 100).toFixed(2)}`;
 
   return (

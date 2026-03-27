@@ -71,12 +71,13 @@ function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-function calculateProcessingFee(baseCents: number): number {
-  return Math.ceil(baseCents * SQUARE_FEE_RATE);
+function calculateTotal(baseCents: number): number {
+  // total * (1 - 0.022) = base  →  total = base / 0.978
+  return Math.ceil(baseCents / (1 - SQUARE_FEE_RATE));
 }
 
-function calculateTotal(baseCents: number): number {
-  return baseCents + calculateProcessingFee(baseCents);
+function calculateProcessingFee(baseCents: number): number {
+  return calculateTotal(baseCents) - baseCents;
 }
 
 /* ------------------------------------------------------------------ */

@@ -99,9 +99,9 @@ export async function processPayment(
     return { success: false, error: "Entry fee not configured" };
   }
 
-  // Add 2.2% Square processing fee on top
-  const processingFeeCents = Math.ceil(baseCents * 0.022);
-  const amountCents = baseCents + processingFeeCents;
+  // Calculate total so that after Square's 2.2% cut, we net the full base amount.
+  // total * (1 - 0.022) = base  →  total = base / 0.978
+  const amountCents = Math.ceil(baseCents / (1 - 0.022));
 
   // Process payment with Square
   const square = getSquareClient();
