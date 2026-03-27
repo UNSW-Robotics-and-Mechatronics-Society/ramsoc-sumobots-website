@@ -38,12 +38,16 @@ interface PaymentRequestConfig {
   total: { amount: string; label: string };
 }
 
+// Opaque object returned by payments.paymentRequest()
+interface SquarePaymentRequest {}
+
 interface SquarePayments {
   card: (options?: Record<string, unknown>) => Promise<SquareCard>;
-  applePay: (req: PaymentRequestConfig) => Promise<SquareDigitalWallet>;
-  googlePay: (req: PaymentRequestConfig) => Promise<SquareDigitalWallet>;
+  paymentRequest: (config: PaymentRequestConfig) => SquarePaymentRequest;
+  applePay: (req: SquarePaymentRequest) => Promise<SquareDigitalWallet>;
+  googlePay: (req: SquarePaymentRequest) => Promise<SquareDigitalWallet>;
   afterpayClearpay: (
-    req: PaymentRequestConfig,
+    req: SquarePaymentRequest,
   ) => Promise<SquareDigitalWallet>;
 }
 
@@ -105,7 +109,13 @@ export default function PaymentForm({
   const applePayRef = useRef<SquareDigitalWallet | null>(null);
   const googlePayRef = useRef<SquareDigitalWallet | null>(null);
   const afterpayRef = useRef<SquareDigitalWallet | null>(null);
+  const cardholderNameRef = useRef(cardholderName);
+  const postalCodeRef = useRef(postalCode);
   const router = useRouter();
+
+  // Keep refs in sync so the stable callback always reads latest values
+  cardholderNameRef.current = cardholderName;
+  postalCodeRef.current = postalCode;
 
   const handleTokenResult = useCallback(
     async (result: TokenResult) => {
@@ -118,8 +128,8 @@ export default function PaymentForm({
       }
 
       const response = await processPayment(result.token, {
-        cardholderName: cardholderName.trim(),
-        postalCode: postalCode.trim(),
+        cardholderName: cardholderNameRef.current.trim(),
+        postalCode: postalCodeRef.current.trim(),
       });
 
       if (response.success) {
@@ -129,7 +139,7 @@ export default function PaymentForm({
       }
       setProcessing(false);
     },
-    [cardholderName, postalCode],
+    [],
   );
 
   const initPayments = useCallback(async () => {
@@ -169,14 +179,14 @@ export default function PaymentForm({
       cardRef.current = card;
 
       const totalCents = calculateTotal(priceCents);
-      const paymentRequest: PaymentRequestConfig = {
+      const paymentRequest = payments.paymentRequest({
         countryCode: "AU",
         currencyCode: "AUD",
         total: {
           amount: (totalCents / 100).toFixed(2),
           label: `Sumobots ${category} entry fee`,
         },
-      };
+      });
 
       try {
         // Apple Pay does NOT use .attach() — the SDK just validates availability.
