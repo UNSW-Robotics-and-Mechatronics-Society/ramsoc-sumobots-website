@@ -23,10 +23,13 @@ interface SquareCard {
 }
 
 interface SquareDigitalWallet {
-  attach: (selector: string) => Promise<void>;
+  attach: (selector: string, options?: Record<string, unknown>) => Promise<void>;
   tokenize: () => Promise<TokenResult>;
   destroy: () => void;
-  addEventListener: (event: string, callback: () => void) => void;
+  addEventListener: (
+    event: string,
+    callback: (event: { detail: { tokenResult: TokenResult } }) => void,
+  ) => void;
 }
 
 interface PaymentRequestConfig {
@@ -39,6 +42,9 @@ interface SquarePayments {
   card: (options?: Record<string, unknown>) => Promise<SquareCard>;
   applePay: (req: PaymentRequestConfig) => Promise<SquareDigitalWallet>;
   googlePay: (req: PaymentRequestConfig) => Promise<SquareDigitalWallet>;
+  afterpayClearpay: (
+    req: PaymentRequestConfig,
+  ) => Promise<SquareDigitalWallet>;
 }
 
 interface SquareGlobal {
@@ -83,11 +89,13 @@ export default function PaymentForm({
   const [success, setSuccess] = useState(false);
   const [applePayAvailable, setApplePayAvailable] = useState(false);
   const [googlePayAvailable, setGooglePayAvailable] = useState(false);
+  const [afterpayAvailable, setAfterpayAvailable] = useState(false);
   const [cardholderName, setCardholderName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const cardRef = useRef<SquareCard | null>(null);
   const applePayRef = useRef<SquareDigitalWallet | null>(null);
   const googlePayRef = useRef<SquareDigitalWallet | null>(null);
+  const afterpayRef = useRef<SquareDigitalWallet | null>(null);
   const router = useRouter();
 
   const handleTokenResult = useCallback(
@@ -162,14 +170,8 @@ export default function PaymentForm({
 
       try {
         const applePay = await payments.applePay(paymentRequest);
-        await applePay.attach("#apple-pay-container");
-        applePay.addEventListener(
-          "ontokenization",
-          async function onAppleToken() {
-            const result = await applePay.tokenize();
-            await handleTokenResult(result);
-          } as unknown as () => void,
-        );
+        // Apple Pay does NOT use attach() — it binds to a <button> element
+        // with id="apple-pay-button" automatically via CSS styling
         applePayRef.current = applePay;
         setApplePayAvailable(true);
       } catch (e) {
@@ -179,17 +181,22 @@ export default function PaymentForm({
       try {
         const googlePay = await payments.googlePay(paymentRequest);
         await googlePay.attach("#google-pay-container");
-        googlePay.addEventListener(
-          "ontokenization",
-          async function onGoogleToken() {
-            const result = await googlePay.tokenize();
-            await handleTokenResult(result);
-          } as unknown as () => void,
-        );
         googlePayRef.current = googlePay;
         setGooglePayAvailable(true);
       } catch (e) {
         console.warn("[Square] Google Pay not available:", e);
+      }
+
+      try {
+        const afterpay = await payments.afterpayClearpay(paymentRequest);
+        await afterpay.attach("#afterpay-container", {
+          buttonColor: "black",
+          buttonType: "buy_now_with_afterpay",
+        });
+        afterpayRef.current = afterpay;
+        setAfterpayAvailable(true);
+      } catch (e) {
+        console.warn("[Square] Afterpay not available:", e);
       }
 
       setLoading(false);
@@ -224,8 +231,26 @@ export default function PaymentForm({
       applePayRef.current = null;
       googlePayRef.current?.destroy();
       googlePayRef.current = null;
+      afterpayRef.current?.destroy();
+      afterpayRef.current = null;
     };
   }, [initPayments]);
+
+  async function handleWalletPay(
+    wallet: SquareDigitalWallet | null,
+    label: string,
+  ) {
+    if (!wallet) return;
+    setProcessing(true);
+    setError(undefined);
+    try {
+      const result = await wallet.tokenize();
+      await handleTokenResult(result);
+    } catch {
+      setError(`${label} payment failed. Please try again.`);
+      setProcessing(false);
+    }
+  }
 
   async function handleCardPay() {
     if (!cardRef.current) return;
@@ -349,21 +374,62 @@ export default function PaymentForm({
         </div>
       </div>
 
-      {/* Digital wallet buttons — containers must always be in the DOM for attach() */}
-      <div className={`flex flex-col gap-2 ${!applePayAvailable && !googlePayAvailable ? "hidden" : ""}`}>
-        <div
-          id="apple-pay-container"
+      {/*
+        Digital wallet buttons — containers MUST always be in the DOM for
+        Square SDK attach(). We use overflow-hidden + h-0 instead of
+        display:none so the SDK can still render its iframes.
+      */}
+      <div
+        className={
+          applePayAvailable || googlePayAvailable || afterpayAvailable
+            ? "flex flex-col gap-3"
+            : "pointer-events-none h-0 overflow-hidden"
+        }
+      >
+        {/* Apple Pay — uses a native <button> styled via CSS, no attach() */}
+        <button
+          id="apple-pay-button"
+          type="button"
+          onClick={() => handleWalletPay(applePayRef.current, "Apple Pay")}
+          disabled={processing}
           className={applePayAvailable ? "" : "hidden"}
+          style={{
+            WebkitAppearance: "-apple-pay-button" as never,
+            appearance: "-apple-pay-button" as never,
+            width: "100%",
+            height: "48px",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
         />
+
+        {/* Google Pay — SDK renders its button via attach() */}
         <div
           id="google-pay-container"
-          className={googlePayAvailable ? "" : "hidden"}
+          className={
+            googlePayAvailable
+              ? "min-h-[48px] [&_button]:!rounded-lg"
+              : "pointer-events-none h-0 overflow-hidden opacity-0"
+          }
         />
-        <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
-          <div className="h-px flex-1 bg-white/10" />
-          or pay with card
-          <div className="h-px flex-1 bg-white/10" />
-        </div>
+
+        {/* Afterpay — SDK renders its button via attach() */}
+        <div
+          id="afterpay-container"
+          className={
+            afterpayAvailable
+              ? "min-h-[48px] [&_button]:!rounded-lg"
+              : "pointer-events-none h-0 overflow-hidden opacity-0"
+          }
+        />
+
+        {(applePayAvailable || googlePayAvailable || afterpayAvailable) && (
+          <div className="font-main my-1 flex items-center gap-3 text-xs text-gray-500">
+            <div className="h-px flex-1 bg-white/10" />
+            or pay with card
+            <div className="h-px flex-1 bg-white/10" />
+          </div>
+        )}
       </div>
 
       {/* Cardholder details */}
@@ -462,7 +528,6 @@ export default function PaymentForm({
           />
         </svg>
         Secured by
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/2026/square-logo.svg"
