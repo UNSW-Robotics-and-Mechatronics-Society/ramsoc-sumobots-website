@@ -2,14 +2,18 @@
 import { useInView } from "motion/react";
 import { useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import TypingAnimation from "./TypeWriter";
 import Social from "./Social";
+import Path from "@/app/path";
 
 export const Banner = ({
   setPageTitleVisible,
 }: {
   setPageTitleVisible: (visible: boolean) => void;
 }) => {
+  const { isSignedIn } = useAuth();
   const titleRef = useRef(null);
   const isTitleInView = useInView(titleRef, {
     amount: "all",
@@ -54,6 +58,12 @@ export const Banner = ({
             <Social socialName="facebook" variant="pill" size={20} />
             <Social socialName="discord" variant="pill" size={20} />
           </div>
+          <Link
+            href={Path[2026].Dashboard}
+            className="mt-6 inline-flex items-center justify-center rounded-lg bg-rose-600 px-10 py-4 text-lg font-semibold text-white transition-all hover:bg-rose-500 active:translate-y-px"
+          >
+            {isSignedIn ? "Go to Dashboard" : "Register Now"}
+          </Link>
         </div>
       </div>
     </div>
