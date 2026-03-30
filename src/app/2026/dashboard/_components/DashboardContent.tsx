@@ -33,34 +33,74 @@ const TAB_LABELS: Record<Tab, string> = {
 
 function ActionItem({
   label,
+  description,
   done,
   onClick,
 }: {
   label: string;
+  description?: string;
   done: boolean;
   onClick?: () => void;
 }) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <button
-      onClick={onClick}
-      disabled={done}
-      className={`font-main flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm transition-colors ${
-        done
-          ? "bg-white/5 text-gray-500 line-through"
-          : "bg-white/5 text-white hover:bg-white/10"
+    <div
+      className={`rounded-lg transition-colors ${
+        done ? "bg-white/5" : "bg-white/5 hover:bg-white/10"
       }`}
     >
-      <span
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${
-          done
-            ? "border-green-500/50 bg-green-500/20 text-green-400"
-            : "border-white/20"
+      <button
+        onClick={onClick}
+        disabled={done}
+        className={`font-main flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
+          done ? "text-gray-500 line-through" : "text-white"
         }`}
       >
-        {done ? "\u2713" : ""}
-      </span>
-      {label}
-    </button>
+        <span
+          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${
+            done
+              ? "border-green-500/50 bg-green-500/20 text-green-400"
+              : "border-white/20"
+          }`}
+        >
+          {done ? "\u2713" : ""}
+        </span>
+        <span className="flex-1">{label}</span>
+        {description && (
+          <span
+            role="button"
+            tabIndex={0}
+            onClick={(e) => {
+              e.stopPropagation();
+              setExpanded((v) => !v);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.stopPropagation();
+                setExpanded((v) => !v);
+              }
+            }}
+            className="shrink-0 text-gray-500 transition-transform hover:text-gray-300"
+          >
+            <svg
+              className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </span>
+        )}
+      </button>
+      {description && expanded && (
+        <p className="font-main px-4 pb-3 pl-12 text-xs text-gray-400">
+          {description}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -221,6 +261,7 @@ export default function DashboardContent({
                       <ActionItem
                         key={task.id}
                         label={task.title}
+                        description={task.description || undefined}
                         done={task.completed}
                         onClick={() => {
                           if (!task.completed && task.url) {
