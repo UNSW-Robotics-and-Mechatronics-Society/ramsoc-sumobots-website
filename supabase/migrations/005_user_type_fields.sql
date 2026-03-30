@@ -6,3 +6,7 @@ ALTER TABLE profiles ADD COLUMN uni_id TEXT DEFAULT '';
 
 -- Add high_school for high school students
 ALTER TABLE profiles ADD COLUMN high_school TEXT DEFAULT '';
+
+-- Add heard_from for tracking how users found the competition
+ALTER TABLE profiles ADD COLUMN heard_from TEXT DEFAULT '';
+ALTER TABLE profiles ADD COLUMN heard_from_other TEXT DEFAULT '';

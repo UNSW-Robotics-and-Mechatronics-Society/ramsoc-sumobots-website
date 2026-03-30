@@ -39,6 +39,7 @@ const FACULTY_OPTIONS = [
   { value: "Law & Justice", label: "Law & Justice" },
   { value: "Medicine & Health", label: "Medicine & Health" },
   { value: "Science", label: "Science" },
+  { value: "Other", label: "Other" },
 ];
 
 const GENDER_OPTIONS = [
@@ -47,6 +48,15 @@ const GENDER_OPTIONS = [
   { value: "non-binary", label: "Non-binary" },
   { value: "other", label: "Other" },
   { value: "prefer-not-to-say", label: "Prefer not to say" },
+];
+
+const HEARD_FROM_OPTIONS = [
+  { value: "discord", label: "Discord" },
+  { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "poster", label: "Poster" },
+  { value: "friend", label: "Friend" },
+  { value: "other", label: "Other" },
 ];
 
 function CheckboxGroup({
@@ -156,13 +166,21 @@ export default function EditProfileForm({
   const [degreeStage, setDegreeStage] = useState(profile.degree_stage || "");
   const [undergradPostgrad, setUndergradPostgrad] = useState(profile.undergrad_postgrad || "");
   const [domesticIntl, setDomesticIntl] = useState(profile.domestic_international || "");
+  const standardFacultyValues = FACULTY_OPTIONS.filter((f) => f.value !== "Other").map((f) => f.value);
+  const existingFaculties = profile.faculty ? profile.faculty.split(", ").filter(Boolean) : [];
+  const existingOtherFaculty = existingFaculties.find((f) => !standardFacultyValues.includes(f));
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>(
-    profile.faculty ? profile.faculty.split(", ").filter(Boolean) : [],
+    existingOtherFaculty
+      ? [...existingFaculties.filter((f) => f !== existingOtherFaculty), "Other"]
+      : existingFaculties,
   );
+  const [facultyOther, setFacultyOther] = useState(existingOtherFaculty || "");
   const [gender, setGender] = useState(profile.gender);
   const [genderOther, setGenderOther] = useState(profile.gender_other || "");
   const [isRamsocMember, setIsRamsocMember] = useState(profile.is_ramsoc_member ?? false);
   const [isArcMember, setIsArcMember] = useState(profile.is_arc_member ?? false);
+  const [heardFrom, setHeardFrom] = useState(profile.heard_from || "");
+  const [heardFromOther, setHeardFromOther] = useState(profile.heard_from_other || "");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -185,11 +203,17 @@ export default function EditProfileForm({
       domestic_international: isHighSchool ? "" : domesticIntl,
       degree: isHighSchool ? "" : ((form.get("degree") as string) || ""),
       majors: isHighSchool ? "" : ((form.get("majors") as string) || ""),
-      faculty: isHighSchool ? "" : selectedFaculties.join(", "),
+      faculty: isHighSchool
+        ? ""
+        : selectedFaculties
+            .map((f) => (f === "Other" ? facultyOther.trim() : f))
+            .join(", "),
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
-      is_ramsoc_member: isRamsocMember,
-      is_arc_member: isArcMember,
+      is_ramsoc_member: isUnsw && isRamsocMember,
+      is_arc_member: isUnsw && isArcMember,
+      heard_from: heardFrom,
+      heard_from_other: heardFrom === "other" ? heardFromOther : "",
       phone: (form.get("phone") as string) || "",
     });
 
@@ -314,8 +338,21 @@ export default function EditProfileForm({
             label="Faculty"
             options={FACULTY_OPTIONS}
             selected={selectedFaculties}
-            onChange={setSelectedFaculties}
+            onChange={(vals) => {
+              setSelectedFaculties(vals);
+              if (!vals.includes("Other")) setFacultyOther("");
+            }}
           />
+
+          {selectedFaculties.includes("Other") && (
+            <Input
+              label="Please specify your faculty"
+              name="faculty_other"
+              required
+              value={facultyOther}
+              onChange={(e) => setFacultyOther(e.target.value)}
+            />
+          )}
         </>
       )}
 
@@ -340,35 +377,60 @@ export default function EditProfileForm({
         />
       )}
 
-      <div className="flex flex-col gap-2">
-        <span className="font-main text-sm text-muted-foreground">Memberships</span>
-        <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
-          isRamsocMember
-            ? "border-primary bg-primary/10 text-foreground"
-            : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
-        }`}>
-          <input
-            type="checkbox"
-            checked={isRamsocMember}
-            onChange={(e) => setIsRamsocMember(e.target.checked)}
-            className="h-5 w-5 rounded accent-primary"
-          />
-          I am a RAMSoc member
-        </label>
-        <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
-          isArcMember
-            ? "border-primary bg-primary/10 text-foreground"
-            : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
-        }`}>
-          <input
-            type="checkbox"
-            checked={isArcMember}
-            onChange={(e) => setIsArcMember(e.target.checked)}
-            className="h-5 w-5 rounded accent-primary"
-          />
-          I am an Arc member
-        </label>
-      </div>
+      {isUnsw && (
+        <div className="flex flex-col gap-2">
+          <span className="font-main text-sm text-muted-foreground">Memberships</span>
+          <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+            isRamsocMember
+              ? "border-primary bg-primary/10 text-foreground"
+              : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
+          }`}>
+            <input
+              type="checkbox"
+              checked={isRamsocMember}
+              onChange={(e) => setIsRamsocMember(e.target.checked)}
+              className="h-5 w-5 rounded accent-primary"
+            />
+            I am a RAMSoc member
+          </label>
+          <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-all ${
+            isArcMember
+              ? "border-primary bg-primary/10 text-foreground"
+              : "border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:bg-secondary/80"
+          }`}>
+            <input
+              type="checkbox"
+              checked={isArcMember}
+              onChange={(e) => setIsArcMember(e.target.checked)}
+              className="h-5 w-5 rounded accent-primary"
+            />
+            I am an Arc member
+          </label>
+        </div>
+      )}
+
+      <Select
+        label="How did you hear about us?"
+        name="heard_from"
+        options={HEARD_FROM_OPTIONS}
+        placeholder="Select an option"
+        required
+        value={heardFrom}
+        onChange={(e) => {
+          setHeardFrom(e.target.value);
+          if (e.target.value !== "other") setHeardFromOther("");
+        }}
+      />
+
+      {heardFrom === "other" && (
+        <Input
+          label="Please specify"
+          name="heard_from_other"
+          required
+          value={heardFromOther}
+          onChange={(e) => setHeardFromOther(e.target.value)}
+        />
+      )}
 
       <Input
         label="Phone Number"

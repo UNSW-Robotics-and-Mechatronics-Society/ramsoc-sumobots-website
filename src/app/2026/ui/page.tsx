@@ -53,6 +53,8 @@ const mockProfile: Profile = {
   gender_other: "",
   is_ramsoc_member: true,
   is_arc_member: true,
+  heard_from: "discord",
+  heard_from_other: "",
   phone: "0400000000",
   onboarded: true,
   created_at: "2026-01-15T00:00:00Z",
@@ -440,6 +442,7 @@ const FACULTY_OPTIONS = [
   { value: "Law & Justice", label: "Law & Justice" },
   { value: "Medicine & Health", label: "Medicine & Health" },
   { value: "Science", label: "Science" },
+  { value: "Other", label: "Other" },
 ];
 
 const GENDER_OPTIONS = [
@@ -448,6 +451,15 @@ const GENDER_OPTIONS = [
   { value: "non-binary", label: "Non-binary" },
   { value: "other", label: "Other" },
   { value: "prefer-not-to-say", label: "Prefer not to say" },
+];
+
+const HEARD_FROM_OPTIONS = [
+  { value: "discord", label: "Discord" },
+  { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "poster", label: "Poster" },
+  { value: "friend", label: "Friend" },
+  { value: "other", label: "Other" },
 ];
 
 const CATEGORY_OPTIONS = [
@@ -605,6 +617,9 @@ function OnboardingSection() {
   const [genderOther, setGenderOther] = useState("");
   const [isRamsocMember, setIsRamsocMember] = useState(true);
   const [isArcMember, setIsArcMember] = useState(true);
+  const [facultyOther, setFacultyOther] = useState("");
+  const [heardFrom, setHeardFrom] = useState("");
+  const [heardFromOther, setHeardFromOther] = useState("");
 
   const isUnsw = userType === "unsw";
   const isOtherUni = userType === "other_uni";
@@ -862,10 +877,25 @@ function OnboardingSection() {
                         label="Faculty"
                         options={FACULTY_OPTIONS}
                         selected={selectedFaculties}
-                        onChange={setSelectedFaculties}
+                        onChange={(vals) => {
+                          setSelectedFaculties(vals);
+                          if (!vals.includes("Other")) setFacultyOther("");
+                        }}
                         required
                       />
                     </OnboardingField>
+
+                    {selectedFaculties.includes("Other") && (
+                      <OnboardingField delay={0}>
+                        <Input
+                          label="Please specify your faculty"
+                          name="faculty_other"
+                          required
+                          value={facultyOther}
+                          onChange={(e) => setFacultyOther(e.target.value)}
+                        />
+                      </OnboardingField>
+                    )}
                   </>
                 )}
 
@@ -895,23 +925,52 @@ function OnboardingSection() {
                   </OnboardingField>
                 )}
 
-                <OnboardingField delay={0.65}>
-                  <div className="flex flex-col gap-2">
-                    <span className="font-main text-sm text-muted-foreground">Memberships</span>
-                    <MockYesNoToggle
-                      label="I am a RAMSoc member"
-                      value={isRamsocMember}
-                      onChange={setIsRamsocMember}
-                    />
-                    <MockYesNoToggle
-                      label="I am an Arc member"
-                      value={isArcMember}
-                      onChange={setIsArcMember}
-                    />
-                  </div>
-                </OnboardingField>
+                {isUnsw && (
+                  <OnboardingField delay={0.65}>
+                    <div className="flex flex-col gap-2">
+                      <span className="font-main text-sm text-muted-foreground">Memberships</span>
+                      <MockYesNoToggle
+                        label="I am a RAMSoc member"
+                        value={isRamsocMember}
+                        onChange={setIsRamsocMember}
+                      />
+                      <MockYesNoToggle
+                        label="I am an Arc member"
+                        value={isArcMember}
+                        onChange={setIsArcMember}
+                      />
+                    </div>
+                  </OnboardingField>
+                )}
 
                 <OnboardingField delay={0.7}>
+                  <Select
+                    label="How did you hear about us?"
+                    name="heard_from"
+                    options={HEARD_FROM_OPTIONS}
+                    placeholder="Select an option"
+                    required
+                    value={heardFrom}
+                    onChange={(e) => {
+                      setHeardFrom(e.target.value);
+                      if (e.target.value !== "other") setHeardFromOther("");
+                    }}
+                  />
+                </OnboardingField>
+
+                {heardFrom === "other" && (
+                  <OnboardingField delay={0}>
+                    <Input
+                      label="Please specify"
+                      name="heard_from_other"
+                      required
+                      value={heardFromOther}
+                      onChange={(e) => setHeardFromOther(e.target.value)}
+                    />
+                  </OnboardingField>
+                )}
+
+                <OnboardingField delay={0.75}>
                   <Input
                     label="Phone Number"
                     name="phone"

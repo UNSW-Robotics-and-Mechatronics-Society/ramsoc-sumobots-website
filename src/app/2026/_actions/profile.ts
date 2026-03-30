@@ -42,6 +42,8 @@ type CreateProfileInput = {
   gender_other: string;
   is_ramsoc_member: boolean;
   is_arc_member: boolean;
+  heard_from: string;
+  heard_from_other: string;
   phone: string;
 };
 
@@ -115,6 +117,14 @@ export async function createProfile(
     return { success: false, error: "Please specify your gender" };
   }
 
+  if (!input.heard_from) {
+    return { success: false, error: "Please tell us how you heard about us" };
+  }
+
+  if (input.heard_from === "other" && !input.heard_from_other.trim()) {
+    return { success: false, error: "Please specify how you heard about us" };
+  }
+
   if (!input.phone.trim()) {
     return { success: false, error: "Phone number is required" };
   }
@@ -153,6 +163,8 @@ export async function createProfile(
     gender_other: input.gender === "other" ? input.gender_other.trim() : "",
     is_ramsoc_member: input.is_ramsoc_member,
     is_arc_member: input.is_arc_member,
+    heard_from: input.heard_from,
+    heard_from_other: input.heard_from === "other" ? input.heard_from_other.trim() : "",
     phone: input.phone.trim(),
     onboarded: false,
   });
@@ -184,6 +196,8 @@ type UpdateProfileInput = {
   gender_other: string;
   is_ramsoc_member: boolean;
   is_arc_member: boolean;
+  heard_from: string;
+  heard_from_other: string;
   phone: string;
 };
 
@@ -236,6 +250,8 @@ export async function updateProfile(
       gender_other: input.gender === "other" ? input.gender_other.trim() : "",
       is_ramsoc_member: input.is_ramsoc_member,
       is_arc_member: input.is_arc_member,
+      heard_from: input.heard_from,
+      heard_from_other: input.heard_from === "other" ? input.heard_from_other.trim() : "",
       phone: input.phone.trim(),
       updated_at: new Date().toISOString(),
     })

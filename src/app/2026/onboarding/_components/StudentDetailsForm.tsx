@@ -39,6 +39,7 @@ const FACULTY_OPTIONS = [
   { value: "Law & Justice", label: "Law & Justice" },
   { value: "Medicine & Health", label: "Medicine & Health" },
   { value: "Science", label: "Science" },
+  { value: "Other", label: "Other" },
 ];
 
 const GENDER_OPTIONS = [
@@ -47,6 +48,15 @@ const GENDER_OPTIONS = [
   { value: "non-binary", label: "Non-binary" },
   { value: "other", label: "Other" },
   { value: "prefer-not-to-say", label: "Prefer not to say" },
+];
+
+const HEARD_FROM_OPTIONS = [
+  { value: "discord", label: "Discord" },
+  { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "poster", label: "Poster" },
+  { value: "friend", label: "Friend" },
+  { value: "other", label: "Other" },
 ];
 
 type FieldErrors = Record<string, string>;
@@ -210,10 +220,13 @@ export default function StudentDetailsForm({
   const [undergradPostgrad, setUndergradPostgrad] = useState("");
   const [domesticIntl, setDomesticIntl] = useState("");
   const [selectedFaculties, setSelectedFaculties] = useState<string[]>([]);
+  const [facultyOther, setFacultyOther] = useState("");
   const [gender, setGender] = useState("");
   const [genderOther, setGenderOther] = useState("");
   const [isRamsocMember, setIsRamsocMember] = useState(false);
   const [isArcMember, setIsArcMember] = useState(false);
+  const [heardFrom, setHeardFrom] = useState("");
+  const [heardFromOther, setHeardFromOther] = useState("");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const markTouched = useCallback((field: string) => {
@@ -268,6 +281,11 @@ export default function StudentDetailsForm({
             break;
           case "faculty":
             break;
+          case "faculty_other":
+            if (selectedFaculties.includes("Other") && !value.trim())
+              next.faculty_other = "Please specify your faculty";
+            else delete next.faculty_other;
+            break;
           case "gender":
             if (!value) next.gender = "Gender is required";
             else delete next.gender;
@@ -277,6 +295,15 @@ export default function StudentDetailsForm({
               next.gender_other = "Please specify";
             else delete next.gender_other;
             break;
+          case "heard_from":
+            if (!value) next.heard_from = "This field is required";
+            else delete next.heard_from;
+            break;
+          case "heard_from_other":
+            if (heardFrom === "other" && !value.trim())
+              next.heard_from_other = "Please specify";
+            else delete next.heard_from_other;
+            break;
           case "phone":
             if (!value.trim()) next.phone = "Phone number is required";
             else delete next.phone;
@@ -285,7 +312,7 @@ export default function StudentDetailsForm({
         return next;
       });
     },
-    [gender],
+    [gender, selectedFaculties, heardFrom],
   );
 
   function handleBlur(e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -332,11 +359,17 @@ export default function StudentDetailsForm({
       if (!degree.trim()) errors.degree = "Degree is required";
 
       if (selectedFaculties.length === 0) errors.faculty = "Select at least one faculty";
+      if (selectedFaculties.includes("Other") && !facultyOther.trim())
+        errors.faculty_other = "Please specify your faculty";
     }
 
     if (!gender) errors.gender = "Gender is required";
     if (gender === "other" && !genderOther.trim())
       errors.gender_other = "Please specify";
+
+    if (!heardFrom) errors.heard_from = "This field is required";
+    if (heardFrom === "other" && !heardFromOther.trim())
+      errors.heard_from_other = "Please specify";
 
     const phone = (form.get("phone") as string) || "";
     if (!phone.trim()) errors.phone = "Phone number is required";
@@ -354,8 +387,11 @@ export default function StudentDetailsForm({
       domestic_international: true,
       degree: true,
       faculty: true,
+      faculty_other: true,
       gender: true,
       gender_other: true,
+      heard_from: true,
+      heard_from_other: true,
       phone: true,
     });
 
@@ -389,11 +425,17 @@ export default function StudentDetailsForm({
       domestic_international: isHighSchool ? "" : domesticIntl,
       degree: isHighSchool ? "" : ((form.get("degree") as string) || ""),
       majors: isHighSchool ? "" : ((form.get("majors") as string) || ""),
-      faculty: isHighSchool ? "" : selectedFaculties.join(", "),
+      faculty: isHighSchool
+        ? ""
+        : selectedFaculties
+            .map((f) => (f === "Other" ? facultyOther.trim() : f))
+            .join(", "),
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
-      is_ramsoc_member: isRamsocMember,
-      is_arc_member: isArcMember,
+      is_ramsoc_member: isUnsw && isRamsocMember,
+      is_arc_member: isUnsw && isArcMember,
+      heard_from: heardFrom,
+      heard_from_other: heardFrom === "other" ? heardFromOther : "",
       phone: (form.get("phone") as string) || "",
     });
 
@@ -582,6 +624,10 @@ export default function StudentDetailsForm({
                   const next = { ...prev };
                   if (vals.length === 0) next.faculty = "Select at least one faculty";
                   else delete next.faculty;
+                  if (!vals.includes("Other")) {
+                    setFacultyOther("");
+                    delete next.faculty_other;
+                  }
                   return next;
                 });
               }}
@@ -589,6 +635,28 @@ export default function StudentDetailsForm({
               required
             />
           </Field>
+
+          {selectedFaculties.includes("Other") && (
+            <Field delay={0}>
+              <Input
+                label="Please specify your faculty"
+                name="faculty_other"
+                required
+                value={facultyOther}
+                onChange={(e) => {
+                  setFacultyOther(e.target.value);
+                  if (touched.faculty_other) {
+                    validateField("faculty_other", e.target.value);
+                  }
+                }}
+                onBlur={(e) => {
+                  markTouched("faculty_other");
+                  validateField("faculty_other", e.target.value);
+                }}
+                error={touched.faculty_other ? fieldErrors.faculty_other : undefined}
+              />
+            </Field>
+          )}
         </>
       )}
 
@@ -638,21 +706,70 @@ export default function StudentDetailsForm({
         </Field>
       )}
 
+      {isUnsw && (
+        <Field delay={nextDelay()}>
+          <div className="flex flex-col gap-2">
+            <span className="font-main text-sm text-muted-foreground">Memberships</span>
+            <YesNoToggle
+              label="I am a RAMSoc member"
+              value={isRamsocMember}
+              onChange={setIsRamsocMember}
+            />
+            <YesNoToggle
+              label="I am an Arc member"
+              value={isArcMember}
+              onChange={setIsArcMember}
+            />
+          </div>
+        </Field>
+      )}
+
       <Field delay={nextDelay()}>
-        <div className="flex flex-col gap-2">
-          <span className="font-main text-sm text-muted-foreground">Memberships</span>
-          <YesNoToggle
-            label="I am a RAMSoc member"
-            value={isRamsocMember}
-            onChange={setIsRamsocMember}
-          />
-          <YesNoToggle
-            label="I am an Arc member"
-            value={isArcMember}
-            onChange={setIsArcMember}
-          />
-        </div>
+        <Select
+          label="How did you hear about us?"
+          name="heard_from"
+          options={HEARD_FROM_OPTIONS}
+          placeholder="Select an option"
+          required
+          value={heardFrom}
+          onChange={(e) => {
+            setHeardFrom(e.target.value);
+            markTouched("heard_from");
+            validateField("heard_from", e.target.value);
+            if (e.target.value !== "other") {
+              setHeardFromOther("");
+              setFieldErrors((prev) => {
+                const next = { ...prev };
+                delete next.heard_from_other;
+                return next;
+              });
+            }
+          }}
+          error={touched.heard_from ? fieldErrors.heard_from : undefined}
+        />
       </Field>
+
+      {heardFrom === "other" && (
+        <Field delay={0}>
+          <Input
+            label="Please specify"
+            name="heard_from_other"
+            required
+            value={heardFromOther}
+            onChange={(e) => {
+              setHeardFromOther(e.target.value);
+              if (touched.heard_from_other) {
+                validateField("heard_from_other", e.target.value);
+              }
+            }}
+            onBlur={(e) => {
+              markTouched("heard_from_other");
+              validateField("heard_from_other", e.target.value);
+            }}
+            error={touched.heard_from_other ? fieldErrors.heard_from_other : undefined}
+          />
+        </Field>
+      )}
 
       <Field delay={nextDelay()}>
         <Input

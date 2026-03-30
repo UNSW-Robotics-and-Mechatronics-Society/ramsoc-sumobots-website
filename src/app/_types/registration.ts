@@ -22,6 +22,8 @@ export type Profile = {
   gender_other: string;
   is_ramsoc_member: boolean;
   is_arc_member: boolean;
+  heard_from: string;
+  heard_from_other: string;
   phone: string;
   onboarded: boolean;
   created_at: string;
