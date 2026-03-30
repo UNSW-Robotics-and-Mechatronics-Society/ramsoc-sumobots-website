@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import StepIndicator from "./StepIndicator";
+import AccountBar from "./AccountBar";
 import UserTypeStep from "./UserTypeStep";
 import type { UserType } from "./UserTypeStep";
 import StudentDetailsForm from "./StudentDetailsForm";
@@ -57,6 +58,7 @@ export default function OnboardingFlow({
 
   return (
     <div>
+      <AccountBar />
       {step > 0 && <StepIndicator currentStep={step} totalSteps={3} />}
       <AnimatePresence mode="wait">
         {step === 0 && (
