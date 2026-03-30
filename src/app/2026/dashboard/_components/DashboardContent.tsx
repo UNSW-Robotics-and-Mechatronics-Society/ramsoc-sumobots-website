@@ -84,15 +84,28 @@ function CollapsibleSection({
 function ActionItem({
   label,
   description,
+  url,
   done,
   onClick,
+  onComplete,
 }: {
   label: string;
   description?: string;
+  url?: string;
   done: boolean;
   onClick?: () => void;
+  onComplete?: () => void;
 }) {
+  const expandable = !!(description || url || onComplete);
   const [expanded, setExpanded] = useState(false);
+
+  function handleClick() {
+    if (expandable && !done) {
+      setExpanded((v) => !v);
+    } else if (onClick) {
+      onClick();
+    }
+  }
 
   return (
     <div
@@ -101,8 +114,8 @@ function ActionItem({
       }`}
     >
       <button
-        onClick={onClick}
-        disabled={done}
+        onClick={handleClick}
+        disabled={done && !expandable}
         className={`font-main flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
           done ? "text-gray-500 line-through" : "text-white"
         }`}
@@ -117,38 +130,47 @@ function ActionItem({
           {done ? "\u2713" : ""}
         </span>
         <span className="flex-1">{label}</span>
-        {description && (
-          <span
-            role="button"
-            tabIndex={0}
-            onClick={(e) => {
-              e.stopPropagation();
-              setExpanded((v) => !v);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.stopPropagation();
-                setExpanded((v) => !v);
-              }
-            }}
-            className="shrink-0 text-gray-500 transition-transform hover:text-gray-300"
+        {expandable && (
+          <svg
+            className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            <svg
-              className={`h-4 w-4 transition-transform ${expanded ? "rotate-180" : ""}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
         )}
       </button>
-      {description && expanded && (
-        <p className="font-main px-4 pb-3 pl-12 text-xs text-gray-400">
-          {description}
-        </p>
+      {expandable && expanded && (
+        <div className="flex flex-col gap-2 px-4 pb-3 pl-12">
+          {description && (
+            <p className="font-main text-xs text-gray-400">{description}</p>
+          )}
+          <div className="flex items-center gap-2">
+            {url && (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-main inline-flex items-center gap-1 text-xs text-indigo-400 transition-colors hover:text-indigo-300"
+              >
+                Open link
+                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+            {onComplete && !done && (
+              <button
+                onClick={onComplete}
+                className="font-main rounded-md bg-green-500/10 px-2.5 py-1 text-xs text-green-400 transition-colors hover:bg-green-500/20"
+              >
+                Mark as completed
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -315,15 +337,9 @@ export default function DashboardContent({
                       key={task.id}
                       label={task.title}
                       description={task.description || undefined}
+                      url={task.url || undefined}
                       done={task.completed}
-                      onClick={() => {
-                        if (!task.completed && task.url) {
-                          window.open(task.url, "_blank");
-                        }
-                        if (!task.completed) {
-                          handleCompleteTask(task.id);
-                        }
-                      }}
+                      onComplete={() => handleCompleteTask(task.id)}
                     />
                   ))}
                 </CollapsibleSection>
