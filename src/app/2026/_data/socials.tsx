@@ -17,7 +17,7 @@ const socials = {
     icon: (size: number) => <FaFacebook size={size} />,
   },
   discord: {
-    href: "https://discord.gg/xSeqzcRKg2",
+    href: "https://discord.gg/rK6pcQZWrb",
     label: "RAMSOC UNSW Discord Server",
     icon: (size: number) => <FaDiscord size={size} />,
   },

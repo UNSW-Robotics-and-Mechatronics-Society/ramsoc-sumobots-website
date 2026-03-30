@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import type {
   Profile,
   TeamWithMembers,
   TeamBrowseItem,
 } from "@/app/_types/registration";
+import type { UserTask } from "@/app/2026/_actions/tasks";
+import Link from "next/link";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
+import socials from "@/app/2026/_data/socials";
+import { completeTask } from "@/app/2026/_actions/tasks";
 import TeamCard from "./TeamCard";
 import MemberList from "./MemberList";
 import JoinCodeDisplay from "./JoinCodeDisplay";
@@ -26,36 +31,148 @@ const TAB_LABELS: Record<Tab, string> = {
   profile: "Profile",
 };
 
+function CollapsibleSection({
+  title,
+  total,
+  completedCount,
+  children,
+}: {
+  title: string;
+  total: number;
+  completedCount: number;
+  children: React.ReactNode;
+}) {
+  const allDone = completedCount === total;
+  const [expanded, setExpanded] = useState(!allDone);
+
+  return (
+    <Card>
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="flex w-full items-center justify-between"
+      >
+        <div className="flex items-center gap-2">
+          <h3 className="text-base">{title}</h3>
+          {allDone && (
+            <span className="font-main rounded-full bg-green-500/10 px-2 py-0.5 text-xs text-green-400">
+              All {total} completed
+            </span>
+          )}
+          {!allDone && (
+            <span className="font-main text-xs text-gray-500">
+              {completedCount}/{total}
+            </span>
+          )}
+        </div>
+        <svg
+          className={`h-4 w-4 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {expanded && (
+        <div className="mt-3 flex flex-col gap-2">{children}</div>
+      )}
+    </Card>
+  );
+}
+
 function ActionItem({
   label,
+  description,
+  url,
   done,
   onClick,
+  onComplete,
 }: {
   label: string;
+  description?: string;
+  url?: string;
   done: boolean;
   onClick?: () => void;
+  onComplete?: () => void;
 }) {
+  const expandable = !!(description || url || onComplete);
+  const [expanded, setExpanded] = useState(false);
+
+  function handleClick() {
+    if (expandable && !done) {
+      setExpanded((v) => !v);
+    } else if (onClick) {
+      onClick();
+    }
+  }
+
   return (
-    <button
-      onClick={onClick}
-      disabled={done}
-      className={`font-main flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm transition-colors ${
-        done
-          ? "bg-white/5 text-gray-500 line-through"
-          : "bg-white/5 text-white hover:bg-white/10"
+    <div
+      className={`rounded-lg transition-colors ${
+        done ? "bg-white/5" : "bg-white/5 hover:bg-white/10"
       }`}
     >
-      <span
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${
-          done
-            ? "border-green-500/50 bg-green-500/20 text-green-400"
-            : "border-white/20"
+      <button
+        onClick={handleClick}
+        disabled={done && !expandable}
+        className={`font-main flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
+          done ? "text-gray-500 line-through" : "text-white"
         }`}
       >
-        {done ? "\u2713" : ""}
-      </span>
-      {label}
-    </button>
+        <span
+          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${
+            done
+              ? "border-green-500/50 bg-green-500/20 text-green-400"
+              : "border-white/20"
+          }`}
+        >
+          {done ? "\u2713" : ""}
+        </span>
+        <span className="flex-1">{label}</span>
+        {expandable && (
+          <svg
+            className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        )}
+      </button>
+      {expandable && expanded && (
+        <div className="flex flex-col gap-2 px-4 pb-3 pl-12">
+          {description && (
+            <p className="font-main text-xs text-gray-400">{description}</p>
+          )}
+          <div className="flex items-center gap-2">
+            {url && (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-main inline-flex items-center gap-1 text-xs text-indigo-400 transition-colors hover:text-indigo-300"
+              >
+                Open link
+                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+            {onComplete && !done && (
+              <button
+                onClick={onComplete}
+                className="font-main rounded-md bg-green-500/10 px-2.5 py-1 text-xs text-green-400 transition-colors hover:bg-green-500/20"
+              >
+                Mark as completed
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -126,17 +243,28 @@ export default function DashboardContent({
   profile,
   team,
   browsableTeams,
+  adminTasks = [],
 }: {
   profile: Profile;
   team: TeamWithMembers | null;
   browsableTeams: TeamBrowseItem[];
+  adminTasks?: UserTask[];
 }) {
   const [tab, setTab] = useState<Tab>("home");
   const [mounted, setMounted] = useState(false);
+  const [isPendingTask, startTaskTransition] = useTransition();
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  function handleCompleteTask(taskId: string) {
+    startTaskTransition(async () => {
+      await completeTask(taskId);
+      router.refresh();
+    });
+  }
 
   const isCaptain =
     team?.members.some(
@@ -172,28 +300,69 @@ export default function DashboardContent({
                 </p>
               </Card>
 
+              <CollapsibleSection
+                title="Getting Started"
+                total={3}
+                completedCount={[hasTeam, hasEnoughMembers, isPaid].filter(Boolean).length}
+              >
+                <ActionItem
+                  label="Create or join a team"
+                  done={hasTeam}
+                  onClick={() => !hasTeam && setTab("team")}
+                />
+                <ActionItem
+                  label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
+                  done={hasEnoughMembers}
+                  onClick={() =>
+                    hasTeam && !hasEnoughMembers && setTab("team")
+                  }
+                />
+                <ActionItem
+                  label="Pay the entry fee to activate your team"
+                  done={isPaid}
+                  onClick={() =>
+                    hasTeam && hasEnoughMembers && !isPaid && setTab("team")
+                  }
+                />
+              </CollapsibleSection>
+
+              {adminTasks.length > 0 && (
+                <CollapsibleSection
+                  title="Tasks"
+                  total={adminTasks.length}
+                  completedCount={adminTasks.filter((t) => t.completed).length}
+                >
+                  {adminTasks.map((task) => (
+                    <ActionItem
+                      key={task.id}
+                      label={task.title}
+                      description={task.description || undefined}
+                      url={task.url || undefined}
+                      done={task.completed}
+                      onComplete={() => handleCompleteTask(task.id)}
+                    />
+                  ))}
+                </CollapsibleSection>
+              )}
+
               <Card>
-                <h3 className="mb-3 text-base">Action Items</h3>
-                <div className="flex flex-col gap-2">
-                  <ActionItem
-                    label="Create or join a team"
-                    done={hasTeam}
-                    onClick={() => !hasTeam && setTab("team")}
-                  />
-                  <ActionItem
-                    label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
-                    done={hasEnoughMembers}
-                    onClick={() =>
-                      hasTeam && !hasEnoughMembers && setTab("team")
-                    }
-                  />
-                  <ActionItem
-                    label="Pay the entry fee to activate your team"
-                    done={isPaid}
-                    onClick={() =>
-                      hasTeam && hasEnoughMembers && !isPaid && setTab("team")
-                    }
-                  />
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 text-lg text-indigo-400">
+                    {socials.discord.icon(20)}
+                  </span>
+                  <div>
+                    <p className="font-main text-sm text-gray-300">
+                      All updates, announcements, and communications will be
+                      through our Discord channel.
+                    </p>
+                    <Link
+                      href={socials.discord.href}
+                      target="_blank"
+                      className="font-main mt-1 inline-block text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+                    >
+                      Join the Discord &rarr;
+                    </Link>
+                  </div>
                 </div>
               </Card>
 

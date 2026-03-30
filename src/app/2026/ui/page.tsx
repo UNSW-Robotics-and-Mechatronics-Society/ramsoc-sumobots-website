@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
+import socials from "@/app/2026/_data/socials";
 import type {
   Profile,
   TeamWithMembers,
@@ -20,6 +22,7 @@ import AdminLoginForm from "@/app/2026/admin/_components/AdminLoginForm";
 import AdminShell from "@/app/2026/admin/_components/AdminShell";
 import TeamsTable from "@/app/2026/admin/_components/TeamsTable";
 import IndividualsTable from "@/app/2026/admin/_components/IndividualsTable";
+import TasksTable from "@/app/2026/admin/_components/TasksTable";
 import StepIndicator from "@/app/2026/onboarding/_components/StepIndicator";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
@@ -248,6 +251,7 @@ const sections = [
   "Admin Login",
   "Admin Teams",
   "Admin Individuals",
+  "Admin Tasks",
 ] as const;
 
 type Section = (typeof sections)[number];
@@ -295,6 +299,7 @@ export default function UIPreviewPage() {
             {active === "Admin Login" && <AdminLoginSection />}
             {active === "Admin Teams" && <AdminTeamsSection />}
             {active === "Admin Individuals" && <AdminIndividualsSection />}
+            {active === "Admin Tasks" && <AdminTasksSection />}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -1188,6 +1193,130 @@ function OnboardingSection() {
   );
 }
 
+// ── Dashboard helpers ─────────────────────────────────────
+
+function PreviewCollapsibleSection({
+  title,
+  total,
+  completedCount,
+  children,
+}: {
+  title: string;
+  total: number;
+  completedCount: number;
+  children: React.ReactNode;
+}) {
+  const allDone = completedCount === total;
+  const [expanded, setExpanded] = useState(!allDone);
+
+  return (
+    <Card>
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="flex w-full items-center justify-between"
+      >
+        <div className="flex items-center gap-2">
+          <h3 className="text-base">{title}</h3>
+          {allDone ? (
+            <span className="font-main rounded-full bg-green-500/10 px-2 py-0.5 text-xs text-green-400">
+              All {total} completed
+            </span>
+          ) : (
+            <span className="font-main text-xs text-gray-500">
+              {completedCount}/{total}
+            </span>
+          )}
+        </div>
+        <svg
+          className={`h-4 w-4 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {expanded && <div className="mt-3 flex flex-col gap-2">{children}</div>}
+    </Card>
+  );
+}
+
+function PreviewActionItem({
+  label,
+  description,
+  url,
+  done,
+}: {
+  label: string;
+  description?: string;
+  url?: string;
+  done: boolean;
+}) {
+  const expandable = !!(description || url);
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className={`rounded-lg transition-colors ${done ? "bg-white/5" : "bg-white/5 hover:bg-white/10"}`}>
+      <button
+        onClick={() => expandable && setExpanded((v) => !v)}
+        className={`font-main flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
+          done ? "text-gray-500 line-through" : "text-white"
+        }`}
+      >
+        <span
+          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${
+            done
+              ? "border-green-500/50 bg-green-500/20 text-green-400"
+              : "border-white/20"
+          }`}
+        >
+          {done ? "\u2713" : ""}
+        </span>
+        <span className="flex-1">{label}</span>
+        {expandable && (
+          <svg
+            className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        )}
+      </button>
+      {expandable && expanded && (
+        <div className="flex flex-col gap-2 px-4 pb-3 pl-12">
+          {description && (
+            <p className="font-main text-xs text-gray-400">{description}</p>
+          )}
+          <div className="flex items-center gap-2">
+            {url && (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-main inline-flex items-center gap-1 text-xs text-indigo-400 transition-colors hover:text-indigo-300"
+              >
+                Open link
+                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+            {!done && (
+              <button className="font-main rounded-md bg-green-500/10 px-2.5 py-1 text-xs text-green-400 transition-colors hover:bg-green-500/20">
+                Mark as completed
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Dashboard ─────────────────────────────────────────────
 
 type DashboardTab = "home" | "team" | "profile";
@@ -1273,24 +1402,49 @@ function DashboardSection() {
                         : "Here's what you need to do to get ready."}
                     </p>
                   </Card>
+                  <PreviewCollapsibleSection
+                    title="Getting Started"
+                    total={3}
+                    completedCount={[hasTeamToggle, hasEnoughMembers, false].filter(Boolean).length}
+                  >
+                    <PreviewActionItem label="Create or join a team" done={hasTeamToggle} />
+                    <PreviewActionItem label="Get at least 3 team members" done={hasEnoughMembers} />
+                    <PreviewActionItem label="Pay the entry fee to activate your team" done={false} />
+                  </PreviewCollapsibleSection>
+                  <PreviewCollapsibleSection
+                    title="Tasks"
+                    total={2}
+                    completedCount={1}
+                  >
+                    <PreviewActionItem
+                      label="Complete the Lipo Battery Safety Quiz"
+                      description="Most team members (over half) must score 100% on the Lipo Battery Safety Quiz to receive your battery kits."
+                      url="https://docs.google.com/forms/example"
+                      done={false}
+                    />
+                    <PreviewActionItem
+                      label="Get Workshop Safety Badge"
+                      description="All team members need a makerspace safety induction badge before Week 3 workshops."
+                      done={true}
+                    />
+                  </PreviewCollapsibleSection>
                   <Card>
-                    <h3 className="mb-3 text-base">Action Items</h3>
-                    <div className="flex flex-col gap-2">
-                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
-                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
-                          {hasTeamToggle ? "\u2713" : ""}
-                        </span>
-                        Create or join a team
-                      </div>
-                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasEnoughMembers ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
-                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasEnoughMembers ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
-                          {hasEnoughMembers ? "\u2713" : ""}
-                        </span>
-                        Get at least 3 team members
-                      </div>
-                      <div className="font-main flex items-center gap-3 rounded-lg bg-secondary px-4 py-3 text-sm text-white">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-xs" />
-                        Pay the entry fee to activate your team
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 text-lg text-indigo-400">
+                        {socials.discord.icon(20)}
+                      </span>
+                      <div>
+                        <p className="font-main text-sm text-gray-300">
+                          All updates, announcements, and communications will be
+                          through our Discord channel.
+                        </p>
+                        <Link
+                          href={socials.discord.href}
+                          target="_blank"
+                          className="font-main mt-1 inline-block text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+                        >
+                          Join the Discord &rarr;
+                        </Link>
                       </div>
                     </div>
                   </Card>
@@ -1579,6 +1733,49 @@ function AdminIndividualsSection() {
       <AdminShell>
         <h2 className="mb-4 text-xl">Individuals</h2>
         <IndividualsTable profiles={mockProfiles} />
+      </AdminShell>
+    </div>
+  );
+}
+
+// ── Admin Tasks ──────────────────────────────────────
+
+const mockTasks = [
+  {
+    id: "task1",
+    title: "Complete the Lipo Battery Safety Quiz",
+    description:
+      "Most team members (over half) must score 100% on the Lipo Battery Safety Quiz to receive your battery kits.",
+    url: "https://docs.google.com/forms/example",
+    active: true,
+    created_at: "2026-02-01T00:00:00Z",
+  },
+  {
+    id: "task2",
+    title: "Get Workshop Safety Badge",
+    description:
+      "All team members need a makerspace safety induction badge before Week 3 workshops.",
+    url: "",
+    active: true,
+    created_at: "2026-02-02T00:00:00Z",
+  },
+  {
+    id: "task3",
+    title: "Install Arduino IDE",
+    description: "",
+    url: "https://www.arduino.cc/en/software",
+    active: false,
+    created_at: "2026-01-15T00:00:00Z",
+  },
+];
+
+function AdminTasksSection() {
+  return (
+    <div>
+      <SectionTitle>Admin — Tasks</SectionTitle>
+      <AdminShell>
+        <h2 className="mb-4 text-xl">Tasks</h2>
+        <TasksTable tasks={mockTasks} />
       </AdminShell>
     </div>
   );
