@@ -31,6 +31,56 @@ const TAB_LABELS: Record<Tab, string> = {
   profile: "Profile",
 };
 
+function CollapsibleSection({
+  title,
+  total,
+  completedCount,
+  children,
+}: {
+  title: string;
+  total: number;
+  completedCount: number;
+  children: React.ReactNode;
+}) {
+  const allDone = completedCount === total;
+  const [expanded, setExpanded] = useState(!allDone);
+
+  return (
+    <Card>
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="flex w-full items-center justify-between"
+      >
+        <div className="flex items-center gap-2">
+          <h3 className="text-base">{title}</h3>
+          {allDone && (
+            <span className="font-main rounded-full bg-green-500/10 px-2 py-0.5 text-xs text-green-400">
+              All {total} completed
+            </span>
+          )}
+          {!allDone && (
+            <span className="font-main text-xs text-gray-500">
+              {completedCount}/{total}
+            </span>
+          )}
+        </div>
+        <svg
+          className={`h-4 w-4 text-gray-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {expanded && (
+        <div className="mt-3 flex flex-col gap-2">{children}</div>
+      )}
+    </Card>
+  );
+}
+
 function ActionItem({
   label,
   description,
@@ -228,53 +278,55 @@ export default function DashboardContent({
                 </p>
               </Card>
 
-              <Card>
-                <h3 className="mb-3 text-base">Getting Started</h3>
-                <div className="flex flex-col gap-2">
-                  <ActionItem
-                    label="Create or join a team"
-                    done={hasTeam}
-                    onClick={() => !hasTeam && setTab("team")}
-                  />
-                  <ActionItem
-                    label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
-                    done={hasEnoughMembers}
-                    onClick={() =>
-                      hasTeam && !hasEnoughMembers && setTab("team")
-                    }
-                  />
-                  <ActionItem
-                    label="Pay the entry fee to activate your team"
-                    done={isPaid}
-                    onClick={() =>
-                      hasTeam && hasEnoughMembers && !isPaid && setTab("team")
-                    }
-                  />
-                </div>
-              </Card>
+              <CollapsibleSection
+                title="Getting Started"
+                total={3}
+                completedCount={[hasTeam, hasEnoughMembers, isPaid].filter(Boolean).length}
+              >
+                <ActionItem
+                  label="Create or join a team"
+                  done={hasTeam}
+                  onClick={() => !hasTeam && setTab("team")}
+                />
+                <ActionItem
+                  label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
+                  done={hasEnoughMembers}
+                  onClick={() =>
+                    hasTeam && !hasEnoughMembers && setTab("team")
+                  }
+                />
+                <ActionItem
+                  label="Pay the entry fee to activate your team"
+                  done={isPaid}
+                  onClick={() =>
+                    hasTeam && hasEnoughMembers && !isPaid && setTab("team")
+                  }
+                />
+              </CollapsibleSection>
 
               {adminTasks.length > 0 && (
-                <Card>
-                  <h3 className="mb-3 text-base">Tasks</h3>
-                  <div className="flex flex-col gap-2">
-                    {adminTasks.map((task) => (
-                      <ActionItem
-                        key={task.id}
-                        label={task.title}
-                        description={task.description || undefined}
-                        done={task.completed}
-                        onClick={() => {
-                          if (!task.completed && task.url) {
-                            window.open(task.url, "_blank");
-                          }
-                          if (!task.completed) {
-                            handleCompleteTask(task.id);
-                          }
-                        }}
-                      />
-                    ))}
-                  </div>
-                </Card>
+                <CollapsibleSection
+                  title="Tasks"
+                  total={adminTasks.length}
+                  completedCount={adminTasks.filter((t) => t.completed).length}
+                >
+                  {adminTasks.map((task) => (
+                    <ActionItem
+                      key={task.id}
+                      label={task.title}
+                      description={task.description || undefined}
+                      done={task.completed}
+                      onClick={() => {
+                        if (!task.completed && task.url) {
+                          window.open(task.url, "_blank");
+                        }
+                        if (!task.completed) {
+                          handleCompleteTask(task.id);
+                        }
+                      }}
+                    />
+                  ))}
+                </CollapsibleSection>
               )}
 
               <Card>
