@@ -4,12 +4,10 @@ import {
   CAD_VIDEO_URL,
   CH340G_DRIVERS_URL,
   INTRO_WORKSHOP_SLIDES_URL,
-  LIPO_BATTERY_QUIZ_URL,
   MOTOR_CONTROL_VIDEO_URL,
   ONSHAPE_URL,
   PRINTING_VIDEO_URL,
   SUMOBOTS_RULEBOOK_URL,
-  SUMOBOTS_INFO_PACK_URL,
   WORKSHOP_SAFETY_BADGE_URL,
   SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
   W2_WORKSHOP_SLIDES_URL,
@@ -30,13 +28,6 @@ export const internalResources: Resource[] = [
     description: "Read the official 2026 SUMOBOTS Rule Book.",
     url: ""
   },
-  {
-    image: "/thumbnails/info_pack.jpg",
-    title: "Info Pack",
-    description: "Read up on our general information about SUMOBOTS.",
-    url: SUMOBOTS_INFO_PACK_URL,
-  },
-
 ];
 
 export const internalVideoResources: Resource[] = [
@@ -75,13 +66,6 @@ export const internalVideoResources: Resource[] = [
 ];
 
 export const externalResources: Resource[] = [
-  {
-    image: "/thumbnails/lipo_safety_quiz_thumbnail.png",
-    title: "Lipo Battery Safety Quiz",
-    description:
-      "‼️IMPORTANT‼️ Most team members (over half) must score 100% on the Lipo Battery Safety Quiz to receive your battery kits. For teams of 2, both members must pass.",
-    url: LIPO_BATTERY_QUIZ_URL,
-  },
   {
     image: "/thumbnails/workshop_badge.png",
     title: "Workshop Safety Badge",

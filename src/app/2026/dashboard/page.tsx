@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getProfile } from "@/app/2026/_actions/profile";
 import { getMyTeam, browseTeams } from "@/app/2026/_actions/team";
+import { getActiveTasks } from "@/app/2026/_actions/tasks";
 import Path from "@/app/path";
 import GlassPanel from "@/app/2026/_components/ui/GlassPanel";
 import DashboardContent from "./_components/DashboardContent";
@@ -13,7 +14,7 @@ export default async function DashboardPage() {
     redirect(Path[2026].Onboarding);
   }
 
-  const team = await getMyTeam();
+  const [team, tasks] = await Promise.all([getMyTeam(), getActiveTasks()]);
   const browsable = team ? [] : await browseTeams();
 
   return (
@@ -39,7 +40,7 @@ export default async function DashboardPage() {
           Back to Sumobots
         </Link>
         <GlassPanel>
-          <DashboardContent profile={profile} team={team} browsableTeams={browsable} />
+          <DashboardContent profile={profile} team={team} browsableTeams={browsable} adminTasks={tasks} />
         </GlassPanel>
       </div>
     </div>

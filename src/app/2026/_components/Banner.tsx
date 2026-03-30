@@ -58,6 +58,17 @@ export const Banner = ({
             <Social socialName="facebook" variant="pill" size={20} />
             <Social socialName="discord" variant="pill" size={20} />
           </div>
+          <p className="font-main text-xs text-gray-400">
+            All updates and announcements will be communicated through our{" "}
+            <Link
+              href="https://discord.gg/rK6pcQZWrb"
+              target="_blank"
+              className="text-indigo-400 underline hover:text-indigo-300"
+            >
+              Discord server
+            </Link>
+            .
+          </p>
           <Link
             href={Path[2026].Dashboard}
             className="mt-6 inline-flex items-center justify-center rounded-lg bg-rose-600 px-10 py-4 text-lg font-semibold text-white transition-all hover:bg-rose-500 active:translate-y-px"

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
+import socials from "@/app/2026/_data/socials";
 import type {
   Profile,
   TeamWithMembers,
@@ -20,6 +22,7 @@ import AdminLoginForm from "@/app/2026/admin/_components/AdminLoginForm";
 import AdminShell from "@/app/2026/admin/_components/AdminShell";
 import TeamsTable from "@/app/2026/admin/_components/TeamsTable";
 import IndividualsTable from "@/app/2026/admin/_components/IndividualsTable";
+import TasksTable from "@/app/2026/admin/_components/TasksTable";
 import StepIndicator from "@/app/2026/onboarding/_components/StepIndicator";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
@@ -248,6 +251,7 @@ const sections = [
   "Admin Login",
   "Admin Teams",
   "Admin Individuals",
+  "Admin Tasks",
 ] as const;
 
 type Section = (typeof sections)[number];
@@ -295,6 +299,7 @@ export default function UIPreviewPage() {
             {active === "Admin Login" && <AdminLoginSection />}
             {active === "Admin Teams" && <AdminTeamsSection />}
             {active === "Admin Individuals" && <AdminIndividualsSection />}
+            {active === "Admin Tasks" && <AdminTasksSection />}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -1294,6 +1299,26 @@ function DashboardSection() {
                       </div>
                     </div>
                   </Card>
+                  <Card>
+                    <div className="flex items-start gap-3">
+                      <span className="mt-0.5 text-lg text-indigo-400">
+                        {socials.discord.icon(20)}
+                      </span>
+                      <div>
+                        <p className="font-main text-sm text-gray-300">
+                          All updates, announcements, and communications will be
+                          through our Discord channel.
+                        </p>
+                        <Link
+                          href={socials.discord.href}
+                          target="_blank"
+                          className="font-main mt-1 inline-block text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+                        >
+                          Join the Discord &rarr;
+                        </Link>
+                      </div>
+                    </div>
+                  </Card>
                   {hasTeamToggle && (
                     <Card>
                       <div className="flex items-center justify-between">
@@ -1579,6 +1604,49 @@ function AdminIndividualsSection() {
       <AdminShell>
         <h2 className="mb-4 text-xl">Individuals</h2>
         <IndividualsTable profiles={mockProfiles} />
+      </AdminShell>
+    </div>
+  );
+}
+
+// ── Admin Tasks ──────────────────────────────────────
+
+const mockTasks = [
+  {
+    id: "task1",
+    title: "Complete the Lipo Battery Safety Quiz",
+    description:
+      "Most team members (over half) must score 100% on the Lipo Battery Safety Quiz to receive your battery kits.",
+    url: "https://docs.google.com/forms/example",
+    active: true,
+    created_at: "2026-02-01T00:00:00Z",
+  },
+  {
+    id: "task2",
+    title: "Get Workshop Safety Badge",
+    description:
+      "All team members need a makerspace safety induction badge before Week 3 workshops.",
+    url: "",
+    active: true,
+    created_at: "2026-02-02T00:00:00Z",
+  },
+  {
+    id: "task3",
+    title: "Install Arduino IDE",
+    description: "",
+    url: "https://www.arduino.cc/en/software",
+    active: false,
+    created_at: "2026-01-15T00:00:00Z",
+  },
+];
+
+function AdminTasksSection() {
+  return (
+    <div>
+      <SectionTitle>Admin — Tasks</SectionTitle>
+      <AdminShell>
+        <h2 className="mb-4 text-xl">Tasks</h2>
+        <TasksTable tasks={mockTasks} />
       </AdminShell>
     </div>
   );

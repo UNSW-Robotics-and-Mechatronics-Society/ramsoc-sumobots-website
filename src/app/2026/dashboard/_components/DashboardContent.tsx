@@ -1,15 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import type {
   Profile,
   TeamWithMembers,
   TeamBrowseItem,
 } from "@/app/_types/registration";
+import type { UserTask } from "@/app/2026/_actions/tasks";
+import Link from "next/link";
 import Card from "@/app/2026/_components/ui/Card";
 import Badge from "@/app/2026/_components/ui/Badge";
+import socials from "@/app/2026/_data/socials";
+import { completeTask } from "@/app/2026/_actions/tasks";
 import TeamCard from "./TeamCard";
 import MemberList from "./MemberList";
 import JoinCodeDisplay from "./JoinCodeDisplay";
@@ -126,17 +131,28 @@ export default function DashboardContent({
   profile,
   team,
   browsableTeams,
+  adminTasks = [],
 }: {
   profile: Profile;
   team: TeamWithMembers | null;
   browsableTeams: TeamBrowseItem[];
+  adminTasks?: UserTask[];
 }) {
   const [tab, setTab] = useState<Tab>("home");
   const [mounted, setMounted] = useState(false);
+  const [isPendingTask, startTaskTransition] = useTransition();
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  function handleCompleteTask(taskId: string) {
+    startTaskTransition(async () => {
+      await completeTask(taskId);
+      router.refresh();
+    });
+  }
 
   const isCaptain =
     team?.members.some(
@@ -194,6 +210,42 @@ export default function DashboardContent({
                       hasTeam && hasEnoughMembers && !isPaid && setTab("team")
                     }
                   />
+                  {adminTasks.map((task) => (
+                    <ActionItem
+                      key={task.id}
+                      label={task.title}
+                      done={task.completed}
+                      onClick={() => {
+                        if (!task.completed && task.url) {
+                          window.open(task.url, "_blank");
+                        }
+                        if (!task.completed) {
+                          handleCompleteTask(task.id);
+                        }
+                      }}
+                    />
+                  ))}
+                </div>
+              </Card>
+
+              <Card>
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 text-lg text-indigo-400">
+                    {socials.discord.icon(20)}
+                  </span>
+                  <div>
+                    <p className="font-main text-sm text-gray-300">
+                      All updates, announcements, and communications will be
+                      through our Discord channel.
+                    </p>
+                    <Link
+                      href={socials.discord.href}
+                      target="_blank"
+                      className="font-main mt-1 inline-block text-sm text-indigo-400 transition-colors hover:text-indigo-300"
+                    >
+                      Join the Discord &rarr;
+                    </Link>
+                  </div>
                 </div>
               </Card>
 
