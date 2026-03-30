@@ -2,6 +2,8 @@
 
 import { cn } from "@/app/_utils/cn";
 
+const STEP_LABELS = ["Who You Are", "Your Details", "Team"];
+
 export default function StepIndicator({
   currentStep,
   totalSteps,
@@ -33,7 +35,7 @@ export default function StepIndicator({
                 isActive ? "text-white" : "text-gray-500",
               )}
             >
-              {stepNum === 1 ? "Your Details" : "Team"}
+              {STEP_LABELS[i] ?? `Step ${stepNum}`}
             </span>
           </div>
         );

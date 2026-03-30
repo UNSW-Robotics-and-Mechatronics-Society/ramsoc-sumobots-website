@@ -4,13 +4,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import CreateTeamForm from "./CreateTeamForm";
 import JoinTeamForm from "./JoinTeamForm";
+import type { UserType } from "./UserTypeStep";
 
 export default function TeamStep({
   onComplete,
   hasTeam,
+  userType,
 }: {
   onComplete: () => void;
   hasTeam: boolean;
+  userType: UserType;
 }) {
   const [mode, setMode] = useState<"choose" | "create" | "join">(
     hasTeam ? "create" : "choose",
@@ -78,9 +81,9 @@ export default function TeamStep({
             &larr; Back
           </button>
           {mode === "create" ? (
-            <CreateTeamForm onComplete={onComplete} />
+            <CreateTeamForm onComplete={onComplete} userType={userType} />
           ) : (
-            <JoinTeamForm onComplete={onComplete} />
+            <JoinTeamForm onComplete={onComplete} userType={userType} />
           )}
         </motion.div>
       )}

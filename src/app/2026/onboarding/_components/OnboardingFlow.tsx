@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import StepIndicator from "./StepIndicator";
+import UserTypeStep from "./UserTypeStep";
+import type { UserType } from "./UserTypeStep";
 import StudentDetailsForm from "./StudentDetailsForm";
 import TeamStep from "./TeamStep";
 import { Button } from "@/app/2026/_components/ui/Button";
@@ -32,14 +34,21 @@ export default function OnboardingFlow({
   hasTeam: boolean;
 }) {
   const router = useRouter();
-  const initialStep = hasProfile ? 2 : 0;
+  const initialStep = hasProfile ? 3 : 0;
   const [step, setStep] = useState(initialStep);
+  const [userType, setUserType] = useState<UserType | null>(null);
+
   function handleStart() {
     setStep(1);
   }
 
-  function handleProfileComplete() {
+  function handleUserTypeSelect(type: UserType) {
+    setUserType(type);
     setStep(2);
+  }
+
+  function handleProfileComplete() {
+    setStep(3);
   }
 
   function handleTeamComplete() {
@@ -48,7 +57,7 @@ export default function OnboardingFlow({
 
   return (
     <div>
-      {step > 0 && <StepIndicator currentStep={step} totalSteps={2} />}
+      {step > 0 && <StepIndicator currentStep={step} totalSteps={3} />}
       <AnimatePresence mode="wait">
         {step === 0 && (
           <motion.div
@@ -108,12 +117,28 @@ export default function OnboardingFlow({
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <StudentDetailsForm onComplete={handleProfileComplete} />
+            <UserTypeStep onSelect={handleUserTypeSelect} />
           </motion.div>
         )}
-        {step === 2 && (
+
+        {step === 2 && userType && (
           <motion.div
             key="step-2"
+            variants={stepVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+          >
+            <StudentDetailsForm onComplete={handleProfileComplete} userType={userType} />
+          </motion.div>
+        )}
+        {step === 3 && (
+          <motion.div
+            key="step-3"
             variants={stepVariants}
             initial="enter"
             animate="center"
@@ -126,6 +151,7 @@ export default function OnboardingFlow({
             <TeamStep
               onComplete={handleTeamComplete}
               hasTeam={hasTeam}
+              userType={userType ?? "unsw"}
             />
           </motion.div>
         )}

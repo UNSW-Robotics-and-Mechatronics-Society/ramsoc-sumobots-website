@@ -7,8 +7,9 @@ import { markOnboarded } from "@/app/2026/_actions/profile";
 import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
 import { Button } from "@/app/2026/_components/ui/Button";
+import type { UserType } from "./UserTypeStep";
 
-const CATEGORY_OPTIONS = [
+const ALL_CATEGORY_OPTIONS = [
   {
     value: "standard",
     label: "Standard (UNSW only, 3-6 members)",
@@ -33,12 +34,19 @@ function Field({ delay, children }: { delay: number; children: React.ReactNode }
 
 export default function CreateTeamForm({
   onComplete,
+  userType,
 }: {
   onComplete: () => void;
+  userType: UserType;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [joinCode, setJoinCode] = useState<string | null>(null);
+
+  const canJoinStandard = userType === "unsw";
+  const categoryOptions = canJoinStandard
+    ? ALL_CATEGORY_OPTIONS
+    : ALL_CATEGORY_OPTIONS.filter((opt) => opt.value === "open");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -120,16 +128,27 @@ export default function CreateTeamForm({
         <Select
           label="Category"
           name="category"
-          options={CATEGORY_OPTIONS}
+          options={categoryOptions}
           required
-          defaultValue="standard"
+          defaultValue={canJoinStandard ? "standard" : "open"}
         />
       </Field>
 
       <Field delay={0.3}>
         <p className="font-main text-xs text-gray-500">
-          <b>Standard:</b> UNSW students only, 3-6 members.{" "}
-          <b>Open:</b> Any university, 1-6 members.
+          {canJoinStandard ? (
+            <>
+              <b>Standard:</b> UNSW students only, 3-6 members.{" "}
+              <b>Open:</b> Any university or high school, 1-6 members.
+            </>
+          ) : (
+            <>
+              <b>Open:</b> Any university or high school, 1-6 members.
+              {userType === "high_school"
+                ? " High school students can only compete in the Open division."
+                : " Non-UNSW students can only compete in the Open division."}
+            </>
+          )}
         </p>
       </Field>
 

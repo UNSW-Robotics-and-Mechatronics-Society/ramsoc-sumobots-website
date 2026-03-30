@@ -7,6 +7,7 @@ import { markOnboarded } from "@/app/2026/_actions/profile";
 import Input from "@/app/2026/_components/ui/Input";
 import { Button } from "@/app/2026/_components/ui/Button";
 import Badge from "@/app/2026/_components/ui/Badge";
+import type { UserType } from "./UserTypeStep";
 
 function Field({ delay, children }: { delay: number; children: React.ReactNode }) {
   return (
@@ -22,8 +23,10 @@ function Field({ delay, children }: { delay: number; children: React.ReactNode }
 
 export default function JoinTeamForm({
   onComplete,
+  userType,
 }: {
   onComplete: () => void;
+  userType: UserType;
 }) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,6 +36,8 @@ export default function JoinTeamForm({
     category: string;
     member_count: number;
   } | null>(null);
+
+  const canJoinStandard = userType === "unsw";
 
   async function handlePreview() {
     if (code.length !== 6) {
@@ -47,6 +52,14 @@ export default function JoinTeamForm({
     setLoading(false);
 
     if (result.success && result.team) {
+      if (result.team.category === "standard" && !canJoinStandard) {
+        setError(
+          userType === "high_school"
+            ? "High school students can only join Open division teams"
+            : "Non-UNSW students can only join Open division teams",
+        );
+        return;
+      }
       setPreview(result.team);
     } else {
       setError(result.error || "Invalid code");
@@ -121,6 +134,16 @@ export default function JoinTeamForm({
           autoComplete="off"
         />
       </Field>
+
+      {!canJoinStandard && (
+        <Field delay={0.25}>
+          <p className="font-main text-xs text-gray-500">
+            {userType === "high_school"
+              ? "As a high school student, you can only join Open division teams."
+              : "As a non-UNSW student, you can only join Open division teams."}
+          </p>
+        </Field>
+      )}
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
