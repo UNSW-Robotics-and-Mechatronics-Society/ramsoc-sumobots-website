@@ -84,8 +84,11 @@ export default function TasksTable({ tasks }: { tasks: AdminTask[] }) {
     });
   }
 
+  const activeTasks = tasks.filter((t) => t.active);
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:gap-6">
+    <div className="flex min-w-0 flex-1 flex-col gap-4">
       <div className="flex items-center justify-between">
         <p className="font-main text-sm text-gray-400">
           {tasks.length} task{tasks.length !== 1 ? "s" : ""}
@@ -265,6 +268,54 @@ export default function TasksTable({ tasks }: { tasks: AdminTask[] }) {
           </tbody>
         </table>
       </div>
+    </div>
+
+    {/* Dashboard preview */}
+    <div className="w-full shrink-0 xl:w-80">
+      <div className="sticky top-6 rounded-lg border border-white/10 bg-white/5 p-4">
+        <h4 className="font-main mb-1 text-xs font-medium text-gray-400">
+          Dashboard Preview
+        </h4>
+        <p className="font-main mb-3 text-[10px] text-gray-500">
+          How active tasks appear to participants
+        </p>
+        <div className="rounded-lg border border-white/10 bg-black/30 p-3">
+          <h3 className="mb-2 text-sm font-semibold text-white">Action Items</h3>
+          <div className="flex flex-col gap-1.5">
+            {/* Built-in items */}
+            <div className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-gray-500 line-through">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-green-500/50 bg-green-500/20 text-[10px] text-green-400">
+                &#x2713;
+              </span>
+              Create or join a team
+            </div>
+            <div className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-white">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/20" />
+              Get at least 3 team members
+            </div>
+            <div className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-white">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/20" />
+              Pay the entry fee
+            </div>
+            {/* Admin tasks */}
+            {activeTasks.map((task) => (
+              <div
+                key={task.id}
+                className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-white"
+              >
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/20" />
+                <span className="truncate">{task.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {activeTasks.length === 0 && (
+          <p className="font-main mt-2 text-[10px] text-gray-500">
+            No active tasks. Create one to see it here.
+          </p>
+        )}
+      </div>
+    </div>
     </div>
   );
 }
