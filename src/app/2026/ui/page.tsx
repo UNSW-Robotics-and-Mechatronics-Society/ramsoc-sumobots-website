@@ -1279,7 +1279,7 @@ function DashboardSection() {
                     </p>
                   </Card>
                   <Card>
-                    <h3 className="mb-3 text-base">Action Items</h3>
+                    <h3 className="mb-3 text-base">Getting Started</h3>
                     <div className="flex flex-col gap-2">
                       <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm ${hasTeamToggle ? "bg-secondary text-muted-foreground line-through" : "bg-secondary text-white"}`}>
                         <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-xs ${hasTeamToggle ? "border-green-500/50 bg-green-500/20 text-green-400" : "border-border"}`}>
@@ -1296,6 +1296,21 @@ function DashboardSection() {
                       <div className="font-main flex items-center gap-3 rounded-lg bg-secondary px-4 py-3 text-sm text-white">
                         <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-xs" />
                         Pay the entry fee to activate your team
+                      </div>
+                    </div>
+                  </Card>
+                  <Card>
+                    <h3 className="mb-3 text-base">Tasks</h3>
+                    <div className="flex flex-col gap-2">
+                      <div className="font-main flex items-center gap-3 rounded-lg bg-secondary px-4 py-3 text-sm text-white">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border text-xs" />
+                        Complete the Lipo Battery Safety Quiz
+                      </div>
+                      <div className={`font-main flex items-center gap-3 rounded-lg px-4 py-3 text-sm bg-secondary text-muted-foreground line-through`}>
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-green-500/50 bg-green-500/20 text-xs text-green-400">
+                          &#x2713;
+                        </span>
+                        Get Workshop Safety Badge
                       </div>
                     </div>
                   </Card>

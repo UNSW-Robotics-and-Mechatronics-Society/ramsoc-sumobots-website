@@ -277,12 +277,12 @@ export default function TasksTable({ tasks }: { tasks: AdminTask[] }) {
           Dashboard Preview
         </h4>
         <p className="font-main mb-3 text-[10px] text-gray-500">
-          How active tasks appear to participants
+          How tasks appear to participants
         </p>
+        {/* Getting Started card */}
         <div className="rounded-lg border border-white/10 bg-black/30 p-3">
-          <h3 className="mb-2 text-sm font-semibold text-white">Action Items</h3>
+          <h3 className="mb-2 text-sm font-semibold text-white">Getting Started</h3>
           <div className="flex flex-col gap-1.5">
-            {/* Built-in items */}
             <div className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-gray-500 line-through">
               <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-green-500/50 bg-green-500/20 text-[10px] text-green-400">
                 &#x2713;
@@ -297,21 +297,28 @@ export default function TasksTable({ tasks }: { tasks: AdminTask[] }) {
               <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/20" />
               Pay the entry fee
             </div>
-            {/* Admin tasks */}
-            {activeTasks.map((task) => (
-              <div
-                key={task.id}
-                className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-white"
-              >
-                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/20" />
-                <span className="truncate">{task.title}</span>
-              </div>
-            ))}
           </div>
         </div>
+        {/* Tasks card */}
+        {activeTasks.length > 0 && (
+          <div className="mt-3 rounded-lg border border-white/10 bg-black/30 p-3">
+            <h3 className="mb-2 text-sm font-semibold text-white">Tasks</h3>
+            <div className="flex flex-col gap-1.5">
+              {activeTasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="font-main flex items-center gap-2 rounded-md bg-white/5 px-3 py-2 text-xs text-white"
+                >
+                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/20" />
+                  <span className="truncate">{task.title}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {activeTasks.length === 0 && (
           <p className="font-main mt-2 text-[10px] text-gray-500">
-            No active tasks. Create one to see it here.
+            No active tasks. Create one to see it in the Tasks section.
           </p>
         )}
       </div>

@@ -189,7 +189,7 @@ export default function DashboardContent({
               </Card>
 
               <Card>
-                <h3 className="mb-3 text-base">Action Items</h3>
+                <h3 className="mb-3 text-base">Getting Started</h3>
                 <div className="flex flex-col gap-2">
                   <ActionItem
                     label="Create or join a team"
@@ -210,23 +210,31 @@ export default function DashboardContent({
                       hasTeam && hasEnoughMembers && !isPaid && setTab("team")
                     }
                   />
-                  {adminTasks.map((task) => (
-                    <ActionItem
-                      key={task.id}
-                      label={task.title}
-                      done={task.completed}
-                      onClick={() => {
-                        if (!task.completed && task.url) {
-                          window.open(task.url, "_blank");
-                        }
-                        if (!task.completed) {
-                          handleCompleteTask(task.id);
-                        }
-                      }}
-                    />
-                  ))}
                 </div>
               </Card>
+
+              {adminTasks.length > 0 && (
+                <Card>
+                  <h3 className="mb-3 text-base">Tasks</h3>
+                  <div className="flex flex-col gap-2">
+                    {adminTasks.map((task) => (
+                      <ActionItem
+                        key={task.id}
+                        label={task.title}
+                        done={task.completed}
+                        onClick={() => {
+                          if (!task.completed && task.url) {
+                            window.open(task.url, "_blank");
+                          }
+                          if (!task.completed) {
+                            handleCompleteTask(task.id);
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                </Card>
+              )}
 
               <Card>
                 <div className="flex items-start gap-3">
