@@ -145,7 +145,11 @@ export default function EditProfileForm({
   onCancel: () => void;
 }) {
   const router = useRouter();
-  const [isUnsw, setIsUnsw] = useState(profile.is_unsw);
+  const userType = profile.user_type || (profile.is_unsw ? "unsw" : "other_uni");
+  const isHighSchool = userType === "high_school";
+  const isUnsw = userType === "unsw";
+  const isOtherUni = userType === "other_uni";
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [yearOfStudy, setYearOfStudy] = useState(profile.year_of_study || "");
@@ -169,16 +173,19 @@ export default function EditProfileForm({
 
     const result = await updateProfile({
       full_name: form.get("full_name") as string,
+      user_type: userType,
       is_unsw: isUnsw,
-      university: isUnsw ? "UNSW" : (form.get("university") as string),
+      university: isUnsw ? "UNSW" : isOtherUni ? (form.get("university") as string) : "",
       zid: isUnsw ? (form.get("zid") as string) : "",
-      year_of_study: yearOfStudy,
-      degree_stage: degreeStage,
-      undergrad_postgrad: undergradPostgrad,
-      domestic_international: domesticIntl,
-      degree: (form.get("degree") as string) || "",
-      majors: (form.get("majors") as string) || "",
-      faculty: selectedFaculties.join(", "),
+      uni_id: isOtherUni ? (form.get("uni_id") as string) : "",
+      high_school: isHighSchool ? (form.get("high_school") as string) : "",
+      year_of_study: isHighSchool ? "" : yearOfStudy,
+      degree_stage: isHighSchool ? "" : degreeStage,
+      undergrad_postgrad: isHighSchool ? "" : undergradPostgrad,
+      domestic_international: isHighSchool ? "" : domesticIntl,
+      degree: isHighSchool ? "" : ((form.get("degree") as string) || ""),
+      majors: isHighSchool ? "" : ((form.get("majors") as string) || ""),
+      faculty: isHighSchool ? "" : selectedFaculties.join(", "),
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
       is_ramsoc_member: isRamsocMember,
@@ -198,6 +205,10 @@ export default function EditProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <div className="font-main rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-muted-foreground">
+        {isUnsw ? "UNSW Student" : isOtherUni ? "Other University" : "High School Student"}
+      </div>
+
       <Input
         label="Full Name"
         name="full_name"
@@ -206,23 +217,7 @@ export default function EditProfileForm({
         defaultValue={profile.full_name}
       />
 
-      <div className="flex items-center gap-3">
-        <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
-          isUnsw
-            ? "border-primary bg-primary/10 text-foreground"
-            : "border-border bg-secondary text-muted-foreground hover:border-primary/30"
-        }`}>
-          <input
-            type="checkbox"
-            checked={isUnsw}
-            onChange={(e) => setIsUnsw(e.target.checked)}
-            className="h-5 w-5 rounded accent-primary"
-          />
-          I am a UNSW student
-        </label>
-      </div>
-
-      {isUnsw ? (
+      {isUnsw && (
         <Input
           label="zID"
           name="zid"
@@ -232,72 +227,97 @@ export default function EditProfileForm({
           title="zID must be in the format z1234567"
           defaultValue={profile.zid}
         />
-      ) : (
+      )}
+
+      {isOtherUni && (
+        <>
+          <Input
+            label="University"
+            name="university"
+            required
+            placeholder="e.g. University of Sydney"
+            defaultValue={profile.university}
+          />
+          <Input
+            label="University ID"
+            name="uni_id"
+            required
+            placeholder="e.g. 490123456"
+            defaultValue={profile.uni_id}
+          />
+        </>
+      )}
+
+      {isHighSchool && (
         <Input
-          label="University"
-          name="university"
+          label="High School"
+          name="high_school"
           required
-          placeholder="e.g. University of Sydney"
-          defaultValue={profile.university}
+          placeholder="e.g. Sydney Grammar School"
+          defaultValue={profile.high_school}
         />
       )}
 
-      <Select
-        label="Year of Study"
-        name="year_of_study"
-        options={YEAR_OPTIONS}
-        placeholder="Select year"
-        required
-        value={yearOfStudy}
-        onChange={(e) => setYearOfStudy(e.target.value)}
-      />
+      {!isHighSchool && (
+        <>
+          <Select
+            label="Year of Study"
+            name="year_of_study"
+            options={YEAR_OPTIONS}
+            placeholder="Select year"
+            required
+            value={yearOfStudy}
+            onChange={(e) => setYearOfStudy(e.target.value)}
+          />
 
-      <Select
-        label="Degree Stage"
-        name="degree_stage"
-        options={DEGREE_STAGE_OPTIONS}
-        placeholder="Select degree stage"
-        value={degreeStage}
-        onChange={(e) => setDegreeStage(e.target.value)}
-      />
+          <Select
+            label="Degree Stage"
+            name="degree_stage"
+            options={DEGREE_STAGE_OPTIONS}
+            placeholder="Select degree stage"
+            value={degreeStage}
+            onChange={(e) => setDegreeStage(e.target.value)}
+          />
 
-      <RadioGroup
-        label="Undergraduate or Postgraduate"
-        name="undergrad_postgrad"
-        options={UNDERGRAD_POSTGRAD_OPTIONS}
-        value={undergradPostgrad}
-        onChange={setUndergradPostgrad}
-      />
+          <RadioGroup
+            label="Undergraduate or Postgraduate"
+            name="undergrad_postgrad"
+            options={UNDERGRAD_POSTGRAD_OPTIONS}
+            value={undergradPostgrad}
+            onChange={setUndergradPostgrad}
+          />
 
-      <RadioGroup
-        label="Domestic or International"
-        name="domestic_international"
-        options={DOMESTIC_INTL_OPTIONS}
-        value={domesticIntl}
-        onChange={setDomesticIntl}
-      />
+          <RadioGroup
+            label="Domestic or International"
+            name="domestic_international"
+            options={DOMESTIC_INTL_OPTIONS}
+            value={domesticIntl}
+            onChange={setDomesticIntl}
+          />
 
-      <Input
-        label="Degree"
-        name="degree"
-        required
-        placeholder="e.g. B.Eng (Mechatronics)"
-        defaultValue={profile.degree}
-      />
+          <Input
+            label="Degree"
+            name="degree"
+            required
+            placeholder="e.g. B.Eng (Mechatronics)"
+            defaultValue={profile.degree}
+          />
 
-      <Input
-        label="Majors (if applicable)"
-        name="majors"
-        placeholder="e.g. Mechanical Engineering"
-        defaultValue={profile.majors}
-      />
+          <Input
+            label="Majors (if applicable)"
+            name="majors"
+            placeholder="e.g. Mechanical Engineering"
+            defaultValue={profile.majors}
+          />
 
-      <CheckboxGroup
-        label="Faculty"
-        options={FACULTY_OPTIONS}
-        selected={selectedFaculties}
-        onChange={setSelectedFaculties}
-      />
+          <CheckboxGroup
+            label="Faculty"
+            options={FACULTY_OPTIONS}
+            selected={selectedFaculties}
+            onChange={setSelectedFaculties}
+          />
+        </>
+      )}
 
       <RadioGroup
         label="Gender"

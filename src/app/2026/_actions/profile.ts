@@ -25,9 +25,12 @@ export async function getProfile(): Promise<Profile | null> {
 
 type CreateProfileInput = {
   full_name: string;
+  user_type: "unsw" | "other_uni" | "high_school";
   is_unsw: boolean;
   university: string;
   zid: string;
+  uni_id: string;
+  high_school: string;
   year_of_study: string;
   degree_stage: string;
   undergrad_postgrad: string;
@@ -57,36 +60,51 @@ export async function createProfile(
     return { success: false, error: "Full name is required" };
   }
 
-  if (input.is_unsw && !input.zid.trim()) {
+  if (!["unsw", "other_uni", "high_school"].includes(input.user_type)) {
+    return { success: false, error: "Invalid user type" };
+  }
+
+  if (input.user_type === "unsw" && !input.zid.trim()) {
     return { success: false, error: "zID is required for UNSW students" };
   }
 
-  if (!input.is_unsw && !input.university.trim()) {
+  if (input.user_type === "other_uni" && !input.university.trim()) {
     return { success: false, error: "University is required" };
   }
 
-  if (!input.year_of_study) {
-    return { success: false, error: "Year of study is required" };
+  if (input.user_type === "other_uni" && !input.uni_id.trim()) {
+    return { success: false, error: "University ID is required" };
   }
 
-  if (!input.degree_stage) {
-    return { success: false, error: "Degree stage is required" };
+  if (input.user_type === "high_school" && !input.high_school.trim()) {
+    return { success: false, error: "High school is required" };
   }
 
-  if (!input.undergrad_postgrad) {
-    return { success: false, error: "Please select undergraduate or postgraduate" };
-  }
+  // University-specific validations (not required for high school students)
+  if (input.user_type !== "high_school") {
+    if (!input.year_of_study) {
+      return { success: false, error: "Year of study is required" };
+    }
 
-  if (!input.domestic_international) {
-    return { success: false, error: "Please select domestic or international" };
-  }
+    if (!input.degree_stage) {
+      return { success: false, error: "Degree stage is required" };
+    }
 
-  if (!input.degree.trim()) {
-    return { success: false, error: "Degree is required" };
-  }
+    if (!input.undergrad_postgrad) {
+      return { success: false, error: "Please select undergraduate or postgraduate" };
+    }
 
-  if (!input.faculty.trim()) {
-    return { success: false, error: "Faculty is required" };
+    if (!input.domestic_international) {
+      return { success: false, error: "Please select domestic or international" };
+    }
+
+    if (!input.degree.trim()) {
+      return { success: false, error: "Degree is required" };
+    }
+
+    if (!input.faculty.trim()) {
+      return { success: false, error: "Faculty is required" };
+    }
   }
 
   if (!input.gender) {
@@ -118,9 +136,12 @@ export async function createProfile(
     clerk_user_id: userId,
     email: user.emailAddresses[0].emailAddress,
     full_name: input.full_name.trim(),
-    is_unsw: input.is_unsw,
-    university: input.is_unsw ? "UNSW" : input.university.trim(),
-    zid: input.is_unsw ? input.zid.trim() : "",
+    user_type: input.user_type,
+    is_unsw: input.user_type === "unsw",
+    university: input.user_type === "unsw" ? "UNSW" : input.user_type === "other_uni" ? input.university.trim() : "",
+    zid: input.user_type === "unsw" ? input.zid.trim() : "",
+    uni_id: input.user_type === "other_uni" ? input.uni_id.trim() : "",
+    high_school: input.user_type === "high_school" ? input.high_school.trim() : "",
     year_of_study: input.year_of_study,
     degree_stage: input.degree_stage,
     undergrad_postgrad: input.undergrad_postgrad,
@@ -146,9 +167,12 @@ export async function createProfile(
 
 type UpdateProfileInput = {
   full_name: string;
+  user_type: "unsw" | "other_uni" | "high_school";
   is_unsw: boolean;
   university: string;
   zid: string;
+  uni_id: string;
+  high_school: string;
   year_of_study: string;
   degree_stage: string;
   undergrad_postgrad: string;
@@ -173,12 +197,20 @@ export async function updateProfile(
     return { success: false, error: "Full name is required" };
   }
 
-  if (input.is_unsw && !input.zid.trim()) {
+  if (input.user_type === "unsw" && !input.zid.trim()) {
     return { success: false, error: "zID is required for UNSW students" };
   }
 
-  if (!input.is_unsw && !input.university.trim()) {
+  if (input.user_type === "other_uni" && !input.university.trim()) {
     return { success: false, error: "University is required" };
+  }
+
+  if (input.user_type === "other_uni" && !input.uni_id.trim()) {
+    return { success: false, error: "University ID is required" };
+  }
+
+  if (input.user_type === "high_school" && !input.high_school.trim()) {
+    return { success: false, error: "High school is required" };
   }
 
   const supabase = getSupabaseSecretClient();
@@ -187,9 +219,12 @@ export async function updateProfile(
     .from("profiles")
     .update({
       full_name: input.full_name.trim(),
-      is_unsw: input.is_unsw,
-      university: input.is_unsw ? "UNSW" : input.university.trim(),
-      zid: input.is_unsw ? input.zid.trim() : "",
+      user_type: input.user_type,
+      is_unsw: input.user_type === "unsw",
+      university: input.user_type === "unsw" ? "UNSW" : input.user_type === "other_uni" ? input.university.trim() : "",
+      zid: input.user_type === "unsw" ? input.zid.trim() : "",
+      uni_id: input.user_type === "other_uni" ? input.uni_id.trim() : "",
+      high_school: input.user_type === "high_school" ? input.high_school.trim() : "",
       year_of_study: input.year_of_study,
       degree_stage: input.degree_stage,
       undergrad_postgrad: input.undergrad_postgrad,

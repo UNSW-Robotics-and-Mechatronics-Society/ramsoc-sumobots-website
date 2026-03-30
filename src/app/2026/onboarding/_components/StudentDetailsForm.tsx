@@ -6,6 +6,7 @@ import { createProfile } from "@/app/2026/_actions/profile";
 import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
 import { Button } from "@/app/2026/_components/ui/Button";
+import type { UserType } from "./UserTypeStep";
 
 const YEAR_OPTIONS = [
   { value: "1st Year", label: "1st Year" },
@@ -192,10 +193,15 @@ function YesNoToggle({
 
 export default function StudentDetailsForm({
   onComplete,
+  userType,
 }: {
   onComplete: () => void;
+  userType: UserType;
 }) {
-  const [isUnsw, setIsUnsw] = useState(true);
+  const isUnsw = userType === "unsw";
+  const isHighSchool = userType === "high_school";
+  const isOtherUni = userType === "other_uni";
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
@@ -231,6 +237,14 @@ export default function StudentDetailsForm({
           case "university":
             if (!value.trim()) next.university = "University is required";
             else delete next.university;
+            break;
+          case "uni_id":
+            if (!value.trim()) next.uni_id = "University ID is required";
+            else delete next.uni_id;
+            break;
+          case "high_school":
+            if (!value.trim()) next.high_school = "High school is required";
+            else delete next.high_school;
             break;
           case "year_of_study":
             if (!value) next.year_of_study = "Year of study is required";
@@ -297,20 +311,28 @@ export default function StudentDetailsForm({
       const zid = (form.get("zid") as string) || "";
       if (!zid.trim()) errors.zid = "zID is required";
       else if (!/^z\d{7}$/.test(zid)) errors.zid = "Format: z1234567";
-    } else {
+    } else if (isOtherUni) {
       const uni = (form.get("university") as string) || "";
       if (!uni.trim()) errors.university = "University is required";
+      const uniId = (form.get("uni_id") as string) || "";
+      if (!uniId.trim()) errors.uni_id = "University ID is required";
+    } else if (isHighSchool) {
+      const hs = (form.get("high_school") as string) || "";
+      if (!hs.trim()) errors.high_school = "High school is required";
     }
 
-    if (!yearOfStudy) errors.year_of_study = "Year of study is required";
-    if (!degreeStage) errors.degree_stage = "Degree stage is required";
-    if (!undergradPostgrad) errors.undergrad_postgrad = "This field is required";
-    if (!domesticIntl) errors.domestic_international = "This field is required";
+    // University-specific fields only required for uni students
+    if (!isHighSchool) {
+      if (!yearOfStudy) errors.year_of_study = "Year of study is required";
+      if (!degreeStage) errors.degree_stage = "Degree stage is required";
+      if (!undergradPostgrad) errors.undergrad_postgrad = "This field is required";
+      if (!domesticIntl) errors.domestic_international = "This field is required";
 
-    const degree = (form.get("degree") as string) || "";
-    if (!degree.trim()) errors.degree = "Degree is required";
+      const degree = (form.get("degree") as string) || "";
+      if (!degree.trim()) errors.degree = "Degree is required";
 
-    if (selectedFaculties.length === 0) errors.faculty = "Select at least one faculty";
+      if (selectedFaculties.length === 0) errors.faculty = "Select at least one faculty";
+    }
 
     if (!gender) errors.gender = "Gender is required";
     if (gender === "other" && !genderOther.trim())
@@ -324,6 +346,8 @@ export default function StudentDetailsForm({
       full_name: true,
       zid: true,
       university: true,
+      uni_id: true,
+      high_school: true,
       year_of_study: true,
       degree_stage: true,
       undergrad_postgrad: true,
@@ -349,16 +373,23 @@ export default function StudentDetailsForm({
 
     const result = await createProfile({
       full_name: form.get("full_name") as string,
+      user_type: userType,
       is_unsw: isUnsw,
-      university: isUnsw ? "UNSW" : (form.get("university") as string),
+      university: isUnsw
+        ? "UNSW"
+        : isOtherUni
+          ? (form.get("university") as string)
+          : "",
       zid: isUnsw ? (form.get("zid") as string) : "",
-      year_of_study: yearOfStudy,
-      degree_stage: degreeStage,
-      undergrad_postgrad: undergradPostgrad,
-      domestic_international: domesticIntl,
-      degree: (form.get("degree") as string) || "",
-      majors: (form.get("majors") as string) || "",
-      faculty: selectedFaculties.join(", "),
+      uni_id: isOtherUni ? (form.get("uni_id") as string) : "",
+      high_school: isHighSchool ? (form.get("high_school") as string) : "",
+      year_of_study: isHighSchool ? "" : yearOfStudy,
+      degree_stage: isHighSchool ? "" : degreeStage,
+      undergrad_postgrad: isHighSchool ? "" : undergradPostgrad,
+      domestic_international: isHighSchool ? "" : domesticIntl,
+      degree: isHighSchool ? "" : ((form.get("degree") as string) || ""),
+      majors: isHighSchool ? "" : ((form.get("majors") as string) || ""),
+      faculty: isHighSchool ? "" : selectedFaculties.join(", "),
       gender: gender,
       gender_other: gender === "other" ? genderOther : "",
       is_ramsoc_member: isRamsocMember,
@@ -375,9 +406,16 @@ export default function StudentDetailsForm({
     }
   }
 
+  let delay = 0.1;
+  function nextDelay() {
+    const d = delay;
+    delay += 0.05;
+    return d;
+  }
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Field delay={0.1}>
+      <Field delay={nextDelay()}>
         <Input
           label="Full Name"
           name="full_name"
@@ -389,26 +427,8 @@ export default function StudentDetailsForm({
         />
       </Field>
 
-      <Field delay={0.15}>
-        <div className="flex items-center gap-3">
-          <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
-            isUnsw
-              ? "border-primary bg-primary/10 text-foreground"
-              : "border-border bg-secondary text-muted-foreground hover:border-primary/30"
-          }`}>
-            <input
-              type="checkbox"
-              checked={isUnsw}
-              onChange={(e) => setIsUnsw(e.target.checked)}
-              className="h-5 w-5 rounded accent-primary"
-            />
-            I am a UNSW student
-          </label>
-        </div>
-      </Field>
-
-      <Field delay={0.2}>
-        {isUnsw ? (
+      {isUnsw && (
+        <Field delay={nextDelay()}>
           <Input
             label="zID"
             name="zid"
@@ -418,126 +438,161 @@ export default function StudentDetailsForm({
             onChange={handleChange}
             error={touched.zid ? fieldErrors.zid : undefined}
           />
-        ) : (
+        </Field>
+      )}
+
+      {isOtherUni && (
+        <>
+          <Field delay={nextDelay()}>
+            <Input
+              label="University"
+              name="university"
+              required
+              placeholder="e.g. University of Sydney"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              error={touched.university ? fieldErrors.university : undefined}
+            />
+          </Field>
+          <Field delay={nextDelay()}>
+            <Input
+              label="University ID"
+              name="uni_id"
+              required
+              placeholder="e.g. 490123456"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              error={touched.uni_id ? fieldErrors.uni_id : undefined}
+            />
+          </Field>
+        </>
+      )}
+
+      {isHighSchool && (
+        <Field delay={nextDelay()}>
           <Input
-            label="University"
-            name="university"
+            label="High School"
+            name="high_school"
             required
-            placeholder="e.g. University of Sydney"
+            placeholder="e.g. Sydney Grammar School"
             onBlur={handleBlur}
             onChange={handleChange}
-            error={touched.university ? fieldErrors.university : undefined}
+            error={touched.high_school ? fieldErrors.high_school : undefined}
           />
-        )}
-      </Field>
+        </Field>
+      )}
 
-      <Field delay={0.25}>
-        <Select
-          label="Year of Study"
-          name="year_of_study"
-          options={YEAR_OPTIONS}
-          placeholder="Select year"
-          required
-          value={yearOfStudy}
-          onChange={(e) => {
-            setYearOfStudy(e.target.value);
-            markTouched("year_of_study");
-            validateField("year_of_study", e.target.value);
-          }}
-          error={touched.year_of_study ? fieldErrors.year_of_study : undefined}
-        />
-      </Field>
+      {!isHighSchool && (
+        <>
+          <Field delay={nextDelay()}>
+            <Select
+              label="Year of Study"
+              name="year_of_study"
+              options={YEAR_OPTIONS}
+              placeholder="Select year"
+              required
+              value={yearOfStudy}
+              onChange={(e) => {
+                setYearOfStudy(e.target.value);
+                markTouched("year_of_study");
+                validateField("year_of_study", e.target.value);
+              }}
+              error={touched.year_of_study ? fieldErrors.year_of_study : undefined}
+            />
+          </Field>
 
-      <Field delay={0.3}>
-        <Select
-          label="Degree Stage"
-          name="degree_stage"
-          options={DEGREE_STAGE_OPTIONS}
-          placeholder="Select degree stage"
-          required
-          value={degreeStage}
-          onChange={(e) => {
-            setDegreeStage(e.target.value);
-            markTouched("degree_stage");
-            validateField("degree_stage", e.target.value);
-          }}
-          error={touched.degree_stage ? fieldErrors.degree_stage : undefined}
-        />
-      </Field>
+          <Field delay={nextDelay()}>
+            <Select
+              label="Degree Stage"
+              name="degree_stage"
+              options={DEGREE_STAGE_OPTIONS}
+              placeholder="Select degree stage"
+              required
+              value={degreeStage}
+              onChange={(e) => {
+                setDegreeStage(e.target.value);
+                markTouched("degree_stage");
+                validateField("degree_stage", e.target.value);
+              }}
+              error={touched.degree_stage ? fieldErrors.degree_stage : undefined}
+            />
+          </Field>
 
-      <Field delay={0.35}>
-        <RadioGroup
-          label="Undergraduate or Postgraduate"
-          name="undergrad_postgrad"
-          options={UNDERGRAD_POSTGRAD_OPTIONS}
-          value={undergradPostgrad}
-          onChange={(val) => {
-            setUndergradPostgrad(val);
-            markTouched("undergrad_postgrad");
-            validateField("undergrad_postgrad", val);
-          }}
-          error={touched.undergrad_postgrad ? fieldErrors.undergrad_postgrad : undefined}
-          required
-        />
-      </Field>
+          <Field delay={nextDelay()}>
+            <RadioGroup
+              label="Undergraduate or Postgraduate"
+              name="undergrad_postgrad"
+              options={UNDERGRAD_POSTGRAD_OPTIONS}
+              value={undergradPostgrad}
+              onChange={(val) => {
+                setUndergradPostgrad(val);
+                markTouched("undergrad_postgrad");
+                validateField("undergrad_postgrad", val);
+              }}
+              error={touched.undergrad_postgrad ? fieldErrors.undergrad_postgrad : undefined}
+              required
+            />
+          </Field>
 
-      <Field delay={0.4}>
-        <RadioGroup
-          label="Domestic or International"
-          name="domestic_international"
-          options={DOMESTIC_INTL_OPTIONS}
-          value={domesticIntl}
-          onChange={(val) => {
-            setDomesticIntl(val);
-            markTouched("domestic_international");
-            validateField("domestic_international", val);
-          }}
-          error={touched.domestic_international ? fieldErrors.domestic_international : undefined}
-          required
-        />
-      </Field>
+          <Field delay={nextDelay()}>
+            <RadioGroup
+              label="Domestic or International"
+              name="domestic_international"
+              options={DOMESTIC_INTL_OPTIONS}
+              value={domesticIntl}
+              onChange={(val) => {
+                setDomesticIntl(val);
+                markTouched("domestic_international");
+                validateField("domestic_international", val);
+              }}
+              error={touched.domestic_international ? fieldErrors.domestic_international : undefined}
+              required
+            />
+          </Field>
 
-      <Field delay={0.45}>
-        <Input
-          label="Degree"
-          name="degree"
-          required
-          placeholder="e.g. B.Eng (Mechatronics)"
-          onBlur={handleBlur}
-          onChange={handleChange}
-          error={touched.degree ? fieldErrors.degree : undefined}
-        />
-      </Field>
+          <Field delay={nextDelay()}>
+            <Input
+              label="Degree"
+              name="degree"
+              required
+              placeholder="e.g. B.Eng (Mechatronics)"
+              onBlur={handleBlur}
+              onChange={handleChange}
+              error={touched.degree ? fieldErrors.degree : undefined}
+            />
+          </Field>
 
-      <Field delay={0.5}>
-        <Input
-          label="Majors (if applicable)"
-          name="majors"
-          placeholder="e.g. Mechanical Engineering"
-        />
-      </Field>
+          <Field delay={nextDelay()}>
+            <Input
+              label="Majors (if applicable)"
+              name="majors"
+              placeholder="e.g. Mechanical Engineering"
+            />
+          </Field>
 
-      <Field delay={0.55}>
-        <CheckboxGroup
-          label="Faculty"
-          options={FACULTY_OPTIONS}
-          selected={selectedFaculties}
-          onChange={(vals) => {
-            setSelectedFaculties(vals);
-            markTouched("faculty");
-            setFieldErrors((prev) => {
-              const next = { ...prev };
-              if (vals.length === 0) next.faculty = "Select at least one faculty";
-              else delete next.faculty;
-              return next;
-            });
-          }}
-          error={touched.faculty ? fieldErrors.faculty : undefined}
-          required
-        />
-      </Field>
+          <Field delay={nextDelay()}>
+            <CheckboxGroup
+              label="Faculty"
+              options={FACULTY_OPTIONS}
+              selected={selectedFaculties}
+              onChange={(vals) => {
+                setSelectedFaculties(vals);
+                markTouched("faculty");
+                setFieldErrors((prev) => {
+                  const next = { ...prev };
+                  if (vals.length === 0) next.faculty = "Select at least one faculty";
+                  else delete next.faculty;
+                  return next;
+                });
+              }}
+              error={touched.faculty ? fieldErrors.faculty : undefined}
+              required
+            />
+          </Field>
+        </>
+      )}
 
-      <Field delay={0.6}>
+      <Field delay={nextDelay()}>
         <RadioGroup
           label="Gender"
           name="gender"
@@ -583,7 +638,7 @@ export default function StudentDetailsForm({
         </Field>
       )}
 
-      <Field delay={0.65}>
+      <Field delay={nextDelay()}>
         <div className="flex flex-col gap-2">
           <span className="font-main text-sm text-muted-foreground">Memberships</span>
           <YesNoToggle
@@ -599,7 +654,7 @@ export default function StudentDetailsForm({
         </div>
       </Field>
 
-      <Field delay={0.7}>
+      <Field delay={nextDelay()}>
         <Input
           label="Phone Number"
           name="phone"

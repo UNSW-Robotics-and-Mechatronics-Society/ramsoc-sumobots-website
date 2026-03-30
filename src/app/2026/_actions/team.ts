@@ -70,8 +70,22 @@ export async function createTeam(input: {
   const profileId = await getProfileId(userId);
   if (!profileId) return { success: false, error: "Profile not found" };
 
-  // Check if user is already on a team
   const supabase = getSupabaseSecretClient();
+
+  // Enforce Standard category restriction: only UNSW students allowed
+  if (input.category === "standard") {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("user_type")
+      .eq("id", profileId)
+      .single();
+
+    if (profile?.user_type && profile.user_type !== "unsw") {
+      return { success: false, error: "Only UNSW students can create Standard division teams" };
+    }
+  }
+
+  // Check if user is already on a team
   const { data: existingMembership } = await supabase
     .from("team_members")
     .select("id")
@@ -209,6 +223,19 @@ export async function joinTeam(
 
   if (!team) {
     return { success: false, error: "Invalid join code" };
+  }
+
+  // Enforce Standard category restriction: only UNSW students allowed
+  if (team.category === "standard") {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("user_type")
+      .eq("id", profileId)
+      .single();
+
+    if (profile?.user_type && profile.user_type !== "unsw") {
+      return { success: false, error: "Only UNSW students can join Standard division teams" };
+    }
   }
 
   // Check member limit

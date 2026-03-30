@@ -1,11 +1,16 @@
+export type UserType = "unsw" | "other_uni" | "high_school";
+
 export type Profile = {
   id: string;
   clerk_user_id: string;
   email: string;
   full_name: string;
+  user_type: UserType;
   is_unsw: boolean;
   university: string;
   zid: string;
+  uni_id: string;
+  high_school: string;
   year_of_study: string;
   degree_stage: string;
   undergrad_postgrad: string;
