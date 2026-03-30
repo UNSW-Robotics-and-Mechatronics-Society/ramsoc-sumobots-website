@@ -591,10 +591,10 @@ function MockYesNoToggle({
 
 function OnboardingSection() {
   const [step, setStep] = useState(0);
+  const [userType, setUserType] = useState<"unsw" | "other_uni" | "high_school" | null>(null);
   const [teamMode, setTeamMode] = useState<"choose" | "create" | "join">(
     "choose",
   );
-  const [isUnsw, setIsUnsw] = useState(true);
   const [joinCode, setJoinCode] = useState("");
   const [createdCode, setCreatedCode] = useState<string | null>(null);
   const [showJoinPreview, setShowJoinPreview] = useState(false);
@@ -606,9 +606,14 @@ function OnboardingSection() {
   const [isRamsocMember, setIsRamsocMember] = useState(true);
   const [isArcMember, setIsArcMember] = useState(true);
 
+  const isUnsw = userType === "unsw";
+  const isOtherUni = userType === "other_uni";
+  const isHighSchool = userType === "high_school";
+  const canJoinStandard = userType === "unsw";
+
   function handleProfileSubmit(e: FormEvent) {
     e.preventDefault();
-    setStep(2);
+    setStep(3);
   }
 
   function handleCreateSubmit(e: FormEvent) {
@@ -618,6 +623,7 @@ function OnboardingSection() {
 
   function resetOnboarding() {
     setStep(0);
+    setUserType(null);
     setTeamMode("choose");
     setCreatedCode(null);
     setShowJoinPreview(false);
@@ -634,7 +640,7 @@ function OnboardingSection() {
       </div>
       <div className="mx-auto max-w-lg">
         <GlassPanel>
-        {step > 0 && <StepIndicator currentStep={step} totalSteps={2} />}
+        {step > 0 && <StepIndicator currentStep={step} totalSteps={3} />}
 
         <AnimatePresence mode="wait">
           {step === 0 && (
@@ -691,7 +697,46 @@ function OnboardingSection() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              {/* Mock StudentDetailsForm — mirrors real onboarding fields */}
+              {/* Mock UserTypeStep — Who are you? */}
+              <div className="flex flex-col items-center gap-6">
+                <div className="text-center">
+                  <h2 className="mb-2 text-2xl sm:text-3xl">Who are you?</h2>
+                  <p className="font-main text-sm text-muted-foreground">
+                    This helps us match you with the right competition division
+                  </p>
+                </div>
+                <div className="flex w-full flex-col gap-3">
+                  {([
+                    { value: "unsw" as const, title: "UNSW Student", desc: "Currently enrolled at UNSW" },
+                    { value: "other_uni" as const, title: "Other University", desc: "Enrolled at another university" },
+                    { value: "high_school" as const, title: "High School Student", desc: "Currently attending high school" },
+                  ]).map((opt) => (
+                    <motion.button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => { setUserType(opt.value); setStep(2); }}
+                      className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <span className="font-display text-lg">{opt.title}</span>
+                      <span className="text-sm text-muted-foreground">{opt.desc}</span>
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 2 && (
+            <motion.div
+              key="step-2"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              {/* Mock StudentDetailsForm — adapts based on user type */}
               <form onSubmit={handleProfileSubmit} className="flex flex-col gap-4">
                 <OnboardingField delay={0.1}>
                   <Input
@@ -703,26 +748,8 @@ function OnboardingSection() {
                   />
                 </OnboardingField>
 
-                <OnboardingField delay={0.15}>
-                  <div className="flex items-center gap-3">
-                    <label className={`font-main flex min-h-[44px] cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-all ${
-                      isUnsw
-                        ? "border-primary bg-primary/10 text-foreground"
-                        : "border-border bg-secondary text-muted-foreground hover:border-primary/30"
-                    }`}>
-                      <input
-                        type="checkbox"
-                        checked={isUnsw}
-                        onChange={(e) => setIsUnsw(e.target.checked)}
-                        className="h-5 w-5 rounded accent-primary"
-                      />
-                      I am a UNSW student
-                    </label>
-                  </div>
-                </OnboardingField>
-
-                <OnboardingField delay={0.2}>
-                  {isUnsw ? (
+                {isUnsw && (
+                  <OnboardingField delay={0.15}>
                     <Input
                       label="zID"
                       name="zid"
@@ -730,88 +757,117 @@ function OnboardingSection() {
                       required
                       defaultValue="z5555555"
                     />
-                  ) : (
+                  </OnboardingField>
+                )}
+
+                {isOtherUni && (
+                  <>
+                    <OnboardingField delay={0.15}>
+                      <Input
+                        label="University"
+                        name="university"
+                        required
+                        placeholder="e.g. University of Sydney"
+                      />
+                    </OnboardingField>
+                    <OnboardingField delay={0.2}>
+                      <Input
+                        label="University ID"
+                        name="uni_id"
+                        required
+                        placeholder="e.g. 490123456"
+                      />
+                    </OnboardingField>
+                  </>
+                )}
+
+                {isHighSchool && (
+                  <OnboardingField delay={0.15}>
                     <Input
-                      label="University"
-                      name="university"
+                      label="High School"
+                      name="high_school"
                       required
-                      placeholder="e.g. University of Sydney"
+                      placeholder="e.g. Sydney Grammar School"
                     />
-                  )}
-                </OnboardingField>
+                  </OnboardingField>
+                )}
 
-                <OnboardingField delay={0.25}>
-                  <Select
-                    label="Year of Study"
-                    name="year_of_study"
-                    options={YEAR_OPTIONS}
-                    placeholder="Select year"
-                    required
-                    defaultValue="3rd Year"
-                  />
-                </OnboardingField>
+                {!isHighSchool && (
+                  <>
+                    <OnboardingField delay={0.25}>
+                      <Select
+                        label="Year of Study"
+                        name="year_of_study"
+                        options={YEAR_OPTIONS}
+                        placeholder="Select year"
+                        required
+                        defaultValue="3rd Year"
+                      />
+                    </OnboardingField>
 
-                <OnboardingField delay={0.3}>
-                  <Select
-                    label="Degree Stage"
-                    name="degree_stage"
-                    options={DEGREE_STAGE_OPTIONS}
-                    placeholder="Select degree stage"
-                    required
-                    defaultValue="Penultimate"
-                  />
-                </OnboardingField>
+                    <OnboardingField delay={0.3}>
+                      <Select
+                        label="Degree Stage"
+                        name="degree_stage"
+                        options={DEGREE_STAGE_OPTIONS}
+                        placeholder="Select degree stage"
+                        required
+                        defaultValue="Penultimate"
+                      />
+                    </OnboardingField>
 
-                <OnboardingField delay={0.35}>
-                  <MockRadioGroup
-                    label="Undergraduate or Postgraduate"
-                    name="undergrad_postgrad"
-                    options={UNDERGRAD_POSTGRAD_OPTIONS}
-                    value={undergradPostgrad}
-                    onChange={setUndergradPostgrad}
-                    required
-                  />
-                </OnboardingField>
+                    <OnboardingField delay={0.35}>
+                      <MockRadioGroup
+                        label="Undergraduate or Postgraduate"
+                        name="undergrad_postgrad"
+                        options={UNDERGRAD_POSTGRAD_OPTIONS}
+                        value={undergradPostgrad}
+                        onChange={setUndergradPostgrad}
+                        required
+                      />
+                    </OnboardingField>
 
-                <OnboardingField delay={0.4}>
-                  <MockRadioGroup
-                    label="Domestic or International"
-                    name="domestic_international"
-                    options={DOMESTIC_INTL_OPTIONS}
-                    value={domesticIntl}
-                    onChange={setDomesticIntl}
-                    required
-                  />
-                </OnboardingField>
+                    <OnboardingField delay={0.4}>
+                      <MockRadioGroup
+                        label="Domestic or International"
+                        name="domestic_international"
+                        options={DOMESTIC_INTL_OPTIONS}
+                        value={domesticIntl}
+                        onChange={setDomesticIntl}
+                        required
+                      />
+                    </OnboardingField>
 
-                <OnboardingField delay={0.45}>
-                  <Input
-                    label="Degree"
-                    name="degree"
-                    required
-                    placeholder="e.g. B.Eng (Mechatronics)"
-                    defaultValue="Computer Science"
-                  />
-                </OnboardingField>
+                    <OnboardingField delay={0.45}>
+                      <Input
+                        label="Degree"
+                        name="degree"
+                        required
+                        placeholder="e.g. B.Eng (Mechatronics)"
+                        defaultValue="Computer Science"
+                      />
+                    </OnboardingField>
 
-                <OnboardingField delay={0.5}>
-                  <Input
-                    label="Majors (if applicable)"
-                    name="majors"
-                    placeholder="e.g. Mechanical Engineering"
-                    defaultValue="Artificial Intelligence"
-                  />
-                </OnboardingField>
+                    <OnboardingField delay={0.5}>
+                      <Input
+                        label="Majors (if applicable)"
+                        name="majors"
+                        placeholder="e.g. Mechanical Engineering"
+                        defaultValue="Artificial Intelligence"
+                      />
+                    </OnboardingField>
 
-                <OnboardingField delay={0.55}>
-                  <MockCheckboxGroup
-                    label="Faculty"
-                    options={FACULTY_OPTIONS}
-                    selected={selectedFaculties}
-                    onChange={setSelectedFaculties}
-                    required
-                  />
-                </OnboardingField>
+                    <OnboardingField delay={0.55}>
+                      <MockCheckboxGroup
+                        label="Faculty"
+                        options={FACULTY_OPTIONS}
+                        selected={selectedFaculties}
+                        onChange={setSelectedFaculties}
+                        required
+                      />
+                    </OnboardingField>
+                  </>
+                )}
 
                 <OnboardingField delay={0.6}>
                   <MockRadioGroup
@@ -875,7 +931,7 @@ function OnboardingSection() {
             </motion.div>
           )}
 
-          {step === 2 && (
+          {step === 3 && (
             <motion.div
               key="step-2"
               initial={{ opacity: 0, y: 30 }}
@@ -938,13 +994,24 @@ function OnboardingSection() {
                     <Select
                       label="Category"
                       name="category"
-                      options={CATEGORY_OPTIONS}
+                      options={canJoinStandard ? CATEGORY_OPTIONS : CATEGORY_OPTIONS.filter((o) => o.value === "open")}
                       required
-                      defaultValue="standard"
+                      defaultValue={canJoinStandard ? "standard" : "open"}
                     />
                     <p className="font-main text-xs text-muted-foreground">
-                      <b>Standard:</b> UNSW students only, 3–6 members.{" "}
-                      <b>Open:</b> Any university, 1–6 members.
+                      {canJoinStandard ? (
+                        <>
+                          <b>Standard:</b> UNSW students only, 3–6 members.{" "}
+                          <b>Open:</b> Any university or high school, 1–6 members.
+                        </>
+                      ) : (
+                        <>
+                          <b>Open:</b> Any university or high school, 1–6 members.
+                          {isHighSchool
+                            ? " High school students can only compete in the Open division."
+                            : " Non-UNSW students can only compete in the Open division."}
+                        </>
+                      )}
                     </p>
                     <div className="sticky bottom-4 mt-4 pt-4">
                       <Button type="submit" size="full">
