@@ -9,13 +9,16 @@ import type { UserType } from "./UserTypeStep";
 
 export default function TeamStep({
   onComplete,
+  onBack,
   hasTeam,
   userType,
 }: {
   onComplete: () => void;
+  onBack?: () => void;
   hasTeam: boolean;
   userType: UserType;
 }) {
+  const isStandard = userType === "unsw";
   const [mode, setMode] = useState<"choose" | "create" | "join" | "solo">(
     hasTeam ? "create" : "choose",
   );
@@ -79,15 +82,39 @@ export default function TeamStep({
           </motion.button>
           <motion.button
             type="button"
-            onClick={() => setMode("solo")}
-            className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.98 }}
+            onClick={() => !isStandard && setMode("solo")}
+            disabled={isStandard}
+            className={
+              isStandard
+                ? "font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white/40 backdrop-blur-sm opacity-50 cursor-not-allowed"
+                : "font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
+            }
+            whileHover={{ scale: isStandard ? 1 : 1.01 }}
+            whileTap={{ scale: isStandard ? 1 : 0.98 }}
           >
             <span className="font-display text-lg">Go Solo</span>
             <span className="text-sm text-gray-400">
               Compete on your own in the Open division
             </span>
+            {isStandard && (
+              <span className="mt-1 text-xs text-rose-400/80">
+                Solo is Open division only.{" "}
+                {onBack ? (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onBack();
+                    }}
+                    className="underline transition-colors hover:text-rose-300"
+                  >
+                    Go back to switch to Open
+                  </button>
+                ) : (
+                  "Go back to switch to Open."
+                )}
+              </span>
+            )}
           </motion.button>
           <motion.button
             type="button"
