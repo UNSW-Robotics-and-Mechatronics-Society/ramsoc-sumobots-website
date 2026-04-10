@@ -609,7 +609,7 @@ function MockYesNoToggle({
 function OnboardingSection() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState<"unsw" | "other_uni" | "high_school" | null>(null);
-  const [teamMode, setTeamMode] = useState<"choose" | "create" | "join">(
+  const [teamMode, setTeamMode] = useState<"choose" | "create" | "join" | "solo">(
     "choose",
   );
   const [joinCode, setJoinCode] = useState("");
@@ -1007,7 +1007,7 @@ function OnboardingSection() {
               {teamMode === "choose" && (
                 <div className="flex flex-col gap-4">
                   <p className="font-main text-center text-muted-foreground">
-                    Create a new team or join an existing one with a code
+                    Create a team, join one with a code, or go it alone
                   </p>
                   <motion.button
                     type="button"
@@ -1031,6 +1031,51 @@ function OnboardingSection() {
                     <span className="font-display text-lg">Join a Team</span>
                     <span className="text-sm text-muted-foreground">
                       Enter a join code from your captain
+                    </span>
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    onClick={() => !canJoinStandard && setTeamMode("solo")}
+                    disabled={canJoinStandard}
+                    className={
+                      canJoinStandard
+                        ? "font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground/40 backdrop-blur-sm opacity-50 cursor-not-allowed"
+                        : "font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
+                    }
+                    whileHover={{ scale: canJoinStandard ? 1 : 1.01 }}
+                    whileTap={{ scale: canJoinStandard ? 1 : 0.98 }}
+                  >
+                    <span className="font-display text-lg">Go Solo</span>
+                    <span className="text-sm text-muted-foreground">
+                      Compete on your own in the Open division
+                    </span>
+                    {canJoinStandard && (
+                      <span className="mt-1 text-xs text-destructive/80">
+                        Solo is Open division only.{" "}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setStep(1);
+                            setTeamMode("choose");
+                          }}
+                          className="underline hover:text-destructive"
+                        >
+                          Go back to switch to Open
+                        </button>
+                      </span>
+                    )}
+                  </motion.button>
+                  <motion.button
+                    type="button"
+                    onClick={() => alert("Would mark onboarded and navigate to dashboard")}
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="font-display text-lg">Decide Later</span>
+                    <span className="text-sm text-muted-foreground">
+                      Skip for now and set up your team from the dashboard
                     </span>
                   </motion.button>
                 </div>
@@ -1092,6 +1137,69 @@ function OnboardingSection() {
                     <h3 className="mb-2">Team Created!</h3>
                     <p className="text-muted-foreground">
                       Share this code with your teammates
+                    </p>
+                  </div>
+                  <div
+                    className="cursor-pointer rounded-xl border border-border bg-secondary px-8 py-6 transition-colors hover:border-primary"
+                    onClick={() => navigator.clipboard.writeText(createdCode)}
+                    title="Click to copy"
+                  >
+                    <span className="font-display text-4xl tracking-[0.3em]">
+                      {createdCode}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Tap the code to copy</p>
+                  <Button
+                    size="full"
+                    onClick={() =>
+                      alert("Would navigate to dashboard")
+                    }
+                  >
+                    Go to Dashboard
+                  </Button>
+                </div>
+              )}
+
+              {teamMode === "solo" && !createdCode && (
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setTeamMode("choose")}
+                    className="font-main mb-4 text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    &larr; Back
+                  </button>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      setCreatedCode("XK9M4R");
+                    }}
+                    className="flex flex-col gap-4"
+                  >
+                    <p className="font-main text-center text-sm text-muted-foreground">
+                      Name your solo team. You&apos;ll compete in the Open division.
+                    </p>
+                    <Input
+                      label="Team Name"
+                      name="team_name"
+                      required
+                      placeholder="e.g. The Destroyers"
+                    />
+                    <div className="sticky bottom-4 mt-4 pt-4">
+                      <Button type="submit" size="full">
+                        Go Solo
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
+              {teamMode === "solo" && createdCode && (
+                <div className="flex flex-col items-center gap-6 text-center">
+                  <div>
+                    <h3 className="mb-2">You&apos;re all set!</h3>
+                    <p className="text-muted-foreground">
+                      Keep this code in case you want to add teammates later
                     </p>
                   </div>
                   <div
