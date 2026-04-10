@@ -6,19 +6,22 @@ import CreateTeamForm from "./CreateTeamForm";
 import JoinTeamForm from "./JoinTeamForm";
 import { markOnboarded } from "@/app/2026/_actions/profile";
 import type { UserType } from "./UserTypeStep";
+import type { TeamCategory } from "@/app/2026/_data/teamConfig";
 
 export default function TeamStep({
   onComplete,
   onBack,
   hasTeam,
   userType,
+  division,
 }: {
   onComplete: () => void;
   onBack?: () => void;
   hasTeam: boolean;
   userType: UserType;
+  division: TeamCategory;
 }) {
-  const isStandard = userType === "unsw";
+  const isStandard = division === "standard";
   const [mode, setMode] = useState<"choose" | "create" | "join" | "solo">(
     hasTeam ? "create" : "choose",
   );
@@ -54,7 +57,7 @@ export default function TeamStep({
           className="flex flex-col gap-4"
         >
           <p className="font-main text-center text-gray-400">
-            Create a team, join one with a code, or go it alone
+            Create a team, join one with a code{!isStandard && ", or go it alone"}
           </p>
           <motion.button
             type="button"
@@ -80,42 +83,20 @@ export default function TeamStep({
               Enter a join code from your captain
             </span>
           </motion.button>
-          <motion.button
-            type="button"
-            onClick={() => !isStandard && setMode("solo")}
-            disabled={isStandard}
-            className={
-              isStandard
-                ? "font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white/40 backdrop-blur-sm opacity-50 cursor-not-allowed"
-                : "font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
-            }
-            whileHover={{ scale: isStandard ? 1 : 1.01 }}
-            whileTap={{ scale: isStandard ? 1 : 0.98 }}
-          >
-            <span className="font-display text-lg">Go Solo</span>
-            <span className="text-sm text-gray-400">
-              Compete on your own in the Open division
-            </span>
-            {isStandard && (
-              <span className="mt-1 text-xs text-rose-400/80">
-                Solo is Open division only.{" "}
-                {onBack ? (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onBack();
-                    }}
-                    className="underline transition-colors hover:text-rose-300"
-                  >
-                    Go back to switch to Open
-                  </button>
-                ) : (
-                  "Go back to switch to Open."
-                )}
+          {!isStandard && (
+            <motion.button
+              type="button"
+              onClick={() => setMode("solo")}
+              className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="font-display text-lg">Go Solo</span>
+              <span className="text-sm text-gray-400">
+                Compete on your own in the Open division
               </span>
-            )}
-          </motion.button>
+            </motion.button>
+          )}
           <motion.button
             type="button"
             onClick={handleDecideLater}
@@ -153,13 +134,13 @@ export default function TeamStep({
             &larr; Back
           </button>
           {mode === "create" && (
-            <CreateTeamForm onComplete={onComplete} userType={userType} />
+            <CreateTeamForm onComplete={onComplete} userType={userType} division={division} />
           )}
           {mode === "join" && (
             <JoinTeamForm onComplete={onComplete} userType={userType} />
           )}
           {mode === "solo" && (
-            <CreateTeamForm onComplete={onComplete} userType={userType} solo />
+            <CreateTeamForm onComplete={onComplete} userType={userType} division={division} solo />
           )}
         </motion.div>
       )}

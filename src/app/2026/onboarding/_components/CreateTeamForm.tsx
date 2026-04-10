@@ -8,6 +8,7 @@ import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
 import { Button } from "@/app/2026/_components/ui/Button";
 import type { UserType } from "./UserTypeStep";
+import type { TeamCategory } from "@/app/2026/_data/teamConfig";
 
 const ALL_CATEGORY_OPTIONS = [
   {
@@ -35,10 +36,12 @@ function Field({ delay, children }: { delay: number; children: React.ReactNode }
 export default function CreateTeamForm({
   onComplete,
   userType,
+  division,
   solo = false,
 }: {
   onComplete: () => void;
   userType: UserType;
+  division: TeamCategory;
   solo?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
@@ -145,7 +148,7 @@ export default function CreateTeamForm({
             name="category"
             options={categoryOptions}
             required
-            defaultValue={canJoinStandard ? "standard" : "open"}
+            defaultValue={canJoinStandard ? division : "open"}
           />
         </Field>
       )}
