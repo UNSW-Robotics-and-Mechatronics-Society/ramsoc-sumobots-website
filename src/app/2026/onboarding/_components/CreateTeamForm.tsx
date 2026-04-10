@@ -35,15 +35,17 @@ function Field({ delay, children }: { delay: number; children: React.ReactNode }
 export default function CreateTeamForm({
   onComplete,
   userType,
+  solo = false,
 }: {
   onComplete: () => void;
   userType: UserType;
+  solo?: boolean;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [joinCode, setJoinCode] = useState<string | null>(null);
 
-  const canJoinStandard = userType === "unsw";
+  const canJoinStandard = userType === "unsw" && !solo;
   const categoryOptions = canJoinStandard
     ? ALL_CATEGORY_OPTIONS
     : ALL_CATEGORY_OPTIONS.filter((opt) => opt.value === "open");
@@ -56,7 +58,7 @@ export default function CreateTeamForm({
     const form = new FormData(e.currentTarget);
     const result = await createTeam({
       name: form.get("team_name") as string,
-      category: form.get("category") as "standard" | "open",
+      category: solo ? "open" : (form.get("category") as "standard" | "open"),
     });
 
     setLoading(false);
@@ -77,8 +79,12 @@ export default function CreateTeamForm({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <h3 className="mb-2">Team Created!</h3>
-          <p className="text-gray-400">Share this code with your teammates</p>
+          <h3 className="mb-2">{solo ? "You're all set!" : "Team Created!"}</h3>
+          <p className="text-gray-400">
+            {solo
+              ? "Keep this code in case you want to add teammates later"
+              : "Share this code with your teammates"}
+          </p>
         </motion.div>
         <motion.div
           className="cursor-pointer rounded-xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-sm transition-colors hover:border-rose-500"
@@ -115,6 +121,14 @@ export default function CreateTeamForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {solo && (
+        <Field delay={0.3}>
+          <p className="font-main text-center text-sm text-gray-400">
+            Name your solo team. You&apos;ll compete in the Open division.
+          </p>
+        </Field>
+      )}
+
       <Field delay={0.4}>
         <Input
           label="Team Name"
@@ -124,39 +138,43 @@ export default function CreateTeamForm({
         />
       </Field>
 
-      <Field delay={0.4}>
-        <Select
-          label="Category"
-          name="category"
-          options={categoryOptions}
-          required
-          defaultValue={canJoinStandard ? "standard" : "open"}
-        />
-      </Field>
+      {!solo && (
+        <Field delay={0.4}>
+          <Select
+            label="Category"
+            name="category"
+            options={categoryOptions}
+            required
+            defaultValue={canJoinStandard ? "standard" : "open"}
+          />
+        </Field>
+      )}
 
-      <Field delay={0.3}>
-        <p className="font-main text-xs text-gray-500">
-          {canJoinStandard ? (
-            <>
-              <b>Standard:</b> UNSW students only, 3-6 members.{" "}
-              <b>Open:</b> Any university or high school, 1-6 members.
-            </>
-          ) : (
-            <>
-              <b>Open:</b> Any university or high school, 1-6 members.
-              {userType === "high_school"
-                ? " High school students can only compete in the Open division."
-                : " Non-UNSW students can only compete in the Open division."}
-            </>
-          )}
-        </p>
-      </Field>
+      {!solo && (
+        <Field delay={0.3}>
+          <p className="font-main text-xs text-gray-500">
+            {canJoinStandard ? (
+              <>
+                <b>Standard:</b> UNSW students only, 3-6 members.{" "}
+                <b>Open:</b> Any university or high school, 1-6 members.
+              </>
+            ) : (
+              <>
+                <b>Open:</b> Any university or high school, 1-6 members.
+                {userType === "high_school"
+                  ? " High school students can only compete in the Open division."
+                  : " Non-UNSW students can only compete in the Open division."}
+              </>
+            )}
+          </p>
+        </Field>
+      )}
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
       <div className="sticky bottom-4 mt-4 pt-4">
         <Button type="submit" size="full" disabled={loading} loading={loading}>
-          {loading ? "Creating..." : "Create Team"}
+          {loading ? "Creating..." : solo ? "Go Solo" : "Create Team"}
         </Button>
       </div>
     </form>
