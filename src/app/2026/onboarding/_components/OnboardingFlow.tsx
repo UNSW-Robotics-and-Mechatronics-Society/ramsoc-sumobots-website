@@ -194,10 +194,6 @@ export default function OnboardingFlow({
           >
             <TeamStep
               onComplete={handleTeamComplete}
-              onBack={!hasProfile ? () => {
-                setStep(1);
-                setDivision(null);
-              } : undefined}
               hasTeam={hasTeam}
               userType={userType ?? "unsw"}
               division={division ?? "open"}

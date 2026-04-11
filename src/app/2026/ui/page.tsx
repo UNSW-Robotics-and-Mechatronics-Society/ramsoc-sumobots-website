@@ -148,7 +148,7 @@ const mockBrowseTeams: TeamBrowseItem[] = [
   { name: "RoboWarriors", category: "standard", member_count: 3 },
   { name: "Bot Busters", category: "open", member_count: 2 },
   { name: "The Pushers", category: "standard", member_count: 6 },
-  { name: "Solo Bot", category: "open", member_count: 1 },
+  { name: "Circuit Breakers", category: "open", member_count: 2 },
 ];
 
 const mockAdminTeams: AdminTeamRow[] = [
@@ -469,7 +469,7 @@ const HEARD_FROM_OPTIONS = [
 
 const CATEGORY_OPTIONS = [
   { value: "standard", label: "Standard (UNSW only, 3–6 members)" },
-  { value: "open", label: "Open (Inter-uni, 1–6 members)" },
+  { value: "open", label: "Open (Inter-uni, 2–6 members)" },
 ];
 
 function OnboardingField({ delay, children }: { delay: number; children: React.ReactNode }) {
@@ -610,7 +610,7 @@ function OnboardingSection() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState<"unsw" | "other_uni" | "high_school" | null>(null);
   const [division, setDivision] = useState<"standard" | "open" | null>(null);
-  const [teamMode, setTeamMode] = useState<"choose" | "create" | "join" | "solo">(
+  const [teamMode, setTeamMode] = useState<"choose" | "create" | "join">(
     "choose",
   );
   const [joinCode, setJoinCode] = useState("");
@@ -631,7 +631,6 @@ function OnboardingSection() {
   const isOtherUni = userType === "other_uni";
   const isHighSchool = userType === "high_school";
   const canJoinStandard = userType === "unsw";
-  const isStandard = division === "standard";
   const showDivisionPicker = step === 1 && userType === "unsw" && !division;
 
   function handleProfileSubmit(e: FormEvent) {
@@ -779,7 +778,7 @@ function OnboardingSection() {
                 <div className="flex w-full flex-col gap-3">
                   {([
                     { value: "standard" as const, title: "Standard", desc: "UNSW students only, 3-6 members per team" },
-                    { value: "open" as const, title: "Open", desc: "Any university or high school, 1-6 members (solo allowed)" },
+                    { value: "open" as const, title: "Open", desc: "Any university or high school, 2-6 members" },
                   ]).map((opt) => (
                     <motion.button
                       key={opt.value}
@@ -1064,7 +1063,7 @@ function OnboardingSection() {
               {teamMode === "choose" && (
                 <div className="flex flex-col gap-4">
                   <p className="font-main text-center text-muted-foreground">
-                    Create a team, join one with a code{!isStandard && ", or go it alone"}
+                    Create a new team or join an existing one with a code
                   </p>
                   <motion.button
                     type="button"
@@ -1090,20 +1089,6 @@ function OnboardingSection() {
                       Enter a join code from your captain
                     </span>
                   </motion.button>
-                  {!isStandard && (
-                    <motion.button
-                      type="button"
-                      onClick={() => setTeamMode("solo")}
-                      className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="font-display text-lg">Go Solo</span>
-                      <span className="text-sm text-muted-foreground">
-                        Compete on your own in the Open division
-                      </span>
-                    </motion.button>
-                  )}
                   <motion.button
                     type="button"
                     onClick={() => alert("Would mark onboarded and navigate to dashboard")}
@@ -1149,11 +1134,11 @@ function OnboardingSection() {
                       {canJoinStandard ? (
                         <>
                           <b>Standard:</b> UNSW students only, 3–6 members.{" "}
-                          <b>Open:</b> Any university or high school, 1–6 members.
+                          <b>Open:</b> Any university or high school, 2–6 members.
                         </>
                       ) : (
                         <>
-                          <b>Open:</b> Any university or high school, 1–6 members.
+                          <b>Open:</b> Any university or high school, 2–6 members.
                           {isHighSchool
                             ? " High school students can only compete in the Open division."
                             : " Non-UNSW students can only compete in the Open division."}
@@ -1175,69 +1160,6 @@ function OnboardingSection() {
                     <h3 className="mb-2">Team Created!</h3>
                     <p className="text-muted-foreground">
                       Share this code with your teammates
-                    </p>
-                  </div>
-                  <div
-                    className="cursor-pointer rounded-xl border border-border bg-secondary px-8 py-6 transition-colors hover:border-primary"
-                    onClick={() => navigator.clipboard.writeText(createdCode)}
-                    title="Click to copy"
-                  >
-                    <span className="font-display text-4xl tracking-[0.3em]">
-                      {createdCode}
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">Tap the code to copy</p>
-                  <Button
-                    size="full"
-                    onClick={() =>
-                      alert("Would navigate to dashboard")
-                    }
-                  >
-                    Go to Dashboard
-                  </Button>
-                </div>
-              )}
-
-              {teamMode === "solo" && !createdCode && (
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setTeamMode("choose")}
-                    className="font-main mb-4 text-sm text-muted-foreground hover:text-foreground"
-                  >
-                    &larr; Back
-                  </button>
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      setCreatedCode("XK9M4R");
-                    }}
-                    className="flex flex-col gap-4"
-                  >
-                    <p className="font-main text-center text-sm text-muted-foreground">
-                      Name your solo team. You&apos;ll compete in the Open division.
-                    </p>
-                    <Input
-                      label="Team Name"
-                      name="team_name"
-                      required
-                      placeholder="e.g. The Destroyers"
-                    />
-                    <div className="sticky bottom-4 mt-4 pt-4">
-                      <Button type="submit" size="full">
-                        Go Solo
-                      </Button>
-                    </div>
-                  </form>
-                </div>
-              )}
-
-              {teamMode === "solo" && createdCode && (
-                <div className="flex flex-col items-center gap-6 text-center">
-                  <div>
-                    <h3 className="mb-2">You&apos;re all set!</h3>
-                    <p className="text-muted-foreground">
-                      Keep this code in case you want to add teammates later
                     </p>
                   </div>
                   <div

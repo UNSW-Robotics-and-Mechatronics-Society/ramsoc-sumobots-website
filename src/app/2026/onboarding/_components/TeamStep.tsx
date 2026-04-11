@@ -10,19 +10,16 @@ import type { TeamCategory } from "@/app/2026/_data/teamConfig";
 
 export default function TeamStep({
   onComplete,
-  onBack,
   hasTeam,
   userType,
   division,
 }: {
   onComplete: () => void;
-  onBack?: () => void;
   hasTeam: boolean;
   userType: UserType;
   division: TeamCategory;
 }) {
-  const isStandard = division === "standard";
-  const [mode, setMode] = useState<"choose" | "create" | "join" | "solo">(
+  const [mode, setMode] = useState<"choose" | "create" | "join">(
     hasTeam ? "create" : "choose",
   );
   const [delaying, setDelaying] = useState(false);
@@ -57,7 +54,7 @@ export default function TeamStep({
           className="flex flex-col gap-4"
         >
           <p className="font-main text-center text-gray-400">
-            Create a team, join one with a code{!isStandard && ", or go it alone"}
+            Create a new team or join an existing one with a code
           </p>
           <motion.button
             type="button"
@@ -83,20 +80,6 @@ export default function TeamStep({
               Enter a join code from your captain
             </span>
           </motion.button>
-          {!isStandard && (
-            <motion.button
-              type="button"
-              onClick={() => setMode("solo")}
-              className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="font-display text-lg">Go Solo</span>
-              <span className="text-sm text-gray-400">
-                Compete on your own in the Open division
-              </span>
-            </motion.button>
-          )}
           <motion.button
             type="button"
             onClick={handleDecideLater}
@@ -138,9 +121,6 @@ export default function TeamStep({
           )}
           {mode === "join" && (
             <JoinTeamForm onComplete={onComplete} userType={userType} />
-          )}
-          {mode === "solo" && (
-            <CreateTeamForm onComplete={onComplete} userType={userType} division={division} solo />
           )}
         </motion.div>
       )}

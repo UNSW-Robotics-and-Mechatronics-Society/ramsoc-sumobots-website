@@ -88,7 +88,7 @@ export async function processPayment(
   if ((count ?? 0) < minMembers) {
     return {
       success: false,
-      error: `Need at least ${minMembers} member${minMembers !== 1 ? "s" : ""} to activate`,
+      error: `Need at least ${minMembers} members to activate`,
     };
   }
 

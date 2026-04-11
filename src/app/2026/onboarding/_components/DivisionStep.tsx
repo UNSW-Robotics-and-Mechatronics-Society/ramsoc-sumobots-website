@@ -16,7 +16,7 @@ const DIVISION_OPTIONS: {
   {
     value: "open",
     title: "Open",
-    description: "Any university or high school, 1-6 members (solo allowed)",
+    description: "Any university or high school, 2-6 members",
   },
 ];
 
