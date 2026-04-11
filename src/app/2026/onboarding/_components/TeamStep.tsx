@@ -4,24 +4,42 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import CreateTeamForm from "./CreateTeamForm";
 import JoinTeamForm from "./JoinTeamForm";
+import { markOnboarded } from "@/app/2026/_actions/profile";
 import type { UserType } from "./UserTypeStep";
+import type { TeamCategory } from "@/app/2026/_data/teamConfig";
 
 export default function TeamStep({
   onComplete,
   hasTeam,
   userType,
+  division,
 }: {
   onComplete: () => void;
   hasTeam: boolean;
   userType: UserType;
+  division: TeamCategory;
 }) {
   const [mode, setMode] = useState<"choose" | "create" | "join">(
     hasTeam ? "create" : "choose",
   );
+  const [delaying, setDelaying] = useState(false);
+  const [delayError, setDelayError] = useState("");
 
   if (hasTeam) {
     onComplete();
     return null;
+  }
+
+  async function handleDecideLater() {
+    setDelaying(true);
+    setDelayError("");
+    const result = await markOnboarded();
+    if (result.success) {
+      onComplete();
+    } else {
+      setDelaying(false);
+      setDelayError(result.error || "Failed to skip team selection");
+    }
   }
 
   return (
@@ -62,6 +80,24 @@ export default function TeamStep({
               Enter a join code from your captain
             </span>
           </motion.button>
+          <motion.button
+            type="button"
+            onClick={handleDecideLater}
+            disabled={delaying}
+            className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10 disabled:pointer-events-none disabled:opacity-50"
+            whileHover={{ scale: delaying ? 1 : 1.01 }}
+            whileTap={{ scale: delaying ? 1 : 0.98 }}
+          >
+            <span className="font-display text-lg">
+              {delaying ? "Saving..." : "Decide Later"}
+            </span>
+            <span className="text-sm text-gray-400">
+              Skip for now and set up your team from the dashboard
+            </span>
+          </motion.button>
+          {delayError && (
+            <p className="text-center text-sm text-red-400">{delayError}</p>
+          )}
         </motion.div>
       )}
 
@@ -80,9 +116,10 @@ export default function TeamStep({
           >
             &larr; Back
           </button>
-          {mode === "create" ? (
-            <CreateTeamForm onComplete={onComplete} userType={userType} />
-          ) : (
+          {mode === "create" && (
+            <CreateTeamForm onComplete={onComplete} userType={userType} division={division} />
+          )}
+          {mode === "join" && (
             <JoinTeamForm onComplete={onComplete} userType={userType} />
           )}
         </motion.div>

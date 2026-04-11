@@ -7,10 +7,12 @@ import StepIndicator from "./StepIndicator";
 import AccountBar from "./AccountBar";
 import UserTypeStep from "./UserTypeStep";
 import type { UserType } from "./UserTypeStep";
+import DivisionStep from "./DivisionStep";
 import StudentDetailsForm from "./StudentDetailsForm";
 import TeamStep from "./TeamStep";
 import { Button } from "@/app/2026/_components/ui/Button";
 import Path from "@/app/path";
+import type { TeamCategory } from "@/app/2026/_data/teamConfig";
 
 const stepVariants = {
   enter: {
@@ -38,6 +40,7 @@ export default function OnboardingFlow({
   const initialStep = hasProfile ? 3 : 0;
   const [step, setStep] = useState(initialStep);
   const [userType, setUserType] = useState<UserType | null>(null);
+  const [division, setDivision] = useState<TeamCategory | null>(null);
 
   function handleStart() {
     setStep(1);
@@ -45,7 +48,24 @@ export default function OnboardingFlow({
 
   function handleUserTypeSelect(type: UserType) {
     setUserType(type);
+    if (type === "unsw") {
+      // UNSW students pick their division before continuing
+      setDivision(null);
+    } else {
+      // Non-UNSW are always Open
+      setDivision("open");
+      setStep(2);
+    }
+  }
+
+  function handleDivisionSelect(div: TeamCategory) {
+    setDivision(div);
     setStep(2);
+  }
+
+  function handleDivisionBack() {
+    setUserType(null);
+    setDivision(null);
   }
 
   function handleProfileComplete() {
@@ -55,6 +75,9 @@ export default function OnboardingFlow({
   function handleTeamComplete() {
     router.push(Path[2026].Dashboard);
   }
+
+  // Within step 1, UNSW users who haven't picked a division yet see DivisionStep
+  const showDivisionPicker = step === 1 && userType === "unsw" && !division;
 
   return (
     <div>
@@ -107,7 +130,7 @@ export default function OnboardingFlow({
           </motion.div>
         )}
 
-        {step === 1 && (
+        {step === 1 && !showDivisionPicker && (
           <motion.div
             key="step-1"
             variants={stepVariants}
@@ -120,6 +143,25 @@ export default function OnboardingFlow({
             }}
           >
             <UserTypeStep onSelect={handleUserTypeSelect} />
+          </motion.div>
+        )}
+
+        {showDivisionPicker && (
+          <motion.div
+            key="step-1-division"
+            variants={stepVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              duration: 0.35,
+              ease: [0.25, 0.46, 0.45, 0.94],
+            }}
+          >
+            <DivisionStep
+              onSelect={handleDivisionSelect}
+              onBack={handleDivisionBack}
+            />
           </motion.div>
         )}
 
@@ -154,6 +196,7 @@ export default function OnboardingFlow({
               onComplete={handleTeamComplete}
               hasTeam={hasTeam}
               userType={userType ?? "unsw"}
+              division={division ?? "open"}
             />
           </motion.div>
         )}

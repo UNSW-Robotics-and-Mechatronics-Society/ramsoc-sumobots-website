@@ -311,7 +311,7 @@ export default function DashboardContent({
                   onClick={() => !hasTeam && setTab("team")}
                 />
                 <ActionItem
-                  label={`Get at least ${minMembers} team member${minMembers !== 1 ? "s" : ""}`}
+                  label={`Get at least ${minMembers} team members`}
                   done={hasEnoughMembers}
                   onClick={() =>
                     hasTeam && !hasEnoughMembers && setTab("team")

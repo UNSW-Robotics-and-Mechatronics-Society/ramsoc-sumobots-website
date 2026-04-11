@@ -148,7 +148,7 @@ const mockBrowseTeams: TeamBrowseItem[] = [
   { name: "RoboWarriors", category: "standard", member_count: 3 },
   { name: "Bot Busters", category: "open", member_count: 2 },
   { name: "The Pushers", category: "standard", member_count: 6 },
-  { name: "Solo Bot", category: "open", member_count: 1 },
+  { name: "Circuit Breakers", category: "open", member_count: 2 },
 ];
 
 const mockAdminTeams: AdminTeamRow[] = [
@@ -469,7 +469,7 @@ const HEARD_FROM_OPTIONS = [
 
 const CATEGORY_OPTIONS = [
   { value: "standard", label: "Standard (UNSW only, 3–6 members)" },
-  { value: "open", label: "Open (Inter-uni, 1–6 members)" },
+  { value: "open", label: "Open (Inter-uni, 2–6 members)" },
 ];
 
 function OnboardingField({ delay, children }: { delay: number; children: React.ReactNode }) {
@@ -609,6 +609,7 @@ function MockYesNoToggle({
 function OnboardingSection() {
   const [step, setStep] = useState(0);
   const [userType, setUserType] = useState<"unsw" | "other_uni" | "high_school" | null>(null);
+  const [division, setDivision] = useState<"standard" | "open" | null>(null);
   const [teamMode, setTeamMode] = useState<"choose" | "create" | "join">(
     "choose",
   );
@@ -630,6 +631,7 @@ function OnboardingSection() {
   const isOtherUni = userType === "other_uni";
   const isHighSchool = userType === "high_school";
   const canJoinStandard = userType === "unsw";
+  const showDivisionPicker = step === 1 && userType === "unsw" && !division;
 
   function handleProfileSubmit(e: FormEvent) {
     e.preventDefault();
@@ -644,6 +646,7 @@ function OnboardingSection() {
   function resetOnboarding() {
     setStep(0);
     setUserType(null);
+    setDivision(null);
     setTeamMode("choose");
     setCreatedCode(null);
     setShowJoinPreview(false);
@@ -709,7 +712,7 @@ function OnboardingSection() {
             </motion.div>
           )}
 
-          {step === 1 && (
+          {step === 1 && !showDivisionPicker && (
             <motion.div
               key="step-1"
               initial={{ opacity: 0, y: 30 }}
@@ -734,7 +737,15 @@ function OnboardingSection() {
                     <motion.button
                       key={opt.value}
                       type="button"
-                      onClick={() => { setUserType(opt.value); setStep(2); }}
+                      onClick={() => {
+                        setUserType(opt.value);
+                        if (opt.value === "unsw") {
+                          setDivision(null);
+                        } else {
+                          setDivision("open");
+                          setStep(2);
+                        }
+                      }}
                       className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
                       whileHover={{ scale: 1.01 }}
                       whileTap={{ scale: 0.98 }}
@@ -744,6 +755,51 @@ function OnboardingSection() {
                     </motion.button>
                   ))}
                 </div>
+              </div>
+            </motion.div>
+          )}
+
+          {showDivisionPicker && (
+            <motion.div
+              key="step-1-division"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              {/* Mock DivisionStep — Standard or Open? */}
+              <div className="flex flex-col items-center gap-6">
+                <div className="text-center">
+                  <h2 className="mb-2 text-2xl sm:text-3xl">Which division?</h2>
+                  <p className="font-main text-sm text-muted-foreground">
+                    As a UNSW student you can compete in either division
+                  </p>
+                </div>
+                <div className="flex w-full flex-col gap-3">
+                  {([
+                    { value: "standard" as const, title: "Standard", desc: "UNSW students only, 3-6 members per team" },
+                    { value: "open" as const, title: "Open", desc: "Any university or high school, 2-6 members" },
+                  ]).map((opt) => (
+                    <motion.button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => { setDivision(opt.value); setStep(2); }}
+                      className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <span className="font-display text-lg">{opt.title}</span>
+                      <span className="text-sm text-muted-foreground">{opt.desc}</span>
+                    </motion.button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setUserType(null); setDivision(null); }}
+                  className="font-main text-sm text-muted-foreground hover:text-foreground"
+                >
+                  &larr; Back
+                </button>
               </div>
             </motion.div>
           )}
@@ -1033,6 +1089,18 @@ function OnboardingSection() {
                       Enter a join code from your captain
                     </span>
                   </motion.button>
+                  <motion.button
+                    type="button"
+                    onClick={() => alert("Would mark onboarded and navigate to dashboard")}
+                    className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-border bg-secondary p-5 text-foreground transition-colors hover:border-primary hover:bg-secondary/80"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="font-display text-lg">Decide Later</span>
+                    <span className="text-sm text-muted-foreground">
+                      Skip for now and set up your team from the dashboard
+                    </span>
+                  </motion.button>
                 </div>
               )}
 
@@ -1060,17 +1128,17 @@ function OnboardingSection() {
                       name="category"
                       options={canJoinStandard ? CATEGORY_OPTIONS : CATEGORY_OPTIONS.filter((o) => o.value === "open")}
                       required
-                      defaultValue={canJoinStandard ? "standard" : "open"}
+                      defaultValue={canJoinStandard ? (division ?? "standard") : "open"}
                     />
                     <p className="font-main text-xs text-muted-foreground">
                       {canJoinStandard ? (
                         <>
                           <b>Standard:</b> UNSW students only, 3–6 members.{" "}
-                          <b>Open:</b> Any university or high school, 1–6 members.
+                          <b>Open:</b> Any university or high school, 2–6 members.
                         </>
                       ) : (
                         <>
-                          <b>Open:</b> Any university or high school, 1–6 members.
+                          <b>Open:</b> Any university or high school, 2–6 members.
                           {isHighSchool
                             ? " High school students can only compete in the Open division."
                             : " Non-UNSW students can only compete in the Open division."}

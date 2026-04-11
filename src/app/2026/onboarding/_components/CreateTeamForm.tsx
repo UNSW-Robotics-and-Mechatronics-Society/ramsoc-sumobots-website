@@ -8,6 +8,7 @@ import Input from "@/app/2026/_components/ui/Input";
 import Select from "@/app/2026/_components/ui/Select";
 import { Button } from "@/app/2026/_components/ui/Button";
 import type { UserType } from "./UserTypeStep";
+import type { TeamCategory } from "@/app/2026/_data/teamConfig";
 
 const ALL_CATEGORY_OPTIONS = [
   {
@@ -16,7 +17,7 @@ const ALL_CATEGORY_OPTIONS = [
   },
   {
     value: "open",
-    label: "Open (Inter-uni, 1-6 members)",
+    label: "Open (Inter-uni, 2-6 members)",
   },
 ];
 
@@ -35,9 +36,11 @@ function Field({ delay, children }: { delay: number; children: React.ReactNode }
 export default function CreateTeamForm({
   onComplete,
   userType,
+  division,
 }: {
   onComplete: () => void;
   userType: UserType;
+  division: TeamCategory;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -130,7 +133,7 @@ export default function CreateTeamForm({
           name="category"
           options={categoryOptions}
           required
-          defaultValue={canJoinStandard ? "standard" : "open"}
+          defaultValue={canJoinStandard ? division : "open"}
         />
       </Field>
 
@@ -139,11 +142,11 @@ export default function CreateTeamForm({
           {canJoinStandard ? (
             <>
               <b>Standard:</b> UNSW students only, 3-6 members.{" "}
-              <b>Open:</b> Any university or high school, 1-6 members.
+              <b>Open:</b> Any university or high school, 2-6 members.
             </>
           ) : (
             <>
-              <b>Open:</b> Any university or high school, 1-6 members.
+              <b>Open:</b> Any university or high school, 2-6 members.
               {userType === "high_school"
                 ? " High school students can only compete in the Open division."
                 : " Non-UNSW students can only compete in the Open division."}
