@@ -9,6 +9,7 @@ const isProtectedRoute = createRouteMatcher([
 const isAdminProtectedRoute = createRouteMatcher([
   "/2026/admin/teams(.*)",
   "/2026/admin/individuals(.*)",
+  "/2026/admin/api(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

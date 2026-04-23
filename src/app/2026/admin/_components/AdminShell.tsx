@@ -53,14 +53,30 @@ export default function AdminShell({
               ))}
             </nav>
           </div>
-          <Button
-            variant="ghost"
-            size="default"
-            onClick={handleLogout}
-            disabled={isPending}
-          >
-            Logout
-          </Button>
+          <div className="flex items-center gap-2">
+            <a
+              href="/2026/admin/api/export/participants"
+              download
+              className="font-main rounded-md border border-white/20 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:border-white/40 hover:text-white"
+            >
+              Export Participants
+            </a>
+            <a
+              href="/2026/admin/api/export/teams"
+              download
+              className="font-main rounded-md border border-white/20 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:border-white/40 hover:text-white"
+            >
+              Export Teams
+            </a>
+            <Button
+              variant="ghost"
+              size="default"
+              onClick={handleLogout}
+              disabled={isPending}
+            >
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
