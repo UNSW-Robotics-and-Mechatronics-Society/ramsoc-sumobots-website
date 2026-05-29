@@ -17,8 +17,8 @@ const timetable: Timetable[] = [
     week: "1",
     topics: "Introduction",
     sessions: [
-      { day: "Tuesday", date: "2 Jun", isoDate: "2026-06-02", time: "6–8 PM", location: "504 Design Next" },
-      { day: "Thursday", date: "4 Jun", isoDate: "2026-06-04", time: "6–8 PM", location: "504 Design Next" },
+      { day: "Tuesday", date: "2 Jun", isoDate: "2026-06-02", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
+      { day: "Thursday", date: "4 Jun", isoDate: "2026-06-04", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
     ],
   },
   {
@@ -26,7 +26,7 @@ const timetable: Timetable[] = [
     topics: "Arduino Basics",
     sessions: [
       { day: "Tuesday", date: "9 Jun", isoDate: "2026-06-09", time: "6–8 PM", location: "Tyree LG03 + LG05" },
-      { day: "Thursday", date: "11 Jun", isoDate: "2026-06-11", time: "6–8 PM", location: "504 Design Next" },
+      { day: "Thursday", date: "11 Jun", isoDate: "2026-06-11", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
     ],
   },
   {
@@ -34,7 +34,7 @@ const timetable: Timetable[] = [
     topics: "CAD | 3D Printing | Lasercutting",
     sessions: [
       { day: "Tuesday", date: "16 Jun", isoDate: "2026-06-16", time: "6–8 PM", location: "Tyree LG03 + LG05" },
-      { day: "Thursday", date: "18 Jun", isoDate: "2026-06-18", time: "6–8 PM", location: "504 Design Next" },
+      { day: "Thursday", date: "18 Jun", isoDate: "2026-06-18", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
     ],
   },
   {
@@ -42,7 +42,7 @@ const timetable: Timetable[] = [
     topics: "Motor Controls | Soldering",
     sessions: [
       { day: "Tuesday", date: "23 Jun", isoDate: "2026-06-23", time: "6–8 PM", location: "Tyree LG03 + LG05" },
-      { day: "Thursday", date: "25 Jun", isoDate: "2026-06-25", time: "6–8 PM", location: "504 Design Next" },
+      { day: "Thursday", date: "25 Jun", isoDate: "2026-06-25", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
     ],
   },
   {
