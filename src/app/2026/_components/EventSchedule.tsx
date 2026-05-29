@@ -76,14 +76,14 @@ export const EventSchedule = () => {
   const tabs: Tab[] = [
     {
       name: "Knock-Out Day",
-      date: "TBC 2026",
-      place: "",
+      date: "6 Aug 2026",
+      place: "TBD",
       roundStatus: "knockout",
     },
     {
       name: "Finals Day",
-      date: "TBC 2026",
-      place: "",
+      date: "7 Aug 2026",
+      place: "Leighton Hall",
       roundStatus: "finals",
     },
   ];

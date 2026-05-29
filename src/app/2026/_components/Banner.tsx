@@ -7,6 +7,42 @@ import { useAuth } from "@clerk/nextjs";
 import TypingAnimation from "./TypeWriter";
 import Social from "./Social";
 import Path from "@/app/path";
+import { getUpcomingEvents } from "@/app/2026/_data/timetable";
+import { FaLocationDot } from "react-icons/fa6";
+
+function NextEventBadge() {
+  const [next] = getUpcomingEvents(1);
+  if (!next) return null;
+
+  const d = new Date(next.isoDate + "T00:00:00");
+  const day = d.getDate();
+  const month = d.toLocaleString("en-AU", { month: "short" });
+
+  return (
+    <Link
+      href="/2026/workshop#timetable"
+      className="group mt-4 inline-flex w-fit items-center gap-3 rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 transition-colors hover:bg-rose-500/20"
+    >
+      <span className="flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-full bg-rose-600 text-center leading-none">
+        <span className="text-[9px] font-semibold uppercase text-rose-200">{month}</span>
+        <span className="text-sm font-bold text-white">{day}</span>
+      </span>
+      <div className="flex flex-col">
+        <span className="font-main text-[10px] uppercase tracking-wider text-rose-400">Next Event</span>
+        <span className="font-main text-sm text-white">
+          Wk {next.week} — {next.topics} &middot; {next.time}
+        </span>
+        <span className="font-main flex items-center gap-1 text-xs text-gray-400">
+          <FaLocationDot size={10} />
+          {next.location}
+        </span>
+      </div>
+      <svg className="ml-1 h-4 w-4 shrink-0 text-rose-400 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </Link>
+  );
+}
 
 export const Banner = ({
   setPageTitleVisible,
@@ -53,6 +89,7 @@ export const Banner = ({
               INTER-UNI COMPETITION
             </span>
           </div>
+          <NextEventBadge />
           <div className="mt-4 flex flex-wrap gap-3">
             <Social socialName="instagram" variant="pill" size={20} />
             <Social socialName="facebook" variant="pill" size={20} />
