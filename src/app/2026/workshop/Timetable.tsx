@@ -30,12 +30,12 @@ export const Timetable = ({ className }: TimetableProps) => {
               <div className="flex flex-col justify-center gap-1 p-2">
                 <h3>{data.topics}</h3>
                 <div className="flex flex-col gap-2">
-                  {data.date_and_location?.map(({ date, location }) => (
+                  {data.sessions.map(({ day, date, time, location }) => (
                     <div
-                      key={`${date}-${location}`}
+                      key={`${day}-${date}`}
                       className="text-opacity-70 flex flex-col gap-2 text-sm text-white sm:flex-row"
                     >
-                      {date}
+                      {day} {date} · {time}
                       <span className="flex w-fit items-center justify-center gap-1 rounded-xl bg-zinc-800 px-2 font-semibold">
                         <FaLocationDot size={12} />
                         {location}
