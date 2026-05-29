@@ -112,7 +112,7 @@ export const EventSchedule = () => {
   return (
     <section id="schedule" className="container">
       <h2 className="col-span-full">Event Schedule.</h2>
-      <p>Coming Soon.</p>
+      <p>The detailed event schedule for Knock-Out and Finals day will be posted closer to the competition. Check back soon!</p>
 
       <div className="mx-auto mt-4 max-w-4xl rounded-lg border border-white/10 bg-zinc-900/70 p-4 shadow-md">
         <div className="mb-10 flex justify-center gap-6">
