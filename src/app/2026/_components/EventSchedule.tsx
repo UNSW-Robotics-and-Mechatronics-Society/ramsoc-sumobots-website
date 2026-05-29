@@ -1,8 +1,64 @@
 import React from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
 import Link from "next/link";
-import timetable from "@/app/2026/_data/timetable";
+import { getUpcomingEvents } from "@/app/2026/_data/timetable";
 import { FaLocationDot } from "react-icons/fa6";
+
+function WorkshopsTab({ containerVariants, itemVariants }: { containerVariants: Variants; itemVariants: Variants }) {
+  const upcoming = getUpcomingEvents(3);
+
+  if (upcoming.length === 0) {
+    return (
+      <p className="text-center text-gray-400">No upcoming workshops — check back soon!</p>
+    );
+  }
+
+  return (
+    <motion.div
+      key="workshops"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      className="flex flex-col gap-3"
+    >
+      {upcoming.map((event) => (
+        <motion.div
+          key={`${event.isoDate}-${event.day}`}
+          variants={itemVariants}
+          className="flex items-center rounded-lg border border-white/10 bg-zinc-800/60"
+        >
+          <div className="flex w-14 shrink-0 flex-col items-center justify-center border-r border-white/10 py-4 text-center">
+            <span className="text-[10px] font-semibold uppercase text-rose-400">
+              {new Date(event.isoDate + "T00:00:00").toLocaleString("en-AU", { month: "short" })}
+            </span>
+            <span className="text-xl font-bold text-white leading-none">
+              {new Date(event.isoDate + "T00:00:00").getDate()}
+            </span>
+          </div>
+          <div className="flex flex-col gap-1 p-3">
+            <p className="font-semibold text-white">Wk {event.week} — {event.topics}</p>
+            <div className="flex flex-wrap items-center gap-2 text-sm text-gray-300">
+              <span>{event.day} · {event.time}</span>
+              <span className="flex items-center gap-1 rounded-full bg-zinc-700 px-2 py-0.5 text-xs font-medium">
+                <FaLocationDot size={10} className="text-rose-400" />
+                {event.location}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+      ))}
+      <div className="mt-2 text-center">
+        <Link
+          href="/2026/workshop#timetable"
+          className="font-main text-sm text-rose-400 transition-colors hover:text-rose-300"
+        >
+          View full workshop schedule &rarr;
+        </Link>
+      </div>
+    </motion.div>
+  );
+}
 
 export const EventSchedule = () => {
   interface Tab {
@@ -146,46 +202,7 @@ export const EventSchedule = () => {
 
         <AnimatePresence mode="wait" initial={false}>
           {activeTab.roundStatus === "workshops" ? (
-            <motion.div
-              key="workshops"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              className="flex flex-col gap-3"
-            >
-              {timetable.map((entry, i) => (
-                <motion.div
-                  key={i}
-                  variants={itemVariants}
-                  className="flex items-start rounded-lg border border-white/10 bg-zinc-800/60"
-                >
-                  <div className="flex h-full w-14 shrink-0 flex-col items-center justify-center border-r border-white/10 py-3 text-center text-sm font-semibold text-white">
-                    WK<br />{entry.week}
-                  </div>
-                  <div className="flex flex-col gap-1.5 p-3">
-                    <p className="font-semibold text-white">{entry.topics}</p>
-                    {entry.sessions.map((s) => (
-                      <div key={`${s.isoDate}-${s.day}`} className="flex flex-wrap items-center gap-2 text-sm text-gray-300">
-                        <span>{s.day} {s.date} · {s.time}</span>
-                        <span className="flex items-center gap-1 rounded-full bg-zinc-700 px-2 py-0.5 text-xs font-medium text-gray-200">
-                          <FaLocationDot size={10} className="text-rose-400" />
-                          {s.location}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-              <div className="mt-2 text-center">
-                <Link
-                  href="/2026/workshop#timetable"
-                  className="font-main text-sm text-rose-400 transition-colors hover:text-rose-300"
-                >
-                  View full workshop details &rarr;
-                </Link>
-              </div>
-            </motion.div>
+            <WorkshopsTab containerVariants={containerVariants} itemVariants={itemVariants} />
           ) : (
             <motion.div
               key={activeTab.roundStatus}
