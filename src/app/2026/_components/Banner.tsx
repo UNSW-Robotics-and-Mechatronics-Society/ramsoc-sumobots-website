@@ -1,6 +1,6 @@
 "use client";
 import { useInView } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@clerk/nextjs";
@@ -8,7 +8,9 @@ import TypingAnimation from "./TypeWriter";
 import Social from "./Social";
 import Path from "@/app/path";
 import { getUpcomingEvents } from "@/app/2026/_data/timetable";
+import { getRegistrationStatus } from "@/app/2026/_data/registrationConfig";
 import { FaLocationDot } from "react-icons/fa6";
+import RegistrationCountdown from "./RegistrationCountdown";
 
 function NextEventBadge() {
   const [next] = getUpcomingEvents(1);
@@ -55,10 +57,13 @@ export const Banner = ({
     amount: "all",
     margin: "80px 0px 0px 0px",
   });
+  const [regStatus] = useState(() => getRegistrationStatus());
 
   useEffect(() => {
     setPageTitleVisible(isTitleInView);
   }, [isTitleInView, setPageTitleVisible]);
+
+  const registerHref = isSignedIn ? Path[2026].Dashboard : Path[2026].SignUp;
 
   return (
     <div
@@ -90,6 +95,8 @@ export const Banner = ({
             </span>
           </div>
           <NextEventBadge />
+          {/* Show countdown while any registration is still open */}
+          {regStatus.anyOpen && <RegistrationCountdown />}
           <div className="mt-4 flex flex-wrap gap-3">
             <Social socialName="instagram" variant="pill" size={20} />
             <Social socialName="facebook" variant="pill" size={20} />
@@ -109,12 +116,23 @@ export const Banner = ({
               All updates and announcements will be through our Discord — join now!
             </span>
           </Link>
-          <Link
-            href={Path[2026].Dashboard}
-            className="mt-6 inline-flex items-center justify-center rounded-lg bg-rose-600 px-10 py-4 text-lg font-semibold text-white transition-all hover:bg-rose-500 active:translate-y-px"
-          >
-            {isSignedIn ? "Go to Dashboard" : "Register Now"}
-          </Link>
+          {regStatus.anyOpen || isSignedIn ? (
+            <Link
+              href={registerHref}
+              className="mt-6 inline-flex items-center justify-center rounded-lg bg-rose-600 px-10 py-4 text-lg font-semibold text-white transition-all hover:bg-rose-500 active:translate-y-px"
+            >
+              {isSignedIn ? "Go to Dashboard" : "Register Now"}
+            </Link>
+          ) : (
+            <div className="mt-6 inline-flex flex-col items-center gap-1">
+              <span className="inline-flex items-center justify-center rounded-lg bg-zinc-700 px-10 py-4 text-lg font-semibold text-gray-400 cursor-not-allowed">
+                Registration Closed
+              </span>
+              <span className="font-main text-xs text-gray-500">
+                Follow our Discord for updates on next year
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
