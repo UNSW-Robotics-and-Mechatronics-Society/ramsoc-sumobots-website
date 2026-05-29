@@ -5,6 +5,7 @@ import { getMyTeam } from "@/app/2026/_actions/team";
 import Path from "@/app/path";
 import GlassPanel from "@/app/2026/_components/ui/GlassPanel";
 import OnboardingFlow from "./_components/OnboardingFlow";
+import { getRegistrationStatus } from "@/app/2026/_data/registrationConfig";
 
 export default async function OnboardingPage() {
   const profile = await getProfile();
@@ -13,6 +14,30 @@ export default async function OnboardingPage() {
   // Already fully onboarded
   if (profile?.onboarded && team) {
     redirect(Path[2026].Dashboard);
+  }
+
+  const regStatus = getRegistrationStatus();
+
+  // If all registration is closed and this user hasn't started onboarding, block entry.
+  // Existing users who have a profile can still complete their setup.
+  if (!regStatus.anyOpen && !profile) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center px-4">
+        <GlassPanel className="max-w-md text-center">
+          <h2 className="mb-3">Registration Closed</h2>
+          <p className="font-main text-sm text-gray-400">
+            Registration for Sumobots 2026 has closed. Follow us on Discord or
+            Instagram for updates on next year&apos;s competition.
+          </p>
+          <Link
+            href={Path[2026].Root}
+            className="font-main mt-6 inline-block text-sm text-rose-400 transition-colors hover:text-rose-300"
+          >
+            &larr; Back to Sumobots
+          </Link>
+        </GlassPanel>
+      </div>
+    );
   }
 
   return (
@@ -31,6 +56,9 @@ export default async function OnboardingPage() {
           <OnboardingFlow
             hasProfile={!!profile}
             hasTeam={!!team}
+            registrationOpen={regStatus.anyOpen}
+            standardOpen={regStatus.standardOpen}
+            openOpen={regStatus.openOpen}
           />
         </GlassPanel>
       </div>

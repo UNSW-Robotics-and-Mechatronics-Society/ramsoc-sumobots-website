@@ -32,9 +32,15 @@ const stepVariants = {
 export default function OnboardingFlow({
   hasProfile,
   hasTeam,
+  registrationOpen = true,
+  standardOpen = true,
+  openOpen = true,
 }: {
   hasProfile: boolean;
   hasTeam: boolean;
+  registrationOpen?: boolean;
+  standardOpen?: boolean;
+  openOpen?: boolean;
 }) {
   const router = useRouter();
   const initialStep = hasProfile ? 3 : 0;
@@ -142,7 +148,7 @@ export default function OnboardingFlow({
               ease: [0.25, 0.46, 0.45, 0.94],
             }}
           >
-            <UserTypeStep onSelect={handleUserTypeSelect} />
+            <UserTypeStep onSelect={handleUserTypeSelect} standardOpen={standardOpen} openOpen={openOpen} />
           </motion.div>
         )}
 
@@ -161,6 +167,8 @@ export default function OnboardingFlow({
             <DivisionStep
               onSelect={handleDivisionSelect}
               onBack={handleDivisionBack}
+              standardOpen={standardOpen}
+              openOpen={openOpen}
             />
           </motion.div>
         )}

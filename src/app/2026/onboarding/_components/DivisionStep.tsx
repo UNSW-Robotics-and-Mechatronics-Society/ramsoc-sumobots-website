@@ -23,10 +23,18 @@ const DIVISION_OPTIONS: {
 export default function DivisionStep({
   onSelect,
   onBack,
+  standardOpen = true,
+  openOpen = true,
 }: {
   onSelect: (division: TeamCategory) => void;
   onBack: () => void;
+  standardOpen?: boolean;
+  openOpen?: boolean;
 }) {
+  function isAvailable(value: TeamCategory) {
+    return value === "standard" ? standardOpen : openOpen;
+  }
+
   return (
     <div className="flex flex-col items-center gap-6">
       <motion.div
@@ -42,26 +50,36 @@ export default function DivisionStep({
       </motion.div>
 
       <div className="flex w-full flex-col gap-3">
-        {DIVISION_OPTIONS.map((opt, i) => (
-          <motion.button
-            key={opt.value}
-            type="button"
-            onClick={() => onSelect(opt.value)}
-            className="font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border border-white/10 bg-white/5 p-5 text-white backdrop-blur-sm transition-colors hover:border-rose-500 hover:bg-white/10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              delay: 0.2 + i * 0.1,
-              duration: 0.35,
-              ease: [0.25, 0.46, 0.45, 0.94],
-            }}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="font-display text-lg">{opt.title}</span>
-            <span className="text-sm text-gray-400">{opt.description}</span>
-          </motion.button>
-        ))}
+        {DIVISION_OPTIONS.map((opt, i) => {
+          const available = isAvailable(opt.value);
+          return (
+            <motion.button
+              key={opt.value}
+              type="button"
+              onClick={() => available && onSelect(opt.value)}
+              disabled={!available}
+              className={`font-main flex min-h-[80px] flex-col items-center justify-center rounded-xl border p-5 backdrop-blur-sm transition-colors ${
+                available
+                  ? "border-white/10 bg-white/5 text-white hover:border-rose-500 hover:bg-white/10"
+                  : "cursor-not-allowed border-white/5 bg-white/[0.02] text-gray-600"
+              }`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                delay: 0.2 + i * 0.1,
+                duration: 0.35,
+                ease: [0.25, 0.46, 0.45, 0.94],
+              }}
+              whileHover={available ? { scale: 1.01 } : {}}
+              whileTap={available ? { scale: 0.98 } : {}}
+            >
+              <span className="font-display text-lg">{opt.title}</span>
+              <span className={`text-sm ${available ? "text-gray-400" : "text-gray-600"}`}>
+                {available ? opt.description : "Registration closed"}
+              </span>
+            </motion.button>
+          );
+        })}
       </div>
 
       <motion.button

@@ -4,6 +4,8 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import socials from "@/app/2026/_data/socials";
+import { getUpcomingEvents } from "@/app/2026/_data/timetable";
+import { FaLocationDot } from "react-icons/fa6";
 import type {
   Profile,
   TeamWithMembers,
@@ -1385,6 +1387,51 @@ function PreviewActionItem({
   );
 }
 
+function UIUpcomingEvents() {
+  const events = getUpcomingEvents(3);
+  if (events.length === 0) return null;
+  return (
+    <Card>
+      <h3 className="mb-3 text-base">Upcoming Events</h3>
+      <div className="flex flex-col gap-3">
+        {events.map((event) => (
+          <div
+            key={`${event.isoDate}-${event.day}`}
+            className="flex items-start gap-3 rounded-lg bg-white/5 px-3 py-2.5"
+          >
+            <div className="flex min-w-[3rem] flex-col items-center rounded-md bg-rose-500/10 px-2 py-1 text-center">
+              <span className="font-main text-[10px] uppercase text-rose-400">
+                {new Date(event.isoDate + "T00:00:00").toLocaleString("en-AU", { month: "short" })}
+              </span>
+              <span className="font-main text-lg font-semibold leading-none text-rose-300">
+                {new Date(event.isoDate + "T00:00:00").getDate()}
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-main text-sm font-medium text-white">
+                Wk {event.week} — {event.topics}
+              </p>
+              <p className="font-main text-xs text-gray-400">
+                {event.day} · {event.time}
+              </p>
+              <span className="font-main mt-1 inline-flex items-center gap-1 text-xs text-gray-500">
+                <FaLocationDot size={10} />
+                {event.location}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <Link
+        href="/2026/workshop#timetable"
+        className="font-main mt-3 inline-block text-sm text-rose-400 transition-colors hover:text-rose-300"
+      >
+        View full schedule &rarr;
+      </Link>
+    </Card>
+  );
+}
+
 // ── Dashboard ─────────────────────────────────────────────
 
 type DashboardTab = "home" | "team" | "profile";
@@ -1516,6 +1563,8 @@ function DashboardSection() {
                       </div>
                     </div>
                   </Card>
+                  <UIUpcomingEvents />
+
                   {hasTeamToggle && (
                     <Card>
                       <div className="flex items-center justify-between">
