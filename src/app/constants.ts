@@ -24,7 +24,7 @@ export const UNSW_ONLY_SIGNUP_FORM_URL =
 
 // Resources URLs
 export const SUMOBOTS_RULEBOOK_URL =
-  "";
+  "https://docs.google.com/document/d/1YLn9QfIOA8OHfvucBwvfXEZGFhw1nH2e/edit?usp=sharing&ouid=106780195791151858067&rtpof=true&sd=true";
 export const SUMOBOTS_INFO_PACK_URL =
   "https://www.canva.com/design/DAGh-iUsRKE/P4ZiyHShW1xyLvB6zs59KQ/watch?utlId=h75586c2a87";
 export const INTRO_WORKSHOP_SLIDES_URL =
