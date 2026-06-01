@@ -24,9 +24,9 @@ interface Resource {
 export const internalResources: Resource[] = [
   {
     image: "/thumbnails/sumobots_rulebook.png",
-    title: "Coming Soon: 2026 Rule Book",
+    title: "2026 Rule Book",
     description: "Read the official 2026 SUMOBOTS Rule Book.",
-    url: ""
+    url: SUMOBOTS_RULEBOOK_URL,
   },
 ];
 

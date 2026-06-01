@@ -34,14 +34,14 @@ const timetable: Timetable[] = [
     topics: "CAD | 3D Printing | Lasercutting",
     sessions: [
       { day: "Tuesday", date: "16 Jun", isoDate: "2026-06-16", time: "6–8 PM", location: "Tyree LG03 + LG05" },
-      { day: "Thursday", date: "18 Jun", isoDate: "2026-06-18", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
+      { day: "Thursday", date: "18 Jun", isoDate: "2026-06-18", time: "6–8 PM", location: "Ainsworth 203/204" },
     ],
   },
   {
     week: "4",
     topics: "Motor Controls | Soldering",
     sessions: [
-      { day: "Tuesday", date: "23 Jun", isoDate: "2026-06-23", time: "6–8 PM", location: "Tyree LG03 + LG05" },
+      { day: "Tuesday", date: "23 Jun", isoDate: "2026-06-23", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
       { day: "Thursday", date: "25 Jun", isoDate: "2026-06-25", time: "6–8 PM", location: "Ainsworth 504 Design Next" },
     ],
   },
@@ -57,37 +57,16 @@ const timetable: Timetable[] = [
     week: "7",
     topics: "Build Session",
     sessions: [
-      { day: "Tuesday", date: "21 Jul", isoDate: "2026-07-21", time: "6–8 PM", location: "Kirby Makerspace" },
-      { day: "Thursday", date: "23 Jul", isoDate: "2026-07-23", time: "6–8 PM", location: "Kirby Makerspace" },
+      { day: "Tuesday", date: "14 Jul", isoDate: "2026-07-14", time: "6–8 PM", location: "Kirby Makerspace" },
+      { day: "Thursday", date: "16 Jul", isoDate: "2026-07-16", time: "6–8 PM", location: "Kirby Makerspace" },
     ],
   },
   {
     week: "8",
     topics: "Build Session",
     sessions: [
-      { day: "Tuesday", date: "28 Jul", isoDate: "2026-07-28", time: "6–8 PM", location: "Kirby Makerspace" },
-      { day: "Thursday", date: "30 Jul", isoDate: "2026-07-30", time: "6–8 PM", location: "Kirby Makerspace" },
-    ],
-  },
-  {
-    week: "9",
-    topics: "Qualifiers",
-    sessions: [
-      { day: "Tuesday", date: "4 Aug", isoDate: "2026-08-04", time: "2–6 PM (pending)", location: "TBD" },
-    ],
-  },
-  {
-    week: "9",
-    topics: "Knockouts",
-    sessions: [
-      { day: "Thursday", date: "6 Aug", isoDate: "2026-08-06", time: "2–9 PM (pending)", location: "TBD" },
-    ],
-  },
-  {
-    week: "9",
-    topics: "Finals",
-    sessions: [
-      { day: "Friday", date: "7 Aug", isoDate: "2026-08-07", time: "5–8:30 PM", location: "Leighton Hall" },
+      { day: "Tuesday", date: "21 Jul", isoDate: "2026-07-21", time: "6–8 PM", location: "Kirby Makerspace" },
+      { day: "Thursday", date: "23 Jul", isoDate: "2026-07-23", time: "6–8 PM", location: "Kirby Makerspace" },
     ],
   },
 ];
