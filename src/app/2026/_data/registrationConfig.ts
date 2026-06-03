@@ -4,7 +4,7 @@
 
 export const REGISTRATION = {
   // Standard (UNSW-only) stream stops accepting new teams
-  standardCloses: new Date("2026-06-01T23:59:59+10:00"),
+  standardCloses: new Date("2026-06-04T12:00:00+10:00"),
 
   // Open (inter-uni) stream stops accepting new teams
   openCloses: new Date("2026-07-26T23:59:59+10:00"),
