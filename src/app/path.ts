@@ -41,6 +41,7 @@ const Path = {
     AdminTeams: "/2026/admin/teams",
     AdminIndividuals: "/2026/admin/individuals",
     AdminTasks: "/2026/admin/tasks",
+    AdminSettings: "/2026/admin/settings",
     NotFound: "/2026/404",
   },
 } as const;

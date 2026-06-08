@@ -4,20 +4,25 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import Badge from "@/app/2026/_components/ui/Badge";
 import { Button } from "@/app/2026/_components/ui/Button";
-import type { ProfileWithTeam } from "@/app/_types/registration";
+import type { ProfileWithTeam, AdminTeamRow } from "@/app/_types/registration";
 import {
   adminKickFromTeam,
   adminDeleteProfile,
 } from "@/app/2026/admin/_actions/individuals";
+import { adminAddToTeam, adminMoveToTeam } from "@/app/2026/admin/_actions/teams";
 
 export default function IndividualsTable({
   profiles,
+  teams,
 }: {
   profiles: ProfileWithTeam[];
+  teams: AdminTeamRow[];
 }) {
   const [search, setSearch] = useState("");
   const [isPending, startTransition] = useTransition();
   const [confirmAction, setConfirmAction] = useState<string | null>(null);
+  const [addingToTeam, setAddingToTeam] = useState<string | null>(null);
+  const [movingToTeam, setMovingToTeam] = useState<string | null>(null);
   const router = useRouter();
 
   const filtered = profiles.filter((p) => {
@@ -106,7 +111,95 @@ export default function IndividualsTable({
                   )}
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
+                    {!p.team_id && (
+                      addingToTeam === p.id ? (
+                        <div className="flex items-center gap-1">
+                          <select
+                            className="font-main rounded border border-white/10 bg-black/50 px-2 py-1 text-xs text-white outline-none focus:border-rose-500"
+                            defaultValue=""
+                            onChange={(e) => {
+                              const targetId = e.target.value;
+                              if (!targetId) return;
+                              handleAction(() => adminAddToTeam(p.id, targetId));
+                              setAddingToTeam(null);
+                            }}
+                          >
+                            <option value="" disabled>Add to...</option>
+                            {teams.map((t) => (
+                              <option key={t.id} value={t.id}>{t.name}</option>
+                            ))}
+                          </select>
+                          <Button
+                            variant="ghost"
+                            size="default"
+                            className="text-xs"
+                            onClick={() => setAddingToTeam(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="default"
+                          className="text-xs text-green-400"
+                          onClick={() => {
+                            setAddingToTeam(p.id);
+                            setMovingToTeam(null);
+                            setConfirmAction(null);
+                          }}
+                          disabled={isPending}
+                        >
+                          Add to Team
+                        </Button>
+                      )
+                    )}
+                    {p.team_id && (
+                      movingToTeam === p.id ? (
+                        <div className="flex items-center gap-1">
+                          <select
+                            className="font-main rounded border border-white/10 bg-black/50 px-2 py-1 text-xs text-white outline-none focus:border-rose-500"
+                            defaultValue=""
+                            onChange={(e) => {
+                              const targetId = e.target.value;
+                              if (!targetId) return;
+                              handleAction(() => adminMoveToTeam(p.id, targetId));
+                              setMovingToTeam(null);
+                            }}
+                          >
+                            <option value="" disabled>Move to...</option>
+                            {teams
+                              .filter((t) => t.id !== p.team_id)
+                              .map((t) => (
+                                <option key={t.id} value={t.id}>{t.name}</option>
+                              ))}
+                          </select>
+                          <Button
+                            variant="ghost"
+                            size="default"
+                            className="text-xs"
+                            onClick={() => setMovingToTeam(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="ghost"
+                          size="default"
+                          className="text-xs text-blue-400"
+                          onClick={() => {
+                            setMovingToTeam(p.id);
+                            setAddingToTeam(null);
+                            setConfirmAction(null);
+                          }}
+                          disabled={isPending}
+                        >
+                          Move
+                        </Button>
+                      )
+                    )}
                     {p.team_id && (
                       <Button
                         variant="ghost"

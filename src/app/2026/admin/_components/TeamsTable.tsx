@@ -16,6 +16,7 @@ import {
   transferCaptain,
   adminRemoveMember,
   adminDeleteTeam,
+  adminMoveToTeam,
 } from "@/app/2026/admin/_actions/teams";
 
 export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
@@ -28,6 +29,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
   const [confirmAction, setConfirmAction] = useState<string | null>(null);
   const [editingName, setEditingName] = useState<string | null>(null);
   const [newName, setNewName] = useState("");
+  const [movingMember, setMovingMember] = useState<string | null>(null);
   const router = useRouter();
 
   const filtered = teams.filter((t) => {
@@ -191,7 +193,7 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
                                       <Badge variant="captain">Captain</Badge>
                                     )}
                                   </div>
-                                  <div className="flex gap-2">
+                                  <div className="flex flex-wrap gap-2">
                                     {m.role !== "captain" && (
                                       <Button
                                         variant="ghost"
@@ -220,6 +222,57 @@ export default function TeamsTable({ teams }: { teams: AdminTeamRow[] }) {
                                         `captain-${m.profile_id}`
                                           ? "Confirm?"
                                           : "Make Captain"}
+                                      </Button>
+                                    )}
+                                    {movingMember === m.profile_id ? (
+                                      <div
+                                        className="flex items-center gap-1"
+                                        onClick={(e) => e.stopPropagation()}
+                                      >
+                                        <select
+                                          className="font-main rounded border border-white/10 bg-black/50 px-2 py-1 text-xs text-white outline-none focus:border-rose-500"
+                                          defaultValue=""
+                                          onChange={(e) => {
+                                            const targetId = e.target.value;
+                                            if (!targetId) return;
+                                            handleAction(() =>
+                                              adminMoveToTeam(m.profile_id, targetId),
+                                            );
+                                            setMovingMember(null);
+                                          }}
+                                        >
+                                          <option value="" disabled>
+                                            Move to...
+                                          </option>
+                                          {teams
+                                            .filter((t) => t.id !== team.id)
+                                            .map((t) => (
+                                              <option key={t.id} value={t.id}>
+                                                {t.name}
+                                              </option>
+                                            ))}
+                                        </select>
+                                        <Button
+                                          variant="ghost"
+                                          size="default"
+                                          className="text-xs"
+                                          onClick={() => setMovingMember(null)}
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <Button
+                                        variant="ghost"
+                                        size="default"
+                                        className="text-xs text-blue-400"
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setMovingMember(m.profile_id);
+                                          setConfirmAction(null);
+                                        }}
+                                      >
+                                        Move
                                       </Button>
                                     )}
                                     <Button
