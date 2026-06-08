@@ -6,6 +6,7 @@ import Path from "@/app/path";
 import GlassPanel from "@/app/2026/_components/ui/GlassPanel";
 import OnboardingFlow from "./_components/OnboardingFlow";
 import { getRegistrationStatus } from "@/app/2026/_data/registrationConfig";
+import { getAppConfig } from "@/app/2026/_actions/appConfig";
 
 export default async function OnboardingPage() {
   const profile = await getProfile();
@@ -16,7 +17,12 @@ export default async function OnboardingPage() {
     redirect(Path[2026].Dashboard);
   }
 
-  const regStatus = getRegistrationStatus();
+  const config = await getAppConfig();
+  const regStatus = getRegistrationStatus(new Date(), {
+    standardCloses: config.standard_closes,
+    openCloses: config.open_closes,
+    paymentDeadline: config.payment_deadline,
+  });
 
   // If all registration is closed and this user hasn't started onboarding, block entry.
   // Existing users who have a profile can still complete their setup.

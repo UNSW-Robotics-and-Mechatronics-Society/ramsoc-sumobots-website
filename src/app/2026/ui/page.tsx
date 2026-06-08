@@ -1849,7 +1849,7 @@ function AdminIndividualsSection() {
       <SectionTitle>Admin — Individuals</SectionTitle>
       <AdminShell>
         <h2 className="mb-4 text-xl">Individuals</h2>
-        <IndividualsTable profiles={mockProfiles} />
+        <IndividualsTable profiles={mockProfiles} teams={[]} />
       </AdminShell>
     </div>
   );

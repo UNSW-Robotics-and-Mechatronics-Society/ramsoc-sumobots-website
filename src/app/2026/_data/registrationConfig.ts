@@ -1,17 +1,18 @@
 // ── Registration deadline configuration ──────────────────────────────────────
-// Update these each year. All dates are end-of-day in Australia/Sydney time.
-// "Closed" means no new registrations accepted after that date.
+// Defaults used as fallback. Live values are stored in the app_config DB table
+// and editable from the admin dashboard.
 
 export const REGISTRATION = {
-  // Standard (UNSW-only) stream stops accepting new teams
   standardCloses: new Date("2026-06-04T12:00:00+10:00"),
-
-  // Open (inter-uni) stream stops accepting new teams
   openCloses: new Date("2026-07-26T23:59:59+10:00"),
-
-  // Hard payment deadline — teams must have paid by this date (last intro workshop)
   paymentDeadline: new Date("2026-06-04T23:59:59+10:00"),
 } as const;
+
+export type RegistrationDates = {
+  standardCloses: Date;
+  openCloses: Date;
+  paymentDeadline: Date;
+};
 
 export type RegistrationStatus = {
   standardOpen: boolean;
@@ -23,17 +24,19 @@ export type RegistrationStatus = {
   nextDeadlineLabel: string | null;
 };
 
-export function getRegistrationStatus(now = new Date()): RegistrationStatus {
-  const standardOpen = now < REGISTRATION.standardCloses;
-  const openOpen = now < REGISTRATION.openCloses;
-  const paymentOpen = now < REGISTRATION.paymentDeadline;
+export function getRegistrationStatus(
+  now = new Date(),
+  dates: RegistrationDates = REGISTRATION,
+): RegistrationStatus {
+  const standardOpen = now < dates.standardCloses;
+  const openOpen = now < dates.openCloses;
+  const paymentOpen = now < dates.paymentDeadline;
   const anyOpen = standardOpen || openOpen;
 
-  // Find the soonest future deadline
   const upcoming = [
-    { date: REGISTRATION.standardCloses, label: "Standard registration closes" },
-    { date: REGISTRATION.paymentDeadline, label: "Payment deadline" },
-    { date: REGISTRATION.openCloses, label: "Open registration closes" },
+    { date: dates.standardCloses, label: "Standard registration closes" },
+    { date: dates.paymentDeadline, label: "Payment deadline" },
+    { date: dates.openCloses, label: "Open registration closes" },
   ]
     .filter((d) => d.date > now)
     .sort((a, b) => a.date.getTime() - b.date.getTime());

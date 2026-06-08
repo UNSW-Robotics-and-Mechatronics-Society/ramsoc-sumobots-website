@@ -175,3 +175,95 @@ export async function adminDeleteTeam(
   if (error) return { success: false, error: error.message };
   return { success: true };
 }
+
+export async function adminMoveToTeam(
+  profileId: string,
+  targetTeamId: string,
+): Promise<{ success: boolean; error?: string }> {
+  await assertAdmin();
+  const supabase = getSupabaseSecretClient();
+
+  // Verify target team exists and get its category
+  const { data: targetTeam } = await supabase
+    .from("teams")
+    .select("id, category")
+    .eq("id", targetTeamId)
+    .single();
+
+  if (!targetTeam) return { success: false, error: "Target team not found" };
+
+  // Remove from current team (handles captain promotion automatically)
+  const { data: currentMembership } = await supabase
+    .from("team_members")
+    .select("id, team_id, role")
+    .eq("profile_id", profileId)
+    .single();
+
+  if (currentMembership) {
+    if (currentMembership.role === "captain") {
+      // Promote next member to captain before removing
+      const { data: others } = await supabase
+        .from("team_members")
+        .select("id")
+        .eq("team_id", currentMembership.team_id)
+        .neq("profile_id", profileId)
+        .order("joined_at", { ascending: true })
+        .limit(1);
+
+      if (others && others.length > 0) {
+        await supabase
+          .from("team_members")
+          .update({ role: "captain" })
+          .eq("id", others[0].id);
+      } else {
+        // Solo captain — delete the empty team
+        await supabase.from("teams").delete().eq("id", currentMembership.team_id);
+      }
+    }
+    await supabase.from("team_members").delete().eq("id", currentMembership.id);
+  }
+
+  // Add to new team as member
+  const { error } = await supabase.from("team_members").insert({
+    team_id: targetTeamId,
+    profile_id: profileId,
+    role: "member",
+  });
+
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}
+
+export async function adminAddToTeam(
+  profileId: string,
+  targetTeamId: string,
+): Promise<{ success: boolean; error?: string }> {
+  await assertAdmin();
+  const supabase = getSupabaseSecretClient();
+
+  // Check they're not already on a team
+  const { data: existing } = await supabase
+    .from("team_members")
+    .select("id")
+    .eq("profile_id", profileId)
+    .single();
+
+  if (existing) return { success: false, error: "Person is already on a team. Use Move instead." };
+
+  const { data: targetTeam } = await supabase
+    .from("teams")
+    .select("id")
+    .eq("id", targetTeamId)
+    .single();
+
+  if (!targetTeam) return { success: false, error: "Target team not found" };
+
+  const { error } = await supabase.from("team_members").insert({
+    team_id: targetTeamId,
+    profile_id: profileId,
+    role: "member",
+  });
+
+  if (error) return { success: false, error: error.message };
+  return { success: true };
+}

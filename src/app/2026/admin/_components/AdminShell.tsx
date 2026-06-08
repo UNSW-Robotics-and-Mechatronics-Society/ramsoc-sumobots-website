@@ -12,6 +12,7 @@ const tabs = [
   { label: "Teams", href: Path[2026].AdminTeams },
   { label: "Individuals", href: Path[2026].AdminIndividuals },
   { label: "Tasks", href: Path[2026].AdminTasks },
+  { label: "Settings", href: Path[2026].AdminSettings },
 ];
 
 export default function AdminShell({

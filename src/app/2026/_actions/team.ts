@@ -37,6 +37,7 @@ function generateJoinCode(): string {
 }
 
 import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
+import { getAppConfig } from "@/app/2026/_actions/appConfig";
 
 async function getProfileId(userId: string) {
   const supabase = getSupabaseSecretClient();
@@ -54,6 +55,11 @@ export async function createTeam(input: {
 }): Promise<{ success: boolean; join_code?: string; error?: string }> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Not authenticated" };
+
+  const config = await getAppConfig();
+  if (config.season_phase === "midseason") {
+    return { success: false, error: "Team registration is locked — the competition season has begun" };
+  }
 
   if (!input.name.trim()) {
     return { success: false, error: "Team name is required" };
@@ -191,6 +197,11 @@ export async function joinTeam(
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Not authenticated" };
 
+  const config = await getAppConfig();
+  if (config.season_phase === "midseason") {
+    return { success: false, error: "Team registration is locked — the competition season has begun" };
+  }
+
   const code = joinCode.trim().toUpperCase();
   if (code.length !== 6) {
     return { success: false, error: "Join code must be 6 characters" };
@@ -269,6 +280,11 @@ export async function leaveTeam(): Promise<{
 }> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Not authenticated" };
+
+  const config = await getAppConfig();
+  if (config.season_phase === "midseason") {
+    return { success: false, error: "Teams are locked — the competition season has begun" };
+  }
 
   const profileId = await getProfileId(userId);
   if (!profileId) return { success: false, error: "Profile not found" };
@@ -502,6 +518,11 @@ export async function kickMember(
 ): Promise<{ success: boolean; error?: string }> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Not authenticated" };
+
+  const config = await getAppConfig();
+  if (config.season_phase === "midseason") {
+    return { success: false, error: "Teams are locked — the competition season has begun" };
+  }
 
   const profileId = await getProfileId(userId);
   if (!profileId) return { success: false, error: "Profile not found" };
