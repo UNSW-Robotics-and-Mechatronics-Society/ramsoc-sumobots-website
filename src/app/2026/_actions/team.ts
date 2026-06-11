@@ -37,7 +37,7 @@ function generateJoinCode(): string {
 }
 
 import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
-import { getAppConfig } from "@/app/2026/_actions/appConfig";
+import { getAppConfig, isCategoryLocked } from "@/app/2026/_actions/appConfig";
 
 async function getProfileId(userId: string) {
   const supabase = getSupabaseSecretClient();
@@ -57,7 +57,7 @@ export async function createTeam(input: {
   if (!userId) return { success: false, error: "Not authenticated" };
 
   const config = await getAppConfig();
-  if (config.season_phase === "midseason") {
+  if (isCategoryLocked(config, input.category)) {
     return { success: false, error: "Team registration is locked — the competition season has begun" };
   }
 
@@ -198,9 +198,6 @@ export async function joinTeam(
   if (!userId) return { success: false, error: "Not authenticated" };
 
   const config = await getAppConfig();
-  if (config.season_phase === "midseason") {
-    return { success: false, error: "Team registration is locked — the competition season has begun" };
-  }
 
   const code = joinCode.trim().toUpperCase();
   if (code.length !== 6) {
@@ -234,6 +231,10 @@ export async function joinTeam(
 
   if (!team) {
     return { success: false, error: "Invalid join code" };
+  }
+
+  if (isCategoryLocked(config, team.category as "standard" | "open")) {
+    return { success: false, error: "Team registration is locked — the competition season has begun" };
   }
 
   // Enforce Standard category restriction: only UNSW students allowed
@@ -282,9 +283,6 @@ export async function leaveTeam(): Promise<{
   if (!userId) return { success: false, error: "Not authenticated" };
 
   const config = await getAppConfig();
-  if (config.season_phase === "midseason") {
-    return { success: false, error: "Teams are locked — the competition season has begun" };
-  }
 
   const profileId = await getProfileId(userId);
   if (!profileId) return { success: false, error: "Profile not found" };
@@ -294,13 +292,18 @@ export async function leaveTeam(): Promise<{
   // Find membership
   const { data: membership } = await supabase
     .from("team_members")
-    .select("id, team_id, role")
+    .select("id, team_id, role, teams(category)")
     .eq("profile_id", profileId)
     .limit(1)
     .single();
 
   if (!membership) {
     return { success: false, error: "You are not on a team" };
+  }
+
+  const teamCategory = (membership.teams as { category: string } | null)?.category as "standard" | "open" | undefined;
+  if (teamCategory && isCategoryLocked(config, teamCategory)) {
+    return { success: false, error: "Teams are locked — the competition season has begun" };
   }
 
   if (membership.role === "captain") {
@@ -520,9 +523,6 @@ export async function kickMember(
   if (!userId) return { success: false, error: "Not authenticated" };
 
   const config = await getAppConfig();
-  if (config.season_phase === "midseason") {
-    return { success: false, error: "Teams are locked — the competition season has begun" };
-  }
 
   const profileId = await getProfileId(userId);
   if (!profileId) return { success: false, error: "Profile not found" };
@@ -532,11 +532,16 @@ export async function kickMember(
   // Verify target exists
   const { data: target } = await supabase
     .from("team_members")
-    .select("id, team_id, profile_id, role")
+    .select("id, team_id, profile_id, role, teams(category)")
     .eq("id", teamMemberId)
     .single();
 
   if (!target) return { success: false, error: "Member not found" };
+
+  const kickTeamCategory = (target.teams as { category: string } | null)?.category as "standard" | "open" | undefined;
+  if (kickTeamCategory && isCategoryLocked(config, kickTeamCategory)) {
+    return { success: false, error: "Teams are locked — the competition season has begun" };
+  }
 
   if (target.profile_id === profileId) {
     return { success: false, error: "You cannot kick yourself" };
