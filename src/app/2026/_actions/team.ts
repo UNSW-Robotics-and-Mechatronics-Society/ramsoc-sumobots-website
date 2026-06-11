@@ -37,7 +37,8 @@ function generateJoinCode(): string {
 }
 
 import { MEMBER_LIMITS } from "@/app/2026/_data/teamConfig";
-import { getAppConfig, isCategoryLocked } from "@/app/2026/_actions/appConfig";
+import { getAppConfig } from "@/app/2026/_actions/appConfig";
+import { isCategoryLocked } from "@/app/2026/_utils/seasonPhase";
 
 async function getProfileId(userId: string) {
   const supabase = getSupabaseSecretClient();
@@ -301,7 +302,8 @@ export async function leaveTeam(): Promise<{
     return { success: false, error: "You are not on a team" };
   }
 
-  const teamCategory = (membership.teams as { category: string } | null)?.category as "standard" | "open" | undefined;
+  const teamsData = membership.teams as unknown as { category: string } | { category: string }[] | null;
+  const teamCategory = (Array.isArray(teamsData) ? teamsData[0]?.category : teamsData?.category) as "standard" | "open" | undefined;
   if (teamCategory && isCategoryLocked(config, teamCategory)) {
     return { success: false, error: "Teams are locked — the competition season has begun" };
   }
@@ -538,7 +540,8 @@ export async function kickMember(
 
   if (!target) return { success: false, error: "Member not found" };
 
-  const kickTeamCategory = (target.teams as { category: string } | null)?.category as "standard" | "open" | undefined;
+  const kickTeamsData = target.teams as unknown as { category: string } | { category: string }[] | null;
+  const kickTeamCategory = (Array.isArray(kickTeamsData) ? kickTeamsData[0]?.category : kickTeamsData?.category) as "standard" | "open" | undefined;
   if (kickTeamCategory && isCategoryLocked(config, kickTeamCategory)) {
     return { success: false, error: "Teams are locked — the competition season has begun" };
   }
