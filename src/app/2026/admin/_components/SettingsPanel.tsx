@@ -5,17 +5,62 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/app/2026/_components/ui/Button";
 import Badge from "@/app/2026/_components/ui/Badge";
 import {
-  updateSeasonPhase,
+  updateCategoryPhase,
   updateRegistrationDates,
 } from "@/app/2026/admin/_actions/config";
 import type { AppConfig } from "@/app/2026/_actions/appConfig";
 
 function toLocalDatetimeValue(date: Date): string {
-  // Returns "YYYY-MM-DDTHH:mm" in local time for datetime-local inputs
   const pad = (n: number) => String(n).padStart(2, "0");
   return (
     `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
     `T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  );
+}
+
+function PhaseToggle({
+  label,
+  description,
+  phase,
+  onToggle,
+  isPending,
+}: {
+  label: string;
+  description: string;
+  phase: "preseason" | "midseason";
+  onToggle: (next: "preseason" | "midseason") => void;
+  isPending: boolean;
+}) {
+  const isMid = phase === "midseason";
+  return (
+    <div className="rounded-lg border border-white/10 bg-black/20 p-4">
+      <div className="mb-3">
+        <p className="font-main text-sm font-semibold text-white">{label}</p>
+        <p className="font-main mt-0.5 text-xs text-gray-400">{description}</p>
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/30 px-3 py-2">
+          <span className="font-main text-xs text-gray-400">Current:</span>
+          <Badge variant={isMid ? "warning" : "success"}>
+            {isMid ? "Midseason" : "Preseason"}
+          </Badge>
+        </div>
+        <Button
+          variant={isMid ? "secondary" : "primary"}
+          size="default"
+          onClick={() => onToggle(isMid ? "preseason" : "midseason")}
+          disabled={isPending}
+        >
+          {isPending ? "Saving…" : isMid ? "Unlock teams" : "Lock teams"}
+        </Button>
+      </div>
+      {isMid && (
+        <p className="font-main mt-2 text-xs text-amber-400">
+          Teams are locked. Participants cannot join, leave, or create{" "}
+          {label.toLowerCase()} teams.
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -40,21 +85,23 @@ export default function SettingsPanel({ config }: { config: AppConfig }) {
     setTimeout(() => setSuccess(null), 3000);
   }
 
-  function handleTogglePhase() {
-    const newPhase =
-      config.season_phase === "preseason" ? "midseason" : "preseason";
+  function handleTogglePhase(
+    category: "standard" | "open",
+    next: "preseason" | "midseason",
+  ) {
     startTransition(async () => {
       setError(null);
-      const result = await updateSeasonPhase(newPhase);
+      const result = await updateCategoryPhase(category, next);
       if (result.success) {
+        const label = category === "standard" ? "Standard" : "Open";
         notify(
-          newPhase === "midseason"
-            ? "Switched to midseason — teams are now locked."
-            : "Switched to preseason — teams are now open.",
+          next === "midseason"
+            ? `${label} teams locked (midseason).`
+            : `${label} teams unlocked (preseason).`,
         );
         router.refresh();
       } else {
-        setError(result.error ?? "Failed to update season phase");
+        setError(result.error ?? "Failed to update phase");
       }
     });
   }
@@ -76,8 +123,6 @@ export default function SettingsPanel({ config }: { config: AppConfig }) {
     });
   }
 
-  const isMidseason = config.season_phase === "midseason";
-
   return (
     <div className="flex flex-col gap-8 max-w-2xl">
       {error && (
@@ -91,44 +136,33 @@ export default function SettingsPanel({ config }: { config: AppConfig }) {
         </p>
       )}
 
-      {/* Season phase toggle */}
+      {/* Season phase toggles */}
       <section className="rounded-lg border border-white/10 bg-white/5 p-6">
         <h3 className="font-main mb-1 text-base font-semibold text-white">
           Season Phase
         </h3>
         <p className="font-main mb-4 text-sm text-gray-400">
-          Toggle between preseason (teams open) and midseason (teams locked).
-          When midseason is active, participants cannot join, leave, or create
-          teams. Admin actions are unaffected.
+          Lock or unlock teams per division. When midseason is active for a
+          division, participants cannot join, leave, or create teams in that
+          division. Admin actions are always unaffected.
         </p>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-black/30 px-4 py-3">
-            <span className="font-main text-sm text-gray-300">Current:</span>
-            <Badge variant={isMidseason ? "warning" : "success"}>
-              {isMidseason ? "Midseason" : "Preseason"}
-            </Badge>
-          </div>
-          <Button
-            variant={isMidseason ? "secondary" : "primary"}
-            size="default"
-            onClick={handleTogglePhase}
-            disabled={isPending}
-          >
-            {isPending
-              ? "Saving..."
-              : isMidseason
-              ? "Switch to Preseason"
-              : "Switch to Midseason"}
-          </Button>
+        <div className="flex flex-col gap-3">
+          <PhaseToggle
+            label="Standard (UNSW-only)"
+            description="Controls team locking for the Standard division."
+            phase={config.standard_phase}
+            onToggle={(next) => handleTogglePhase("standard", next)}
+            isPending={isPending}
+          />
+          <PhaseToggle
+            label="Open (inter-uni)"
+            description="Controls team locking for the Open division."
+            phase={config.open_phase}
+            onToggle={(next) => handleTogglePhase("open", next)}
+            isPending={isPending}
+          />
         </div>
-
-        {isMidseason && (
-          <p className="font-main mt-3 text-xs text-amber-400">
-            Teams are currently locked. Participants cannot join, leave, or create
-            teams.
-          </p>
-        )}
       </section>
 
       {/* Registration date controls */}
@@ -185,7 +219,7 @@ export default function SettingsPanel({ config }: { config: AppConfig }) {
             disabled={isPending}
             className="self-start"
           >
-            {isPending ? "Saving..." : "Save Dates"}
+            {isPending ? "Saving…" : "Save Dates"}
           </Button>
         </div>
       </section>
