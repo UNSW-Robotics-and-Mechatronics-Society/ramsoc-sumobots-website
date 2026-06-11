@@ -11,15 +11,6 @@ export type AppConfig = {
   payment_deadline: Date;
 };
 
-export function isCategoryLocked(
-  config: AppConfig,
-  category: "standard" | "open",
-): boolean {
-  return category === "standard"
-    ? config.standard_phase === "midseason"
-    : config.open_phase === "midseason";
-}
-
 export async function getAppConfig(): Promise<AppConfig> {
   const supabase = getSupabaseSecretClient();
   const { data } = await supabase
