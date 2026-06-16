@@ -128,7 +128,8 @@ export async function getTeamMembers(
   if (!data) return [];
   return data
     .map((m) => {
-      const p = m.profile as { id: string; full_name: string } | null;
+      const raw = m.profile as unknown;
+      const p = (Array.isArray(raw) ? (raw[0] ?? null) : raw) as { id: string; full_name: string } | null;
       if (!p) return null;
       return { id: p.id, fullName: p.full_name };
     })
