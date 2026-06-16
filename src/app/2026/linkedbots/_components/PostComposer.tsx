@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
-import { LuImagePlus, LuUploadCloud, LuX } from "react-icons/lu";
+import { LuCloudUpload, LuImagePlus, LuX } from "react-icons/lu";
 import Card from "@/app/2026/_components/ui/Card";
 import { Button } from "@/app/2026/_components/ui/Button";
 import { getUploadUrl } from "../_utils/uploadImage";
@@ -120,7 +120,7 @@ export default function PostComposer({
             <span className="font-main text-xs">Uploading…</span>
           ) : (
             <>
-              <LuUploadCloud className="h-6 w-6" />
+              <LuCloudUpload className="h-6 w-6" />
               <span className="font-main text-xs">
                 Drag & drop a photo or{" "}
                 <span className="text-rose-400 underline">browse</span>
