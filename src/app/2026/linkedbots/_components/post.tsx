@@ -108,7 +108,7 @@ export default function Post({
       {/* Header */}
       <div className="flex items-center gap-3 p-4">
         <Link
-          href={`/2026/blog/team/${post.team.teamId}`}
+          href={`/2026/linkedbots/team/${post.team.teamId}`}
           className="flex items-center gap-3 transition-opacity hover:opacity-80"
         >
           <TeamAvatar team={post.team} size={40} />
@@ -143,19 +143,20 @@ export default function Post({
         )}
       </div>
 
-      {/* Image */}
-      {post.imageUrl ? (
+      {/* Image (only when present) */}
+      {post.imageUrl && (
         <ImageWithSkeleton src={post.imageUrl} alt={post.caption} />
-      ) : (
-        <div className="flex aspect-[16/9] w-full items-center justify-center bg-linear-to-br from-rose-500/10 to-blue-500/10">
-          <span className="font-main text-xs tracking-wide text-gray-500 uppercase">
-            No photo yet
-          </span>
-        </div>
       )}
 
       {/* Body */}
       <div className="flex flex-col gap-3 p-4">
+        {/* Text-only posts: show caption prominently before actions */}
+        {!post.imageUrl && (
+          <p className="font-main text-base leading-relaxed text-white">
+            {post.caption}
+          </p>
+        )}
+
         <div className="flex items-center gap-4 text-gray-300">
           <button
             type="button"
@@ -174,10 +175,14 @@ export default function Post({
             <span className="font-main text-sm">{comments.length}</span>
           </span>
         </div>
-        <p className="font-main text-sm text-gray-200">
-          <span className="font-semibold text-white">{post.team.teamName}</span>{" "}
-          {post.caption}
-        </p>
+
+        {/* Caption below image when image is present */}
+        {post.imageUrl && (
+          <p className="font-main text-sm text-gray-200">
+            <span className="font-semibold text-white">{post.team.teamName}</span>{" "}
+            {post.caption}
+          </p>
+        )}
 
         {/* Comments */}
         <div className="mt-1 flex flex-col gap-3 border-t border-white/10 pt-3">

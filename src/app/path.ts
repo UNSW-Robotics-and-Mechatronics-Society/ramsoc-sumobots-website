@@ -31,8 +31,8 @@ const Path = {
       Resources: "/2026/workshop/#resources",
     },
     Blog: {
-      Root: "/2026/blog",
-      Manage: "/2026/blog/manage",
+      Root: "/2026/linkedbots",
+      Manage: "/2026/linkedbots/manage",
     },
     Team: "/2026/team",
     EOI: "/2026/eoi",

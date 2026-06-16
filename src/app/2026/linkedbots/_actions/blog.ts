@@ -19,8 +19,8 @@ import type {
   BlogTeamProfile,
 } from "../_types";
 
-const BLOG_PATH = "/2026/blog";
-const MANAGE_PATH = "/2026/blog/manage";
+const BLOG_PATH = "/2026/linkedbots";
+const MANAGE_PATH = "/2026/linkedbots/manage";
 
 type Caller = { userId: string; profileId: string; fullName: string };
 
@@ -108,6 +108,31 @@ export async function getBlogProfile(
     avatarUrl: profile?.avatar_url ?? null,
     robotName: profile?.robot_name ?? "",
   };
+}
+
+/** Members of a team, for display on the team profile page. */
+export type TeamMemberProfile = {
+  id: string;
+  fullName: string;
+};
+
+export async function getTeamMembers(
+  teamId: string,
+): Promise<TeamMemberProfile[]> {
+  const supabase = getSupabaseSecretClient();
+  const { data } = await supabase
+    .from("team_members")
+    .select("id, profile:profiles(id, full_name)")
+    .eq("team_id", teamId)
+    .order("joined_at", { ascending: true });
+  if (!data) return [];
+  return data
+    .map((m) => {
+      const p = m.profile as { id: string; full_name: string } | null;
+      if (!p) return null;
+      return { id: p.id, fullName: p.full_name };
+    })
+    .filter((m): m is TeamMemberProfile => m !== null);
 }
 
 // ---------------------------------------------------------------------------
