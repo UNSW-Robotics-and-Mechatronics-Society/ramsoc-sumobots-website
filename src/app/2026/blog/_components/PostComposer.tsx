@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { LuImagePlus, LuX } from "react-icons/lu";
 import Card from "@/app/2026/_components/ui/Card";
 import { Button } from "@/app/2026/_components/ui/Button";
-import { uploadPostImage } from "../_utils/uploadImage";
+import { getUploadUrl } from "../_utils/uploadImage";
 import type { BlogPost, BlogTeamProfile } from "../_types";
 
 /**
@@ -36,10 +36,15 @@ export default function PostComposer({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const fd = new FormData();
-    fd.append("file", file);
-    const { url } = await uploadPostImage(fd);
-    if (url) setImageUrl(url);
+    const { signedUrl, publicUrl } = await getUploadUrl(file.name, file.type);
+    if (signedUrl && publicUrl) {
+      const res = await fetch(signedUrl, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": file.type },
+      });
+      if (res.ok) setImageUrl(publicUrl);
+    }
     setUploading(false);
   }
 

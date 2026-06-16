@@ -1,37 +1,47 @@
 "use server";
 
-// Uploads an image to the public Supabase Storage bucket "blog-images" and
-// returns its public URL. Called from client components by POSTing FormData
-// (a File can't cross the server-action boundary as a bare argument).
+// Generates a short-lived Supabase signed upload URL so the browser can PUT
+// the file directly to Supabase Storage without routing it through the
+// Cloudflare Worker (which has a ~4 MB server-action body limit).
+//
+// Flow:
+//   1. Client calls getUploadUrl(filename, contentType) — tiny request.
+//   2. Server generates a UUID path + signed URL and returns both.
+//   3. Client PUTs the file to signedUrl.
+//   4. Client uses publicUrl as the stored image URL.
 //
 // Setup: create a PUBLIC bucket named "blog-images" in the Supabase dashboard.
-// The bucket host is already allowed in next.config.ts -> images.remotePatterns.
 
 import { auth } from "@clerk/nextjs/server";
 import { getSupabaseSecretClient } from "@/app/_utils/supabase";
 
-export type UploadResult = { url: string | null; error: string | null };
-
 const BUCKET = "blog-images";
 
-export async function uploadPostImage(
-  formData: FormData,
-): Promise<UploadResult> {
-  const { userId } = await auth();
-  if (!userId) return { url: null, error: "Not authenticated" };
+export type UploadUrlResult = {
+  signedUrl: string | null;
+  publicUrl: string | null;
+  error: string | null;
+};
 
-  const file = formData.get("file");
-  if (!(file instanceof File)) return { url: null, error: "No file provided" };
+export async function getUploadUrl(
+  filename: string,
+  contentType: string,
+): Promise<UploadUrlResult> {
+  const { userId } = await auth();
+  if (!userId) return { signedUrl: null, publicUrl: null, error: "Not authenticated" };
 
   const supabase = getSupabaseSecretClient();
-  const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+  const ext = filename.split(".").pop()?.toLowerCase() || "jpg";
   const path = `${userId}/${crypto.randomUUID()}.${ext}`;
 
-  const { error } = await supabase.storage
+  const { data, error } = await supabase.storage
     .from(BUCKET)
-    .upload(path, file, { contentType: file.type, upsert: false });
-  if (error) return { url: null, error: error.message };
+    .createSignedUploadUrl(path);
 
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
-  return { url: data.publicUrl, error: null };
+  if (error || !data) {
+    return { signedUrl: null, publicUrl: null, error: error?.message ?? "Failed to create upload URL" };
+  }
+
+  const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return { signedUrl: data.signedUrl, publicUrl: urlData.publicUrl, error: null };
 }
