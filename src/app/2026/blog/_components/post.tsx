@@ -21,6 +21,37 @@ function timeAgo(iso: string): string {
   return `${days}d ago`;
 }
 
+const BLOCKED_WORDS = [
+  "fuck",
+  "shit",
+  "ass",
+  "bitch",
+  "dick",
+  "cock",
+  "pussy",
+  "cunt",
+  "damn",
+  "bastard",
+  "slut",
+  "whore",
+  "nigger",
+  "nigga",
+  "faggot",
+  "retard",
+  "rape",
+  "nazi",
+  "hitler",
+  "penis",
+  "vagina",
+  "porn",
+  "sex",
+  "hentai",
+  "cum",
+  "dildo",
+  "anal",
+  "anus",
+];
+
 /**
  * A single feed post — Instagram-style: header (team), image, caption, likes.
  * When `owned` is true it shows edit/delete controls (used on the manage page).
@@ -182,7 +213,10 @@ export default function Post({
           )}
 
           {authorName ? (
-            <form onSubmit={handleAddComment} className="flex items-center gap-2">
+            <form
+              onSubmit={handleAddComment}
+              className="flex items-center gap-2"
+            >
               <input
                 type="text"
                 value={body}
@@ -190,7 +224,7 @@ export default function Post({
                 maxLength={300}
                 placeholder={`Comment as ${authorName}…`}
                 aria-label="Add a comment"
-                className="font-main flex-1 rounded-lg border border-input bg-transparent px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
+                className="font-main border-input text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 flex-1 rounded-lg border bg-transparent px-3 py-2 text-sm transition-colors outline-none focus-visible:ring-2"
               />
               <button
                 type="submit"
