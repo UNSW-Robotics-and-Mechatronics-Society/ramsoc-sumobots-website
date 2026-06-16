@@ -21,6 +21,28 @@ function timeAgo(iso: string): string {
   return `${days}d ago`;
 }
 
+function ImageWithSkeleton({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/40">
+      {!loaded && (
+        <div className="absolute inset-0 animate-pulse bg-white/10" />
+      )}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        className={cn(
+          "object-cover transition-opacity duration-300",
+          loaded ? "opacity-100" : "opacity-0",
+        )}
+        sizes="(max-width: 640px) 100vw, 600px"
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+}
+
 /**
  * A single feed post — Instagram-style: header (team), image, caption, likes.
  * When `owned` is true it shows edit/delete controls (used on the manage page).
@@ -117,15 +139,7 @@ export default function Post({
 
       {/* Image */}
       {post.imageUrl ? (
-        <div className="relative aspect-square w-full bg-black/40">
-          <Image
-            src={post.imageUrl}
-            alt={post.caption}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 100vw, 600px"
-          />
-        </div>
+        <ImageWithSkeleton src={post.imageUrl} alt={post.caption} />
       ) : (
         <div className="flex aspect-[16/9] w-full items-center justify-center bg-linear-to-br from-rose-500/10 to-blue-500/10">
           <span className="font-main text-xs tracking-wide text-gray-500 uppercase">
