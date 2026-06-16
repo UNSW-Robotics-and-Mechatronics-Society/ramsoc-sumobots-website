@@ -6,7 +6,7 @@ import Card from "@/app/2026/_components/ui/Card";
 import { Button } from "@/app/2026/_components/ui/Button";
 import Input from "@/app/2026/_components/ui/Input";
 import { TeamAvatar } from "./teamProfile";
-import { uploadPostImage } from "../_utils/uploadImage";
+import { getUploadUrl } from "../_utils/uploadImage";
 import { updateBlogProfile } from "../_actions/blog";
 import type { BlogTeamProfile } from "../_types";
 
@@ -41,10 +41,18 @@ export default function BioEditor({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const fd = new FormData();
-    fd.append("file", file);
-    const { url } = await uploadPostImage(fd);
-    if (url) setAvatarUrl(url);
+    const { signedUrl, publicUrl, error } = await getUploadUrl(file.name, file.type);
+    if (signedUrl && publicUrl) {
+      const res = await fetch(signedUrl, {
+        method: "PUT",
+        body: file,
+        headers: { "Content-Type": file.type },
+      });
+      if (res.ok) setAvatarUrl(publicUrl);
+      else setError("Upload failed, please try again");
+    } else {
+      setError(error ?? "Couldn't start upload");
+    }
     setUploading(false);
   }
 
