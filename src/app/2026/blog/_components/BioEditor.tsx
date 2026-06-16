@@ -1,10 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { LuImagePlus } from "react-icons/lu";
+import { LuImagePlus, LuPencil } from "react-icons/lu";
 import Card from "@/app/2026/_components/ui/Card";
 import { Button } from "@/app/2026/_components/ui/Button";
 import Input from "@/app/2026/_components/ui/Input";
+import Badge from "@/app/2026/_components/ui/Badge";
 import { TeamAvatar } from "./teamProfile";
 import { getUploadUrl } from "../_utils/uploadImage";
 import { updateBlogProfile } from "../_actions/blog";
@@ -13,8 +14,9 @@ import type { BlogTeamProfile } from "../_types";
 /**
  * Edit the team's shared blog profile: avatar, robot name and bio.
  *
- * The team name is fixed (sourced from `teams.name`) and shown read-only — it
- * is never sent to `updateBlogProfile`. Any member of the team can save here.
+ * Starts collapsed when the profile already has a robot name; expands to the
+ * full form when the user clicks "Edit profile". After saving it collapses
+ * back automatically.
  */
 export default function BioEditor({
   team,
@@ -23,6 +25,7 @@ export default function BioEditor({
   team: BlogTeamProfile;
   onSave: (updated: BlogTeamProfile) => void;
 }) {
+  const [editing, setEditing] = useState(!team.robotName);
   const [robotName, setRobotName] = useState(team.robotName);
   const [bio, setBio] = useState(team.bio);
   const [avatarUrl, setAvatarUrl] = useState(team.avatarUrl);
@@ -41,7 +44,10 @@ export default function BioEditor({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const { signedUrl, publicUrl, error } = await getUploadUrl(file.name, file.type);
+    const { signedUrl, publicUrl, error } = await getUploadUrl(
+      file.name,
+      file.type,
+    );
     if (signedUrl && publicUrl) {
       const res = await fetch(signedUrl, {
         method: "PUT",
@@ -67,12 +73,53 @@ export default function BioEditor({
     }
     onSave({ ...team, robotName, bio, avatarUrl });
     setSaved(true);
-    setTimeout(() => setSaved(false), 1500);
+    setTimeout(() => {
+      setSaved(false);
+      setEditing(false);
+    }, 1000);
   }
 
+  // ── Collapsed view ──────────────────────────────────────────────────────────
+  if (!editing) {
+    return (
+      <Card className="flex items-center gap-3 p-4">
+        <TeamAvatar team={{ teamName: team.teamName, avatarUrl }} size={48} />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <div className="flex items-center gap-2">
+            <span className="font-main truncate text-sm font-semibold text-white">
+              {team.teamName}
+            </span>
+            <Badge variant={team.category === "open" ? "info" : "default"}>
+              {team.category}
+            </Badge>
+          </div>
+          <span className="font-main truncate text-xs text-rose-400">
+            {robotName || "No robot name yet"}
+          </span>
+        </div>
+        <Button variant="secondary" onClick={() => setEditing(true)}>
+          <LuPencil className="h-4 w-4" />
+          Edit profile
+        </Button>
+      </Card>
+    );
+  }
+
+  // ── Expanded / editing view ─────────────────────────────────────────────────
   return (
     <Card className="flex flex-col gap-5">
-      <h3 className="text-lg font-semibold text-white">Team profile</h3>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-white">Team profile</h3>
+        {team.robotName && (
+          <button
+            type="button"
+            onClick={() => setEditing(false)}
+            className="font-main text-xs text-gray-500 transition-colors hover:text-gray-300"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
 
       <div className="flex items-center gap-4">
         <TeamAvatar team={{ teamName: team.teamName, avatarUrl }} size={72} />
@@ -133,9 +180,7 @@ export default function BioEditor({
         </span>
       </div>
 
-      {error && (
-        <p className="font-main text-sm text-rose-400">{error}</p>
-      )}
+      {error && <p className="font-main text-sm text-rose-400">{error}</p>}
 
       <Button
         onClick={handleSave}

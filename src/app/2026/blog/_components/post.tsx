@@ -2,6 +2,7 @@
 
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { LuHeart, LuMessageCircle, LuPencil, LuTrash2 } from "react-icons/lu";
 import Card from "@/app/2026/_components/ui/Card";
@@ -106,15 +107,20 @@ export default function Post({
     <Card className="overflow-hidden p-0">
       {/* Header */}
       <div className="flex items-center gap-3 p-4">
-        <TeamAvatar team={post.team} size={40} />
-        <div className="flex flex-col">
-          <span className="font-main text-sm font-semibold text-white">
-            {post.team.teamName}
-          </span>
-          <span className="font-main text-xs text-gray-400">
-            {post.team.robotName} · {timeAgo(post.createdAt)}
-          </span>
-        </div>
+        <Link
+          href={`/2026/blog/team/${post.team.teamId}`}
+          className="flex items-center gap-3 transition-opacity hover:opacity-80"
+        >
+          <TeamAvatar team={post.team} size={40} />
+          <div className="flex flex-col">
+            <span className="font-main text-sm font-semibold text-white">
+              {post.team.teamName}
+            </span>
+            <span className="font-main text-xs text-gray-400">
+              {post.team.robotName} · {timeAgo(post.createdAt)}
+            </span>
+          </div>
+        </Link>
         {owned && (
           <div className="ml-auto flex items-center gap-1">
             <button
