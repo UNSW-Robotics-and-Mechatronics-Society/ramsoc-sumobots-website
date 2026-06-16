@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { LuSettings2 } from "react-icons/lu";
 import Navbar from "../_components/Nav/Navbar";
@@ -8,11 +8,16 @@ import Footer from "../_components/Footer";
 import FadeIn from "../_components/ui/FadeIn";
 import Path from "@/app/path";
 import Feed from "./_components/feed";
-import { getFeedPosts } from "./_data/mockBlog";
+import { getFeedPosts } from "./_actions/blog";
+import type { BlogPostWithTeam } from "./_types";
 
 export default function BlogPage() {
   const [isFooterVisible, setFooterVisible] = useState(false);
-  const posts = getFeedPosts();
+  const [posts, setPosts] = useState<BlogPostWithTeam[]>([]);
+
+  useEffect(() => {
+    getFeedPosts().then(setPosts);
+  }, []);
 
   return (
     <Fragment>

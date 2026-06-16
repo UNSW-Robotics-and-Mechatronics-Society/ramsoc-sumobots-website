@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { LuArrowLeft, LuPlus } from "react-icons/lu";
 import Navbar from "../../_components/Nav/Navbar";
@@ -11,61 +11,68 @@ import BioEditor from "../_components/BioEditor";
 import PostComposer from "../_components/PostComposer";
 import Post from "../_components/post";
 import {
-  MOCK_CURRENT_TEAM_ID,
-  getTeamProfile,
+  getMyTeam,
   getTeamPosts,
-} from "../_data/mockBlog";
+  createPost,
+  updatePost,
+  deletePost,
+} from "../_actions/blog";
 import type { BlogPostWithTeam, BlogTeamProfile } from "../_types";
 
 export default function ManageBlogPage() {
   const [isFooterVisible, setFooterVisible] = useState(false);
 
-  // Front-end only: seed local state from mock data. Replace with the current
-  // user's team + posts (server actions) once the backend is wired up.
-  const [team, setTeam] = useState<BlogTeamProfile>(
-    () => getTeamProfile(MOCK_CURRENT_TEAM_ID)!,
-  );
-  const [posts, setPosts] = useState<BlogPostWithTeam[]>(() =>
-    getTeamPosts(MOCK_CURRENT_TEAM_ID),
-  );
+  // The signed-in user's team (shared by all its members) and its posts,
+  // loaded from Supabase. `team` is null while loading or if not on a team.
+  const [team, setTeam] = useState<BlogTeamProfile | null>(null);
+  const [posts, setPosts] = useState<BlogPostWithTeam[]>([]);
+  const [loading, setLoading] = useState(true);
   const [composing, setComposing] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
+  const refreshPosts = useCallback(async (teamId: string) => {
+    setPosts(await getTeamPosts(teamId));
+  }, []);
+
+  useEffect(() => {
+    getMyTeam().then(async (t) => {
+      setTeam(t);
+      if (t) await refreshPosts(t.teamId);
+      setLoading(false);
+    });
+  }, [refreshPosts]);
+
   // Keep each post's embedded team profile in sync when the bio is edited.
   const decoratedPosts = useMemo(
-    () => posts.map((p) => ({ ...p, team })),
+    () => (team ? posts.map((p) => ({ ...p, team })) : posts),
     [posts, team],
   );
   const editingPost = decoratedPosts.find((p) => p.id === editingId);
 
-  function handleCreate(data: { caption: string; imageUrl: string | null }) {
-    const newPost: BlogPostWithTeam = {
-      id: `post-${crypto.randomUUID()}`,
-      teamId: team.teamId,
-      caption: data.caption,
-      imageUrl: data.imageUrl,
-      likes: 0,
-      comments: [],
-      createdAt: new Date().toISOString(),
-      team,
-    };
-    setPosts((prev) => [newPost, ...prev]);
+  async function handleCreate(data: {
+    caption: string;
+    imageUrl: string | null;
+  }) {
+    if (!team) return;
+    const res = await createPost(data);
+    if (res.success) await refreshPosts(team.teamId);
     setComposing(false);
   }
 
-  function handleUpdate(data: { caption: string; imageUrl: string | null }) {
-    setPosts((prev) =>
-      prev.map((p) =>
-        p.id === editingId
-          ? { ...p, caption: data.caption, imageUrl: data.imageUrl }
-          : p,
-      ),
-    );
+  async function handleUpdate(data: {
+    caption: string;
+    imageUrl: string | null;
+  }) {
+    if (!team || !editingId) return;
+    const res = await updatePost(editingId, data);
+    if (res.success) await refreshPosts(team.teamId);
     setEditingId(null);
   }
 
-  function handleDelete(post: BlogPostWithTeam) {
-    setPosts((prev) => prev.filter((p) => p.id !== post.id));
+  async function handleDelete(post: BlogPostWithTeam) {
+    if (!team) return;
+    const res = await deletePost(post.id);
+    if (res.success) await refreshPosts(team.teamId);
   }
 
   return (
@@ -85,66 +92,82 @@ export default function ManageBlogPage() {
             <FadeIn className="mb-8">
               <h1>Manage your posts</h1>
               <p className="font-main mt-2 text-sm text-gray-400">
-                Editing as <span className="text-white">{team.teamName}</span>.
-                Update your team&apos;s profile and share new robot updates.
+                {team ? (
+                  <>
+                    Editing as{" "}
+                    <span className="text-white">{team.teamName}</span>. Update
+                    your team&apos;s profile and share new robot updates.
+                  </>
+                ) : (
+                  "Update your team's profile and share new robot updates."
+                )}
               </p>
             </FadeIn>
 
-            <div className="flex flex-col gap-6">
-              <BioEditor team={team} onSave={setTeam} />
+            {loading ? (
+              <p className="font-main text-sm text-gray-400">Loading…</p>
+            ) : !team ? (
+              <p className="font-main text-sm text-gray-400">
+                You need to be on a team to manage a blog. Join or create one
+                first.
+              </p>
+            ) : (
+              <div className="flex flex-col gap-6">
+                <BioEditor team={team} onSave={setTeam} />
 
-              {/* New post */}
-              {composing ? (
-                <PostComposer
-                  team={team}
-                  onSubmit={handleCreate}
-                  onCancel={() => setComposing(false)}
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setComposing(true)}
-                  className="font-main flex items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/5 py-4 text-sm text-gray-300 transition-colors hover:border-white/40 hover:text-white"
-                >
-                  <LuPlus className="h-4 w-4" />
-                  New post
-                </button>
-              )}
-
-              {/* Existing posts */}
-              <div className="flex flex-col gap-2">
-                <h3 className="text-lg font-semibold text-white">
-                  Your posts ({decoratedPosts.length})
-                </h3>
-                {decoratedPosts.length === 0 ? (
-                  <p className="font-main text-sm text-gray-400">
-                    You haven&apos;t posted anything yet.
-                  </p>
+                {/* New post */}
+                {composing ? (
+                  <PostComposer
+                    team={team}
+                    onSubmit={handleCreate}
+                    onCancel={() => setComposing(false)}
+                  />
                 ) : (
-                  <div className="flex flex-col gap-6">
-                    {decoratedPosts.map((post) =>
-                      editingId === post.id && editingPost ? (
-                        <PostComposer
-                          key={post.id}
-                          team={team}
-                          editing={editingPost}
-                          onSubmit={handleUpdate}
-                          onCancel={() => setEditingId(null)}
-                        />
-                      ) : (
-                        <Post
-                          key={post.id}
-                          post={post}
-                          owned
-                          onEdit={() => setEditingId(post.id)}
-                          onDelete={handleDelete}
-                        />
-                      ),
-                    )}
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setComposing(true)}
+                    className="font-main flex items-center justify-center gap-2 rounded-xl border border-dashed border-white/20 bg-white/5 py-4 text-sm text-gray-300 transition-colors hover:border-white/40 hover:text-white"
+                  >
+                    <LuPlus className="h-4 w-4" />
+                    New post
+                  </button>
                 )}
+
+                {/* Existing posts */}
+                <div className="flex flex-col gap-2">
+                  <h3 className="text-lg font-semibold text-white">
+                    Your posts ({decoratedPosts.length})
+                  </h3>
+                  {decoratedPosts.length === 0 ? (
+                    <p className="font-main text-sm text-gray-400">
+                      You haven&apos;t posted anything yet.
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-6">
+                      {decoratedPosts.map((post) =>
+                        editingId === post.id && editingPost ? (
+                          <PostComposer
+                            key={post.id}
+                            team={team}
+                            editing={editingPost}
+                            onSubmit={handleUpdate}
+                            onCancel={() => setEditingId(null)}
+                          />
+                        ) : (
+                          <Post
+                            key={post.id}
+                            post={post}
+                            owned
+                            onEdit={() => setEditingId(post.id)}
+                            onDelete={handleDelete}
+                          />
+                        ),
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

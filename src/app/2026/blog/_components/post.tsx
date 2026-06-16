@@ -6,7 +6,7 @@ import { useState } from "react";
 import { LuHeart, LuMessageCircle, LuPencil, LuTrash2 } from "react-icons/lu";
 import Card from "@/app/2026/_components/ui/Card";
 import { cn } from "@/app/_utils/cn";
-import { addComment } from "../_data/mockBlog";
+import { addComment, toggleLike } from "../_actions/blog";
 import { TeamAvatar } from "./teamProfile";
 import type { BlogComment, BlogPostWithTeam } from "../_types";
 
@@ -36,8 +36,27 @@ export default function Post({
   onEdit?: (post: BlogPostWithTeam) => void;
   onDelete?: (post: BlogPostWithTeam) => void;
 }) {
-  const [liked, setLiked] = useState(false);
-  const likeCount = post.likes + (liked ? 1 : 0);
+  const [liked, setLiked] = useState(post.likedByMe);
+  const [likeCount, setLikeCount] = useState(post.likes);
+  const [likePending, setLikePending] = useState(false);
+
+  async function handleToggleLike() {
+    if (likePending) return;
+    setLikePending(true);
+    const next = !liked;
+    // Optimistic update, reconciled with the server's canonical count.
+    setLiked(next);
+    setLikeCount((c) => c + (next ? 1 : -1));
+    const res = await toggleLike(post.id);
+    if (res.error) {
+      setLiked(!next);
+      setLikeCount((c) => c + (next ? -1 : 1));
+    } else {
+      setLiked(res.liked);
+      setLikeCount(res.likes);
+    }
+    setLikePending(false);
+  }
 
   const { user } = useUser();
   const authorName =
@@ -51,12 +70,14 @@ export default function Post({
   ]);
   const [body, setBody] = useState("");
 
-  function handleAddComment(e: React.FormEvent) {
+  async function handleAddComment(e: React.FormEvent) {
     e.preventDefault();
     if (!authorName || !body.trim()) return;
-    const comment = addComment(post.id, authorName, body);
-    setComments((prev) => [...prev, comment]);
-    setBody("");
+    const res = await addComment(post.id, body);
+    if (res.comment) {
+      setComments((prev) => [...prev, res.comment!]);
+      setBody("");
+    }
   }
 
   return (
@@ -118,8 +139,9 @@ export default function Post({
         <div className="flex items-center gap-4 text-gray-300">
           <button
             type="button"
-            onClick={() => setLiked((v) => !v)}
-            className="flex w-fit items-center gap-1.5 transition-colors hover:text-rose-400"
+            onClick={handleToggleLike}
+            disabled={likePending}
+            className="flex w-fit items-center gap-1.5 transition-colors hover:text-rose-400 disabled:opacity-60"
             aria-label={liked ? "Unlike" : "Like"}
           >
             <LuHeart

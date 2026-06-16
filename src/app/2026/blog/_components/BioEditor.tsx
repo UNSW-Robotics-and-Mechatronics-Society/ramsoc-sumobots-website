@@ -7,14 +7,14 @@ import { Button } from "@/app/2026/_components/ui/Button";
 import Input from "@/app/2026/_components/ui/Input";
 import { TeamAvatar } from "./teamProfile";
 import { uploadPostImage } from "../_utils/uploadImage";
+import { updateBlogProfile } from "../_actions/blog";
 import type { BlogTeamProfile } from "../_types";
 
 /**
- * Edit the team's blog profile: avatar, robot name and bio.
+ * Edit the team's shared blog profile: avatar, robot name and bio.
  *
- * NOTE: front-end only. `onSave` currently just updates local state in the
- * parent. Swap it for a server action (e.g. `updateTeamBlogProfile`) when the
- * backend is ready.
+ * The team name is fixed (sourced from `teams.name`) and shown read-only — it
+ * is never sent to `updateBlogProfile`. Any member of the team can save here.
  */
 export default function BioEditor({
   team,
@@ -27,7 +27,9 @@ export default function BioEditor({
   const [bio, setBio] = useState(team.bio);
   const [avatarUrl, setAvatarUrl] = useState(team.avatarUrl);
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const dirty =
@@ -39,12 +41,22 @@ export default function BioEditor({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const { url } = await uploadPostImage(file); // placeholder upload
+    const fd = new FormData();
+    fd.append("file", file);
+    const { url } = await uploadPostImage(fd);
     if (url) setAvatarUrl(url);
     setUploading(false);
   }
 
-  function handleSave() {
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    const res = await updateBlogProfile({ bio, avatarUrl, robotName });
+    setSaving(false);
+    if (!res.success) {
+      setError(res.error ?? "Couldn't save profile");
+      return;
+    }
     onSave({ ...team, robotName, bio, avatarUrl });
     setSaved(true);
     setTimeout(() => setSaved(false), 1500);
@@ -72,6 +84,16 @@ export default function BioEditor({
             className="hidden"
             onChange={handleAvatar}
           />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1.5">
+        <span className="font-main text-sm text-muted-foreground">
+          Team name
+        </span>
+        <div className="font-main flex items-center justify-between rounded-lg border border-input bg-white/5 px-3 py-2.5 text-sm text-gray-300">
+          <span>{team.teamName}</span>
+          <span className="text-xs text-gray-500">set at registration</span>
         </div>
       </div>
 
@@ -103,9 +125,14 @@ export default function BioEditor({
         </span>
       </div>
 
+      {error && (
+        <p className="font-main text-sm text-rose-400">{error}</p>
+      )}
+
       <Button
         onClick={handleSave}
-        disabled={!dirty && !saved}
+        disabled={(!dirty && !saved) || saving}
+        loading={saving}
         size="full"
       >
         {saved ? "Saved!" : "Save profile"}

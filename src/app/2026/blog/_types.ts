@@ -1,14 +1,14 @@
 // Types for the robot blog / social feed.
 //
-// These mirror the shape we intend to persist in Supabase later. For now the
-// feed runs off mock data (see `_data/mockBlog.ts`). When the backend is wired
-// up, the `posts` and `team_blog_profiles` tables should match these fields so
-// the UI components can be reused without changes.
+// These mirror the data persisted in Supabase (see migration 008_blog_schema
+// and the server actions in `_actions/blog.ts`). The `blog_posts`,
+// `blog_comments`, `blog_post_likes` and `team_blog_profiles` tables map onto
+// these shapes; team name/category are joined from `teams`.
 
 export type BlogTeamProfile = {
   /** Team id (FK to `teams.id` once persisted). */
   teamId: string;
-  /** Team display name. */
+  /** Team display name. Fixed — always sourced from `teams.name`, not editable. */
   teamName: string;
   /** "standard" | "open" — mirrors team category. */
   category: "standard" | "open";
@@ -43,8 +43,10 @@ export type BlogPost = {
   imageUrl: string | null;
   /** Post caption / body text. */
   caption: string;
-  /** Number of likes — placeholder until a likes table exists. */
+  /** Total like count, derived from the `blog_post_likes` table. */
   likes: number;
+  /** Whether the current viewer has liked this post. */
+  likedByMe: boolean;
   /** Comments left on this post, oldest first. */
   comments: BlogComment[];
   /** ISO timestamp of when the post was created. */

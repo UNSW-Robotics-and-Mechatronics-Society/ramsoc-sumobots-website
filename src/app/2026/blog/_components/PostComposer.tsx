@@ -36,7 +36,9 @@ export default function PostComposer({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
-    const { url } = await uploadPostImage(file); // placeholder upload
+    const fd = new FormData();
+    fd.append("file", file);
+    const { url } = await uploadPostImage(fd);
     if (url) setImageUrl(url);
     setUploading(false);
   }
