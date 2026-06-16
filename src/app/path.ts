@@ -30,6 +30,10 @@ const Path = {
       Timetable: "/2026/workshop/#timetable",
       Resources: "/2026/workshop/#resources",
     },
+    Blog: {
+      Root: "/2026/blog",
+      Manage: "/2026/blog/manage",
+    },
     Team: "/2026/team",
     EOI: "/2026/eoi",
     SignIn: "/2026/sign-in",

@@ -41,6 +41,23 @@ const navItems: NavItem[] = [
     href: Path[2026].Team,
   },
   {
+    name: "Blog",
+    label: "Go to robot blog",
+    href: Path[2026].Blog.Root,
+    dropdown: [
+      {
+        name: "Feed",
+        label: "Go to the robot feed",
+        href: Path[2026].Blog.Root,
+      },
+      {
+        name: "Manage Posts",
+        label: "Manage your team's posts and profile",
+        href: Path[2026].Blog.Manage,
+      },
+    ],
+  },
+  {
     name: "Workshop",
     label: "Go to workshop page",
     href: Path[2026].Workshop.Root,
