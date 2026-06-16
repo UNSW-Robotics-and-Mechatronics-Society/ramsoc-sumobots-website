@@ -198,15 +198,25 @@ async function assemblePosts(
     .filter((p): p is BlogPostWithTeam => p !== null);
 }
 
-/** All posts, newest first, joined with their author team. */
-export async function getFeedPosts(): Promise<BlogPostWithTeam[]> {
+/** Paginated posts feed, newest first, joined with their author team. */
+export async function getFeedPosts(
+  offset = 0,
+  limit = 5,
+): Promise<{ posts: BlogPostWithTeam[]; hasMore: boolean }> {
   const caller = await getCaller();
   const supabase = getSupabaseSecretClient();
+  // Fetch one extra to determine whether more pages exist.
   const { data } = await supabase
     .from("blog_posts")
     .select("id, team_id, image_url, caption, created_at")
-    .order("created_at", { ascending: false });
-  return assemblePosts(data ?? [], caller?.profileId ?? null);
+    .order("created_at", { ascending: false })
+    .range(offset, offset + limit);
+  const hasMore = (data?.length ?? 0) > limit;
+  const posts = await assemblePosts(
+    (data ?? []).slice(0, limit),
+    caller?.profileId ?? null,
+  );
+  return { posts, hasMore };
 }
 
 /** Posts for a single team, newest first. */

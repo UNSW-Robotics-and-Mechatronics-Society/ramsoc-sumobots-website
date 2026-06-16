@@ -41,8 +41,8 @@ const navItems: NavItem[] = [
     href: Path[2026].Team,
   },
   {
-    name: "Blog",
-    label: "Go to robot blog",
+    name: "LinkedBots",
+    label: "Go to robot feed",
     href: Path[2026].Blog.Root,
     dropdown: [
       {
