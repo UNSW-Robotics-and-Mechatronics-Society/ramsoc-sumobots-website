@@ -4,6 +4,7 @@ export const sponsors: LogoKey[] = [
   "unsw_arc_green_outline",
   "unsw_cse_school",
   "unsw_mech_school",
+  "unsw_eet_school",
   "engineers_australia",
   "yokogawa",
 ];

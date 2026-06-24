@@ -15,8 +15,9 @@ const Logo = ({ logoName, size, className, disableLink }: LogoProps) => {
     <Image
       src={logoData.image_url}
       alt={logoData.label}
-      width={96}
-      height={96}
+      width={192}
+      height={192}
+      className="h-full w-auto"
     />
   );
 

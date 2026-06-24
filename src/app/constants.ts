@@ -15,6 +15,8 @@ export const UNSW_ARC_SITE_URL = "https://www.arc.unsw.edu.au";
 export const UNSW_CSE_SCHOOL_SITE_URL = "https://www.cse.unsw.edu.au/";
 export const UNSW_MECH_SCHOOL_SITE_URL =
   "https://www.unsw.edu.au/engineering/our-schools/mechanical-and-manufacturing-engineering";
+export const UNSW_EET_SCHOOL_SITE_URL =
+  "https://www.unsw.edu.au/engineering/our-schools/electrical-engineering-telecommunications";
 
 // Signup Form URLs
 export const INTER_UNI_SIGNUP_FORM_URL =
@@ -24,7 +26,7 @@ export const UNSW_ONLY_SIGNUP_FORM_URL =
 
 // Resources URLs
 export const SUMOBOTS_RULEBOOK_URL =
-  "https://docs.google.com/document/d/1YLn9QfIOA8OHfvucBwvfXEZGFhw1nH2e/edit?usp=sharing&ouid=106780195791151858067&rtpof=true&sd=true";
+  "https://docs.google.com/document/d/1YLn9QfIOA8OHfvucBwvfXEZGFhw1nH2e/edit?pli=1";
 export const SUMOBOTS_INFO_PACK_URL =
   "https://www.canva.com/design/DAGh-iUsRKE/P4ZiyHShW1xyLvB6zs59KQ/watch?utlId=h75586c2a87";
 export const INTRO_WORKSHOP_SLIDES_URL =

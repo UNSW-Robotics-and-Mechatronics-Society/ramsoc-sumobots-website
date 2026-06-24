@@ -2,6 +2,7 @@ import {
   MAIN_SITE_URL,
   UNSW_ARC_SITE_URL,
   UNSW_CSE_SCHOOL_SITE_URL,
+  UNSW_EET_SCHOOL_SITE_URL,
   UNSW_MECH_SCHOOL_SITE_URL,
 } from "@/app/constants";
 
@@ -39,6 +40,13 @@ const logos = {
     name: "UNSW School of Mechanical and Manufacturing Engineering",
     image_url: "/unsw_mech_school_logo.svg",
     href: UNSW_MECH_SCHOOL_SITE_URL,
+    bg_color: "#FDDD00",
+  },
+  unsw_eet_school: {
+    label: "unsw eet school logo",
+    name: "UNSW School of Electrical Engineering and Telecommunications",
+    image_url: "/unsw_eet_logo.svg",
+    href: UNSW_EET_SCHOOL_SITE_URL,
     bg_color: "#FDDD00",
   },
   engineers_australia: {
