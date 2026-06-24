@@ -141,13 +141,13 @@ export const EventSchedule = () => {
     },
     {
       name: "Knock-Out Day",
-      date: "6 Aug 2026",
+      date: "TBD",
       place: "TBD",
       roundStatus: "knockout",
     },
     {
       name: "Finals Day",
-      date: "7 Aug 2026",
+      date: "TBD",
       place: "Leighton Hall",
       roundStatus: "finals",
     },

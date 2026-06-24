@@ -9,10 +9,10 @@ const RulebookBox = () => {
         For more detailed competition rules and guidelines, refer to the
         official rulebook.
       </p>
-      <div className="button flex cursor-default opacity-50">
+      <Link className="button flex" href={SUMOBOTS_RULEBOOK_URL} target="_blank" rel="noopener noreferrer">
         <LuFileText className="size-5" />
-          Coming Soon.
-      </div>
+        View Rulebook
+      </Link>
     </div>
   );
 };
