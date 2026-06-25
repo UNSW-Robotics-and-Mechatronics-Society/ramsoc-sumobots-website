@@ -12,6 +12,8 @@ import {
   SUMOBOTS_FINALS_2024_LIVE_STREAM_URL,
   W2_WORKSHOP_SLIDES_URL,
   W3_WORKSHOP_SLIDES_URL,
+  W4_WORKSHOP_SLIDES_URL,
+  SUMOBOTS_INFO_PACK_URL,
 } from "@/app/constants";
 
 interface Resource {
@@ -27,6 +29,36 @@ export const internalResources: Resource[] = [
     title: "2026 Rule Book",
     description: "Read the official 2026 SUMOBOTS Rule Book.",
     url: SUMOBOTS_RULEBOOK_URL,
+  },
+  {
+    image: "/thumbnails/infographic.jpg",
+    title: "Sumobots Info Pack",
+    description: "Want to Know a little bit more about the event, read our info pack!",
+    url: SUMOBOTS_INFO_PACK_URL,
+  },
+  {
+    image: "/thumbnails/workshop_slides_week1.jpg",
+    title: "Week 1 Workshop Slides",
+    description:"An introduction to the competition including overview of the timeline, prizes and competition.",
+    url: INTRO_WORKSHOP_SLIDES_URL,
+  },
+  {
+    image: "/thumbnails/workshop_slides_week_2.jpg",
+    title: "Week 2 Workshop Slides",
+    description: "Arduino Basics, covering everything you need to know about arduino to get started on your sumobot.",
+    url: W2_WORKSHOP_SLIDES_URL,
+  },
+  {
+    image: "/thumbnails/workshop_slides_week_3.jpg",
+    title: "Week 3 Workshop Slides",
+    description: "CAD, Lasercutting and 3D printing. All the basis to assist teams in developing the perfect chassis",
+    url: W3_WORKSHOP_SLIDES_URL,
+  },
+  {
+    image: "/thumbnails/workshop_slides_week4.jpg",
+    title: "Week 4 Workshop Slides",
+    description: "Motor control, wiring and soldering. The fundamentals of controlling and wiring your sumobot.",
+    url: W4_WORKSHOP_SLIDES_URL,
   },
 ];
 
