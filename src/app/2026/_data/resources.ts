@@ -43,13 +43,13 @@ export const internalResources: Resource[] = [
     url: INTRO_WORKSHOP_SLIDES_URL,
   },
   {
-    image: "/thumbnails/workshop_slides_week2.jpg",
+    image: "/thumbnails/workshop_slides_week_2.jpg",
     title: "Week 2 Workshop Slides",
     description: "Arduino Basics, covering everything you need to know about arduino to get started on your sumobot.",
     url: W2_WORKSHOP_SLIDES_URL,
   },
   {
-    image: "/thumbnails/workshop_slides_week3.jpg",
+    image: "/thumbnails/workshop_slides_week_3.jpg",
     title: "Week 3 Workshop Slides",
     description: "CAD, Lasercutting and 3D printing. All the basis to assist teams in developing the perfect chassis",
     url: W3_WORKSHOP_SLIDES_URL,
