@@ -28,13 +28,15 @@ export const UNSW_ONLY_SIGNUP_FORM_URL =
 export const SUMOBOTS_RULEBOOK_URL =
   "https://docs.google.com/document/d/1YLn9QfIOA8OHfvucBwvfXEZGFhw1nH2e/edit?pli=1";
 export const SUMOBOTS_INFO_PACK_URL =
-  "https://www.canva.com/design/DAGh-iUsRKE/P4ZiyHShW1xyLvB6zs59KQ/watch?utlId=h75586c2a87";
+  "https://canva.link/n34r33dzm0b9id2";
 export const INTRO_WORKSHOP_SLIDES_URL =
-  "";
+  "https://canva.link/jsg2rmahegfy8qc";
 export const W2_WORKSHOP_SLIDES_URL =
-  "";
+  "https://canva.link/e6bo2flbu11v003";
 export const W3_WORKSHOP_SLIDES_URL =
-  "";
+  "https://canva.link/hldiknwyc8zj17v";
+export const W4_WORKSHOP_SLIDES_URL =
+  "https://canva.link/bqk92a897m869bc";
 
 export const SUMOBOTS_FINALS_2024_LIVE_STREAM_URL =
   "https://www.youtube.com/live/rF5C53Vflls";
