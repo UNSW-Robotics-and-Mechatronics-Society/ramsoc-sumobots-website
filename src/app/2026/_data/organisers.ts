@@ -24,6 +24,14 @@ const person = (
 // is scoped to just those two portfolios rather than the full committee.
 export const primaryOrganisers: TeamMember[] = [
   person(
+    "aneesa-shaki",
+    "Aneesa Shaki",
+    "technical executive",
+    "Technical Executive",
+    "executive",
+    "https://images.ctfassets.net/zo65zj537qdi/5861AMYU9lBj5WaIPBERqq/3f3128512cc764782ed3f0ce5a5bb9e9/IMG_6338_-_Aneesa_s.jpeg",
+  ),
+  person(
     "kobe-goodridge",
     "Kobe Goodridge",
     "workshops director",

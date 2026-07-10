@@ -12,21 +12,36 @@ const TeamProfileGrid = () => {
         <legend className="ml-4 -mb-4 px-2 text-left text-sm text-gray-300">
           Main Organisers
         </legend>
-        <div className="mb-4 grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="mb-4 flex w-full flex-wrap justify-center gap-4">
           {primaryOrganisers.map((member) => (
-            <TeamProfile key={member.id} member={member} size="l" />
+            <div
+              key={member.id}
+              className="w-full md:w-[calc(33.333%-0.6667rem)]"
+            >
+              <TeamProfile member={member} size="l" />
+            </div>
           ))}
         </div>
-        <div className="mt-5 grid w-full grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
+        <div className="mt-5 flex w-full flex-wrap justify-center gap-4">
           {secondaryOrganisers.map((member) => (
-            <TeamProfile key={member.id} member={member} />
+            <div
+              key={member.id}
+              className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.6667rem)] lg:w-[calc(25%-0.75rem)]"
+            >
+              <TeamProfile member={member} />
+            </div>
           ))}
         </div>
       </fieldset>
       <h3 className="mb-4 text-left">Mentors</h3>
-      <div className="mt-5 grid w-full grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
+      <div className="mt-5 flex w-full flex-wrap justify-center gap-4">
         {mentors.map((member) => (
-          <TeamProfile key={member.id} member={member} />
+          <div
+            key={member.id}
+            className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.6667rem)] lg:w-[calc(25%-0.75rem)]"
+          >
+            <TeamProfile member={member} />
+          </div>
         ))}
       </div>
     </div>
