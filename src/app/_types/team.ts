@@ -10,9 +10,10 @@ export type TeamMember = {
   linkedin: string | "";
 };
 
-export type TeamPosition = "executive" | "director" | "subcommittee";
+export type TeamPosition = "executive" | "director" | "subcommittee" | "mentor";
 
 export type TeamRole =
+  | "mentor"
   | "president"
   | "vice president"
   | "secretary"

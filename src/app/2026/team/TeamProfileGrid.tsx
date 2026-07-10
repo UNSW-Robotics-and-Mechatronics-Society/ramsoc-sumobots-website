@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getTeamProfiles } from "@/app/_utils/teamProfiles";
 import TeamProfile from "./TeamProfile";
 import { TeamMember } from "@/app/_types/team";
+import { mentors } from "../_data/mentors";
 
 const TeamProfileSkeleton = ({
   length,
@@ -28,13 +29,11 @@ const TeamProfileGrid = () => {
   const [secondaryOrganisers, setSecondaryOrganisers] = useState<
     TeamMember[] | null
   >(null);
-  const [others, setOthers] = useState<TeamMember[] | null>(null);
   useEffect(() => {
     const fetchData = async () => {
       const teamData = await getTeamProfiles(2026);
       setPrimaryOrganisers(teamData.primaryOrganisers);
       setSecondaryOrganisers(teamData.secondaryOrganisers);
-      setOthers(teamData.others);
     };
     fetchData();
   }, []);
@@ -67,14 +66,11 @@ const TeamProfileGrid = () => {
           )}
         </div>
       </fieldset>
+      <h3 className="mb-4 text-left">Mentors</h3>
       <div className="mt-5 grid w-full grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
-        {others ? (
-          others.map((member) => (
-            <TeamProfile key={member.id} member={member} />
-          ))
-        ) : (
-          <TeamProfileSkeleton length={16} />
-        )}
+        {mentors.map((member) => (
+          <TeamProfile key={member.id} member={member} />
+        ))}
       </div>
     </div>
   );
