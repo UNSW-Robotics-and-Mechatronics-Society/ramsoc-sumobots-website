@@ -1,43 +1,8 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { getTeamProfiles } from "@/app/_utils/teamProfiles";
 import TeamProfile from "./TeamProfile";
-import { TeamMember } from "@/app/_types/team";
 import { mentors } from "../_data/mentors";
-
-const TeamProfileSkeleton = ({
-  length,
-  size = "s",
-}: {
-  length: number;
-  size?: "s" | "l";
-}) => {
-  return (
-    <>
-      {Array.from({ length: length }).map((_, index) => (
-        <TeamProfile isLoading key={index} member={null} size={size} />
-      ))}
-    </>
-  );
-};
+import { primaryOrganisers, secondaryOrganisers } from "../_data/organisers";
 
 const TeamProfileGrid = () => {
-  const [primaryOrganisers, setPrimaryOrganisers] = useState<
-    TeamMember[] | null
-  >(null);
-  const [secondaryOrganisers, setSecondaryOrganisers] = useState<
-    TeamMember[] | null
-  >(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      const teamData = await getTeamProfiles(2026);
-      setPrimaryOrganisers(teamData.primaryOrganisers);
-      setSecondaryOrganisers(teamData.secondaryOrganisers);
-    };
-    fetchData();
-  }, []);
-
   return (
     <div className="container" id="team">
       <fieldset
@@ -48,22 +13,14 @@ const TeamProfileGrid = () => {
           Main Organisers
         </legend>
         <div className="mb-4 grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-          {primaryOrganisers ? (
-            primaryOrganisers.map((member) => (
-              <TeamProfile key={member.id} member={member} size="l" />
-            ))
-          ) : (
-            <TeamProfileSkeleton length={3} size="l" />
-          )}
+          {primaryOrganisers.map((member) => (
+            <TeamProfile key={member.id} member={member} size="l" />
+          ))}
         </div>
         <div className="mt-5 grid w-full grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
-          {secondaryOrganisers ? (
-            secondaryOrganisers.map((member) => (
-              <TeamProfile key={member.id} member={member} />
-            ))
-          ) : (
-            <TeamProfileSkeleton length={8} />
-          )}
+          {secondaryOrganisers.map((member) => (
+            <TeamProfile key={member.id} member={member} />
+          ))}
         </div>
       </fieldset>
       <h3 className="mb-4 text-left">Mentors</h3>
