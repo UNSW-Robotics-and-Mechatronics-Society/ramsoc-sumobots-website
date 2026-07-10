@@ -22,7 +22,6 @@ export type TeamRole =
   | "grievance & edi officer"
   | "marketing executive"
   | "technical executive"
-  | "socials executive"
   | "industry & sponsorships executive"
   | "industry & sponsorships director"
   | "it director"
