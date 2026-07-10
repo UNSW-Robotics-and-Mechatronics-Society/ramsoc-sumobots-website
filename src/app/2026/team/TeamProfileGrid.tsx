@@ -41,9 +41,12 @@ const TeamProfileGrid = () => {
 
   return (
     <div className="container" id="team">
-      <fieldset className="mb-5 rounded-lg border border-dashed border-gray-300 px-4 py-8">
-        <legend className="ml-1 text-left">
-          <h3>Main Organisers</h3>
+      <fieldset
+        className="relative mb-5 overflow-hidden rounded-lg border border-dashed border-gray-300 bg-black/40 px-4 py-8 bg-repeat"
+        style={{ backgroundImage: "url(/2026/team/gear-pattern.svg)" }}
+      >
+        <legend className="ml-4 -mb-4 px-2 text-left text-sm text-gray-300">
+          Main Organisers
         </legend>
         <div className="mb-4 grid w-full grid-cols-1 gap-4 md:grid-cols-3">
           {primaryOrganisers ? (
