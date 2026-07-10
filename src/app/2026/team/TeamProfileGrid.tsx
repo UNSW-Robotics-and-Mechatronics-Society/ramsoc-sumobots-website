@@ -1,77 +1,48 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { getTeamProfiles } from "@/app/_utils/teamProfiles";
 import TeamProfile from "./TeamProfile";
-import { TeamMember } from "@/app/_types/team";
-
-const TeamProfileSkeleton = ({
-  length,
-  size = "s",
-}: {
-  length: number;
-  size?: "s" | "l";
-}) => {
-  return (
-    <>
-      {Array.from({ length: length }).map((_, index) => (
-        <TeamProfile isLoading key={index} member={null} size={size} />
-      ))}
-    </>
-  );
-};
+import { mentors } from "../_data/mentors";
+import { primaryOrganisers, secondaryOrganisers } from "../_data/organisers";
 
 const TeamProfileGrid = () => {
-  const [primaryOrganisers, setPrimaryOrganisers] = useState<
-    TeamMember[] | null
-  >(null);
-  const [secondaryOrganisers, setSecondaryOrganisers] = useState<
-    TeamMember[] | null
-  >(null);
-  const [others, setOthers] = useState<TeamMember[] | null>(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      const teamData = await getTeamProfiles(2026);
-      setPrimaryOrganisers(teamData.primaryOrganisers);
-      setSecondaryOrganisers(teamData.secondaryOrganisers);
-      setOthers(teamData.others);
-    };
-    fetchData();
-  }, []);
-
   return (
     <div className="container" id="team">
-      <fieldset className="mb-5 rounded-lg border border-dashed border-gray-300 px-4 py-8">
-        <legend className="ml-1 text-left">
-          <h3>Main Organisers</h3>
+      <fieldset
+        className="relative mb-5 overflow-hidden rounded-lg border border-dashed border-gray-300 bg-black/40 px-4 py-8 bg-repeat"
+        style={{ backgroundImage: "url(/2026/team/gear-pattern.svg)" }}
+      >
+        <legend className="ml-4 -mb-4 px-2 text-left text-sm text-gray-300">
+          Main Organisers
         </legend>
-        <div className="mb-4 grid w-full grid-cols-1 gap-4 md:grid-cols-3">
-          {primaryOrganisers ? (
-            primaryOrganisers.map((member) => (
-              <TeamProfile key={member.id} member={member} size="l" />
-            ))
-          ) : (
-            <TeamProfileSkeleton length={3} size="l" />
-          )}
+        <div className="mb-4 flex w-full flex-wrap justify-center gap-4">
+          {primaryOrganisers.map((member) => (
+            <div
+              key={member.id}
+              className="w-full md:w-[calc(33.333%-0.6667rem)]"
+            >
+              <TeamProfile member={member} size="l" />
+            </div>
+          ))}
         </div>
-        <div className="mt-5 grid w-full grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
-          {secondaryOrganisers ? (
-            secondaryOrganisers.map((member) => (
-              <TeamProfile key={member.id} member={member} />
-            ))
-          ) : (
-            <TeamProfileSkeleton length={8} />
-          )}
+        <div className="mt-5 flex w-full flex-wrap justify-center gap-4">
+          {secondaryOrganisers.map((member) => (
+            <div
+              key={member.id}
+              className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.6667rem)] lg:w-[calc(25%-0.75rem)]"
+            >
+              <TeamProfile member={member} />
+            </div>
+          ))}
         </div>
       </fieldset>
-      <div className="mt-5 grid w-full grid-cols-2 gap-4 self-center md:grid-cols-3 lg:grid-cols-4">
-        {others ? (
-          others.map((member) => (
-            <TeamProfile key={member.id} member={member} />
-          ))
-        ) : (
-          <TeamProfileSkeleton length={16} />
-        )}
+      <h3 className="mb-4 text-left">Mentors</h3>
+      <div className="mt-5 flex w-full flex-wrap justify-center gap-4">
+        {mentors.map((member) => (
+          <div
+            key={member.id}
+            className="w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.6667rem)] lg:w-[calc(25%-0.75rem)]"
+          >
+            <TeamProfile member={member} />
+          </div>
+        ))}
       </div>
     </div>
   );
