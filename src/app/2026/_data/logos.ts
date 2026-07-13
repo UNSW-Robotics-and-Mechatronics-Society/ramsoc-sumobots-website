@@ -63,6 +63,13 @@ const logos = {
     href: "https://www.yokogawa.com/au/",
     bg_color: "white",
   },
+  ant61: {
+    label: "ant61 logo",
+    name: "ANT61",
+    image_url: "/ant61-logo.png",
+    href: "https://ant61.com/",
+    bg_color: "black",
+  },
 };
 
 export default logos;
