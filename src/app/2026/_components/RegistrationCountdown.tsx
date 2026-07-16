@@ -20,15 +20,15 @@ function getTimeLeft(target: Date) {
 
 export default function RegistrationCountdown() {
   const [status] = useState(() => getRegistrationStatus());
-  const [timeLeft, setTimeLeft] = useState(
-    status.nextDeadline ? getTimeLeft(status.nextDeadline) : null,
+  const [timeLeft, setTimeLeft] = useState<ReturnType<typeof getTimeLeft>>(
+    null,
   );
 
   useEffect(() => {
     if (!status.nextDeadline) return;
-    const id = setInterval(() => {
-      setTimeLeft(getTimeLeft(status.nextDeadline!));
-    }, 1000);
+    const tick = () => setTimeLeft(getTimeLeft(status.nextDeadline!));
+    tick();
+    const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [status.nextDeadline]);
 

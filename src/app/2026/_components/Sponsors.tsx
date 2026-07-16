@@ -22,7 +22,7 @@ export const SponsorCard = ({ logoName }: SponsorCardProps) => {
       <div className="bg-secondary/50 absolute top-0 right-0 m-2 rounded-sm">
         <LuSquareArrowOutUpRight className="text-primary size-5" />
       </div>
-      <Logo logoName={logoName} className="h-full" disableLink />
+      <Logo logoName={logoName} className="h-full w-full" disableLink fit />
     </Link>
   );
 };

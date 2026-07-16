@@ -192,14 +192,27 @@ export default function Page() {
               <div
                 key={data.name}
                 className="col-span-4 aspect-square w-full overflow-hidden rounded-full lg:col-span-2"
+                style={data.bgColor ? { backgroundColor: data.bgColor } : undefined}
               >
-                <Image
-                  width={200}
-                  height={200}
-                  className="h-full w-full object-cover"
-                  src={`/2024${data.src}`}
-                  alt={`${data.name} logo`}
-                ></Image>
+                {data.bgColor ? (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Image
+                      width={200}
+                      height={200}
+                      className="h-[71%] w-[71%] object-contain"
+                      src={`/2024${data.src}`}
+                      alt={`${data.name} logo`}
+                    ></Image>
+                  </div>
+                ) : (
+                  <Image
+                    width={200}
+                    height={200}
+                    className="h-full w-full object-cover"
+                    src={`/2024${data.src}`}
+                    alt={`${data.name} logo`}
+                  ></Image>
+                )}
               </div>
             ))}
           </div>
