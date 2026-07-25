@@ -13,6 +13,8 @@ const logos = {
     image_url: "/ramsoc_logo.svg",
     href: MAIN_SITE_URL,
     bg_color: "black",
+    width: 192,
+    height: 192,
   },
   unsw_arc_white: {
     label: "unsw arc logo white",
@@ -20,6 +22,8 @@ const logos = {
     image_url: "/unsw_arc_logo_white.svg",
     href: UNSW_ARC_SITE_URL,
     bg_color: "black",
+    width: 192,
+    height: 192,
   },
   unsw_arc_green_outline: {
     label: "unsw arc logo green outline",
@@ -27,6 +31,8 @@ const logos = {
     image_url: "/unsw_arc_logo_green_outline.svg",
     href: UNSW_ARC_SITE_URL,
     bg_color: "white",
+    width: 192,
+    height: 192,
   },
   unsw_cse_school: {
     label: "unsw cse school logo",
@@ -34,6 +40,8 @@ const logos = {
     image_url: "/unsw_cse_school_logo.svg",
     href: UNSW_CSE_SCHOOL_SITE_URL,
     bg_color: "#FDDD00",
+    width: 192,
+    height: 192,
   },
   unsw_mech_school: {
     label: "unsw mech school logo",
@@ -41,6 +49,8 @@ const logos = {
     image_url: "/unsw_mech_school_logo.svg",
     href: UNSW_MECH_SCHOOL_SITE_URL,
     bg_color: "#FDDD00",
+    width: 192,
+    height: 192,
   },
   unsw_eet_school: {
     label: "unsw eet school logo",
@@ -48,6 +58,8 @@ const logos = {
     image_url: "/unsw_eet_logo.svg",
     href: UNSW_EET_SCHOOL_SITE_URL,
     bg_color: "#FDDD00",
+    width: 192,
+    height: 192,
   },
   engineers_australia: {
     label: "engineers australia logo",
@@ -55,6 +67,8 @@ const logos = {
     image_url: "/engineers_australia_logo.svg",
     href: "https://www.engineersaustralia.org.au/",
     bg_color: "white",
+    width: 192,
+    height: 192,
   },
   yokogawa: {
     label: "yokogawa logo",
@@ -62,6 +76,17 @@ const logos = {
     image_url: "/icon.png",
     href: "https://www.yokogawa.com/au/",
     bg_color: "white",
+    width: 192,
+    height: 192,
+  },
+  ant61: {
+    label: "ant61 logo",
+    name: "ANT61",
+    image_url: "/ant61-logo.png",
+    href: "https://ant61.com/",
+    bg_color: "black",
+    width: 1023,
+    height: 468,
   },
 };
 

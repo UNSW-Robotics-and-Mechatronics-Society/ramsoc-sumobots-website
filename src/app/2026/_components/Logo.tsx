@@ -7,16 +7,27 @@ type LogoProps = {
   size?: number;
   className?: string;
   disableLink?: boolean;
+  fit?: boolean;
 };
 
-const Logo = ({ logoName, size, className, disableLink }: LogoProps) => {
+const Logo = ({ logoName, size, className, disableLink, fit }: LogoProps) => {
   const logoData = logos[logoName];
-  const content = (
+  const content = fit ? (
+    <div className="relative h-full w-full">
+      <Image
+        src={logoData.image_url}
+        alt={logoData.label}
+        fill
+        sizes="(min-width: 640px) 256px, 192px"
+        className="object-contain"
+      />
+    </div>
+  ) : (
     <Image
       src={logoData.image_url}
       alt={logoData.label}
-      width={192}
-      height={192}
+      width={logoData.width}
+      height={logoData.height}
       className="h-full w-auto"
     />
   );
