@@ -73,6 +73,7 @@ export const EventSchedule = () => {
     event: string;
     details?: string;
     showLogos?: boolean;
+    ticketUrl?: string;
   }
 
   interface Sponsors {
@@ -81,12 +82,37 @@ export const EventSchedule = () => {
     style: string;
   }
 
-  const knockOutSchedule: Events[] = [
+  const qualifiersSchedule: Events[] = [
+    {
+      time: "Mon 27 Jul",
+      event: "Qualifiers — Day 1",
+      details: "5:30pm – 8:30pm · Ainsworth 101 & 201",
+      ticketUrl: "https://campus.hellorubric.com/?eid=69359",
+    },
+    {
+      time: "Tue 28 Jul",
+      event: "Qualifiers — Day 2",
+      details: "5:30pm – 8:30pm · Ainsworth 101 & 201",
+      ticketUrl: "https://campus.hellorubric.com/?eid=69360",
+    },
+  ];
 
+  const knockOutSchedule: Events[] = [
+    {
+      time: "2:00pm",
+      event: "Knockouts",
+      details: "2:00pm – 8:30pm · Science Theatre",
+      ticketUrl: "https://campus.hellorubric.com/?eid=69422",
+    },
   ];
 
   const finalsSchedule: Events[] = [
-
+    {
+      time: "5:00pm",
+      event: "Finals",
+      details: "5:00pm – 8:30pm · Leighton Hall",
+      ticketUrl: "https://campus.hellorubric.com/?eid=69361",
+    },
   ];
 
   const sponsors: Sponsors[] = [
@@ -140,14 +166,20 @@ export const EventSchedule = () => {
       roundStatus: "workshops",
     },
     {
+      name: "Qualifiers",
+      date: "27–28 Jul 2026",
+      place: "Ainsworth 101 & 201",
+      roundStatus: "qualifiers",
+    },
+    {
       name: "Knock-Out Day",
-      date: "TBD",
-      place: "TBD",
+      date: "29 Jul 2026",
+      place: "Science Theatre",
       roundStatus: "knockout",
     },
     {
       name: "Finals Day",
-      date: "TBD",
+      date: "31 Jul 2026",
       place: "Leighton Hall",
       roundStatus: "finals",
     },
@@ -155,7 +187,11 @@ export const EventSchedule = () => {
   const [activeTab, setActiveTab] = React.useState(tabs[0]);
 
   const scheduleData =
-    activeTab.roundStatus === "knockout" ? knockOutSchedule : finalsSchedule;
+    activeTab.roundStatus === "qualifiers"
+      ? qualifiersSchedule
+      : activeTab.roundStatus === "knockout"
+      ? knockOutSchedule
+      : finalsSchedule;
 
   // Motions:
   const containerVariants = {
@@ -177,7 +213,7 @@ export const EventSchedule = () => {
   return (
     <section id="schedule" className="container">
       <h2 className="col-span-full">Event Schedule.</h2>
-      <p>The detailed event schedule for Knock-Out and Finals day will be posted closer to the competition. Check back soon!</p>
+      <p>Last chance to qualify at the Qualifiers, then it&apos;s straight into Knock-Outs and Finals. All teams in all streams must qualify to compete in Knockouts, and qualifying results directly impact your Knockout bracket seeding.</p>
 
       <div className="mx-auto mt-4 max-w-4xl rounded-lg border border-white/10 bg-zinc-900/70 p-4 shadow-md">
         <div className="mb-8 flex flex-wrap justify-center gap-3">
@@ -227,6 +263,16 @@ export const EventSchedule = () => {
                     <div className="mx-10 w-8/10 pb-10">
                       <p><b>{item.event}</b></p>
                       <p className="text-gray-400">{item.details}</p>
+                      {item.ticketUrl && (
+                        <a
+                          href={item.ticketUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-block rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-500"
+                        >
+                          Get Tickets
+                        </a>
+                      )}
                       {item.showLogos && (
                         <div className="relative mt-6 rounded-xl border border-white/10 bg-white/70 p-6 shadow-inner">
                           <div className="flex flex-wrap items-center justify-center gap-6">

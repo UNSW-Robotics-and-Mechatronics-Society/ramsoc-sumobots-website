@@ -9,7 +9,13 @@ import { Button } from "@/app/2026/_components/ui/Button";
 import Badge from "@/app/2026/_components/ui/Badge";
 import type { UserType } from "./UserTypeStep";
 
-function Field({ delay, children }: { delay: number; children: React.ReactNode }) {
+function Field({
+  delay,
+  children,
+}: {
+  delay: number;
+  children: React.ReactNode;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -92,7 +98,8 @@ export default function JoinTeamForm({
                 {preview.category === "standard" ? "Standard" : "Open"}
               </Badge>
               <span className="font-main text-sm text-gray-400">
-                {preview.member_count} member{preview.member_count !== 1 ? "s" : ""}
+                {preview.member_count} member
+                {preview.member_count !== 1 ? "s" : ""}
               </span>
             </div>
           </div>
@@ -112,7 +119,12 @@ export default function JoinTeamForm({
             >
               Cancel
             </Button>
-            <Button size="full" onClick={handleJoin} disabled={loading} loading={loading}>
+            <Button
+              size="full"
+              onClick={handleJoin}
+              disabled={loading}
+              loading={loading}
+            >
               {loading ? "Joining..." : "Join Team"}
             </Button>
           </div>

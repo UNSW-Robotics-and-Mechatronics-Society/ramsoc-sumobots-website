@@ -19,6 +19,7 @@ const NavLink = ({
   color = "default",
   dropdown,
   isDisabled: isDisabledProp,
+  isExternal,
   onClick: onClickProp,
   className,
 }: NavLinkProps) => {
@@ -136,7 +137,12 @@ const NavLink = ({
       variants={{ open: { opacity: 1 }, closed: { opacity: 0 } }}
       onClick={onClick}
     >
-      <Link href={href || ""} aria-label={label} className="flex w-full items-center px-4 py-2">
+      <Link
+        href={href || ""}
+        aria-label={label}
+        className="flex w-full items-center px-4 py-2"
+        {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

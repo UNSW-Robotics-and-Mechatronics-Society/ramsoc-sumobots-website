@@ -7,6 +7,7 @@ export type NavItem = {
   color?: "default" | "white";
   dropdown?: NavItem[];
   isDisabled?: boolean;
+  isExternal?: boolean;
 };
 
 const navItems: NavItem[] = [
@@ -79,6 +80,12 @@ const navItems: NavItem[] = [
   //   label: "Go to EOI page",
   //   href: Path[2026].EOI,
   // },
+  {
+    name: "PickABots",
+    label: "Go to PickABots",
+    href: "https://pickabots.ramsocunsw.org",
+    isExternal: true,
+  },
   {
     name: "Register",
     label: "Go to registration dashboard",
