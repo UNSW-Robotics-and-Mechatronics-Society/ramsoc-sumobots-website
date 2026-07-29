@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PickabotsBanner() {
   return (
-    <div className="w-full border-y-2 border-yellow-400 bg-yellow-400 py-6">
+    <div className="w-full border-y-2 border-yellow-400/90 bg-yellow-400/90 py-6">
       <Link
         href="https://pickabots.ramsocunsw.org"
         target="_blank"

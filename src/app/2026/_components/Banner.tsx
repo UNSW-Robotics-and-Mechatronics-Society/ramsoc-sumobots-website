@@ -68,9 +68,9 @@ export const Banner = ({
   return (
     <div
       id="banner"
-      className="relative flex h-[100vh] min-h-[50rem] flex-col items-center justify-center"
+      className="relative flex min-h-[100vh] flex-col items-center justify-center py-24"
     >
-      <div className="absolute top-1/2 left-[50vw] -translate-x-1/2 -translate-y-1/4">
+      <div>
         <h1 ref={titleRef} className="leading-none">
           <span className="self-start text-[0.8rem] md:text-[1rem] xl:text-[1.5rem]">
             <span className="text-rose-600">2026</span> RAMSOC UNSW PRESENTS

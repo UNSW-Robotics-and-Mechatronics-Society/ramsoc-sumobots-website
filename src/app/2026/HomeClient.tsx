@@ -7,6 +7,7 @@ import { Sponsors } from "./_components/Sponsors";
 import Navbar from "./_components/Nav/Navbar";
 import { Banner } from "./_components/Banner";
 import PickabotsBanner from "./_components/PickabotsBanner";
+import PickabotsAccountModal from "./_components/PickabotsAccountModal";
 import Stats from "./_components/Stats/Stats";
 import Faq from "./_components/Faq";
 import FurtherSupport from "./_components/FurtherSupport";
@@ -14,13 +15,16 @@ import Footer from "./_components/Footer";
 
 export default function HomeClient({
   pickabotsEnabled,
+  showPickabotsPrompt,
 }: {
   pickabotsEnabled: boolean;
+  showPickabotsPrompt: boolean;
 }) {
   const [isTitleVisible, setTitleVisible] = useState(true);
   const [isFooterVisible, setFooterVisible] = useState(false);
   return (
     <Fragment>
+      <PickabotsAccountModal show={showPickabotsPrompt} />
       <Navbar
         isTitleVisible={isTitleVisible}
         isFooterVisible={isFooterVisible}
