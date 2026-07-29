@@ -17,7 +17,9 @@ export async function getAdminAppConfig(): Promise<AppConfig> {
   const supabase = getSupabaseSecretClient();
   const { data } = await supabase
     .from("app_config")
-    .select("standard_phase, open_phase, standard_closes, open_closes, payment_deadline")
+    .select(
+      "standard_phase, open_phase, standard_closes, open_closes, payment_deadline, pickabots_enabled",
+    )
     .eq("competition_year", 2026)
     .single();
 
@@ -29,7 +31,23 @@ export async function getAdminAppConfig(): Promise<AppConfig> {
     standard_closes: new Date(data.standard_closes),
     open_closes: new Date(data.open_closes),
     payment_deadline: new Date(data.payment_deadline),
+    pickabots_enabled: Boolean(data.pickabots_enabled),
   };
+}
+
+export async function updatePickabotsToggle(
+  enabled: boolean,
+): Promise<{ success: boolean; error?: string }> {
+  await assertAdmin();
+  const supabase = getSupabaseSecretClient();
+
+  const { error } = await supabase
+    .from("app_config")
+    .update({ pickabots_enabled: enabled, updated_at: new Date().toISOString() })
+    .eq("competition_year", 2026);
+
+  if (error) return { success: false, error: error.message };
+  return { success: true };
 }
 
 export async function updateCategoryPhase(
