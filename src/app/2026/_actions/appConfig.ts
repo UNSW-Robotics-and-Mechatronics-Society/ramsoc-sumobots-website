@@ -9,13 +9,16 @@ export type AppConfig = {
   standard_closes: Date;
   open_closes: Date;
   payment_deadline: Date;
+  pickabots_enabled: boolean;
 };
 
 export async function getAppConfig(): Promise<AppConfig> {
   const supabase = getSupabaseSecretClient();
   const { data } = await supabase
     .from("app_config")
-    .select("standard_phase, open_phase, standard_closes, open_closes, payment_deadline")
+    .select(
+      "standard_phase, open_phase, standard_closes, open_closes, payment_deadline, pickabots_enabled",
+    )
     .eq("competition_year", 2026)
     .single();
 
@@ -26,6 +29,7 @@ export async function getAppConfig(): Promise<AppConfig> {
       standard_closes: REGISTRATION.standardCloses,
       open_closes: REGISTRATION.openCloses,
       payment_deadline: REGISTRATION.paymentDeadline,
+      pickabots_enabled: false,
     };
   }
 
@@ -35,5 +39,6 @@ export async function getAppConfig(): Promise<AppConfig> {
     standard_closes: new Date(data.standard_closes),
     open_closes: new Date(data.open_closes),
     payment_deadline: new Date(data.payment_deadline),
+    pickabots_enabled: Boolean(data.pickabots_enabled),
   };
 }

@@ -7,6 +7,7 @@ import Badge from "@/app/2026/_components/ui/Badge";
 import {
   updateCategoryPhase,
   updateRegistrationDates,
+  updatePickabotsToggle,
 } from "@/app/2026/admin/_actions/config";
 import type { AppConfig } from "@/app/2026/_actions/appConfig";
 
@@ -106,6 +107,23 @@ export default function SettingsPanel({ config }: { config: AppConfig }) {
     });
   }
 
+  function handleTogglePickabots(next: boolean) {
+    startTransition(async () => {
+      setError(null);
+      const result = await updatePickabotsToggle(next);
+      if (result.success) {
+        notify(
+          next
+            ? "PickABots banner is now live on the homepage."
+            : "PickABots banner hidden from the homepage.",
+        );
+        router.refresh();
+      } else {
+        setError(result.error ?? "Failed to update PickABots banner");
+      }
+    });
+  }
+
   function handleSaveDates() {
     startTransition(async () => {
       setError(null);
@@ -162,6 +180,40 @@ export default function SettingsPanel({ config }: { config: AppConfig }) {
             onToggle={(next) => handleTogglePhase("open", next)}
             isPending={isPending}
           />
+        </div>
+      </section>
+
+      {/* PickABots homepage banner */}
+      <section className="rounded-lg border border-white/10 bg-white/5 p-6">
+        <h3 className="font-main mb-1 text-base font-semibold text-white">
+          PickABots Homepage Banner
+        </h3>
+        <p className="font-main mb-4 text-sm text-gray-400">
+          Advertise PickABots on the homepage so teams can check today&apos;s
+          match schedule and fans can join the voting competition.
+        </p>
+
+        <div className="rounded-lg border border-white/10 bg-black/20 p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/30 px-3 py-2">
+              <span className="font-main text-xs text-gray-400">Status:</span>
+              <Badge variant={config.pickabots_enabled ? "success" : "warning"}>
+                {config.pickabots_enabled ? "Live" : "Hidden"}
+              </Badge>
+            </div>
+            <Button
+              variant={config.pickabots_enabled ? "secondary" : "primary"}
+              size="default"
+              onClick={() => handleTogglePickabots(!config.pickabots_enabled)}
+              disabled={isPending}
+            >
+              {isPending
+                ? "Saving…"
+                : config.pickabots_enabled
+                  ? "Hide banner"
+                  : "Show banner"}
+            </Button>
+          </div>
         </div>
       </section>
 
