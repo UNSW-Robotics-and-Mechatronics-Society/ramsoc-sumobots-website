@@ -26,9 +26,9 @@ export default function HomeClient({
         isFooterVisible={isFooterVisible}
       />
       <Banner setPageTitleVisible={setTitleVisible} />
+      {pickabotsEnabled && <PickabotsBanner />}
       <div className="flex min-h-screen w-full flex-col items-center bg-black/30 pt-12">
         <div className="max-w-5xl">
-          {pickabotsEnabled && <PickabotsBanner />}
           <Stats />
           <About />
           <EventSchedule />
